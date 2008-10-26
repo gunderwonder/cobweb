@@ -1,0 +1,12 @@
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine On;
+
+# If you've defined an URL_PREFIX in Cobweb's settings, add RewriteBase that
+# matches this setting.
+# RewriteBase /
+
+# Reqwrite URL to index.php if the URI does not exists (i.e. is not a file or directory)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php

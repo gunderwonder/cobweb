@@ -1,0 +1,47 @@
+
+
+.codeblock {
+	margin-bottom: 20px;
+}
+
+.code-legend {
+	font-size: 11px;
+	margin-left: 30px;
+	
+}
+
+.comment {
+  	color: maroon;
+	font-style: italic;
+}
+
+.keyword {
+	font-weight: bold;
+}
+
+.string {
+	font-style: italic;
+}
+
+.variable { 
+	color: maroon;
+	border-bottom: 1px solid #eaeaea;
+}
+
+.python .string {
+	color: blue;
+}
+
+.phpdoc {
+	font-weight: bold;
+	color: black;
+}
+
+.html .atribute .value {
+  color: green;
+}
+
+.stack-line {
+	border: 1px solid LightGrey;
+	background-color: #eaeaea;
+}

@@ -1,0 +1,5 @@
+<?php
+
+Cobweb::configure(array(
+	
+));

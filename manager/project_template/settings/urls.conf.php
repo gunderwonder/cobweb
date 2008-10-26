@@ -1,0 +1,5 @@
+<?php
+
+Router::connect(array(
+	
+));

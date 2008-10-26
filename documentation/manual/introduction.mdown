@@ -1,0 +1,115 @@
+## 1 [Introduction](#introduction) {#introduction}
+
+Hello, and welcome to _Cobweb_.
+
+Cobweb is a lightweight, extensible Model-View-Controller (MVC) PHP web application framework inspired by [Django](http://www.djangoproject.com/). .
+
+
+### 1.1 [Rationale](#rationale) {#rationale}
+Django is a very nice web framework, but if your hosting provider does not support Python, you are out luck. Cobweb's aim is to offer some of Django's elegance and ease of use without Django's steep system requirements. Unfortunately, some might say, that means we have to use PHP, which is ubiquitus and available almost everywhere.
+
+
+
+### 1.2 Overview {#overview}
+Web frameworks commonly consist of
+
+1. An Object-Relational Mapper (ORM)
+2. A Templating engine
+3. A dispatch model
+
+Cobweb implements the dispatch model (more on that later), and bundles [Doctrine](http://www.phpdoctrine.org/) (ORM) and [Smarty](http://www.smarty.net/) (templating engine) for the complete package. Hence, unlike Django, Cobweb is not a full-stack framework; instead it provides infrastructure and glue code to make the pieces fit together.
+
+
+
+### 1.3 Design Philosophies {#philosopy}
+Cobweb shares its core design philosophies with Django:
+
+
+
+#### 1.3.1 Model-View-Controller {#MVC}
+Cobweb is designed around the [Model-View-Controller](http://en.wikipedia.org/wiki/Model_view_controller) pattern, which emphasizes separation between business logic and user interface. A Cobweb application consists of three distinct layers:
+
+* __Model layer__
+
+	Contains your  by way of Doctrine's ORM or whatever persistance layer or datastore .
+	
+* __View layer__
+
+	Templates.
+	
+* __Controller layer__
+
+	Binds the model layer to the view layer (and handles everything in between)
+
+
+
+#### 1.3.2 Loose coupling, tight cohesion {#loose-coupling}
+Cobweb emphasizes [loose coupling](http://en.wikipedia.org/wiki/Loose_coupling) in its design, attempting to minimize both internal and external dependencies. For example, there is no need for the templating framework to know anything about the request-response and its inner workings or vice-versa. Likewise, the database layer is completely separated from the presentation of its data – that belongs in the view layer.
+
+The different 
+
+On the other hand, Cobweb strives to be _cohesive_, keeping common functionality in separate distinct places for maximum reusability and flexibility.
+
+
+
+#### 1.3.3 Don't Repeat Yourself (DRY) {#DRY}
+Web development can often be a monotonous process consisting of repetative and boring tasks. Cobweb aims to offer generalized shortcuts for common use-cases, so that the programmer can focus on the fun stuff, not the nitty-gritty of the repetative stuff.
+
+
+#### 1.3.4 Strictness {#strictness}
+PHP's default approach to error handling can be described as lax. Also, when errors do occur, PHP's error messages are often obtuse and hard to understand. Cobweb's approach is to be strict: it treats every error or uncaught exception as a fatal one, and will display a detailed debug console with a stacktrace. To the extent that the error or exception stems from within Cobweb, error messages will allways be clear and provide detailed information as to where and why the error occured.
+
+#### Pragmatism {#pragmatism}
+Although 
+
+
+
+*[DRY]: Don't Repeat Yourself
+*[MVC]: Model View Controller
+*[ORM]: Object-Relational Mapper
+
+
+<!-- ### Subtitle 2 {#intro}
+
+Yes, *yes*.
+
+### Subtitle
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<div class="codeblock">
+<pre>
+<code class="php">// this is a comment
+if (true)
+    echo 'hei';
+</code>
+</pre>
+<div class="code-legend">Figure 1: Blabla...</div>
+</div>
+
+More and more and more... Call `frobnicate_foobarbaz()` if you want to frobnicate something.
+
+<div class="warning">
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
+
+Test paragraph with a [little link](http://www.google.com/ "Google"). Also, here is a list:
+
+* This is number 1.
+* This is number 2.
+	* This is number 2-1.
+
+<div class="future">
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
+
+Yes, sir-e, Bob.
+
+> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+>Jepp...
+<div class="quotation-source">Source: the Bible</div>
+
+Another paragraph...
+
+#### This is another subtitle -->
