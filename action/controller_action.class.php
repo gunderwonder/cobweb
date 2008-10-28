@@ -75,7 +75,8 @@ class ControllerAction implements Action {
 	}
 	
 	private function loadController() {
-
+		Cobweb::loadApplication($this->application_name);
+		
 		$label = $this->controller_name;
 		if (!class_exists($this->controller_name . 'Controller'))
 			$this->controller_name = str_classify($this->controller_name) . 'Controller';
