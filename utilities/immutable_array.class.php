@@ -1,5 +1,14 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @package    Cobweb
+ * @subpackage Utilities
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version    $Revision
+ */
 class ImmutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	
 	protected $array;
@@ -9,6 +18,7 @@ class ImmutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	}
 	
 	public function get($key, $nullvalue) {
+
 		if (isset($this[$key]))
 			return $this[$key];
 			
@@ -24,11 +34,11 @@ class ImmutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	}
 	
 	public function offsetSet($key, $value) {
-		// NO-OP
+		throw new CobwebException('Array is immutable');
 	}
 	
 	public function offsetUnset($key) {
-		// NO-OP
+		throw new CobwebException('Array is immutable');
 	}
 	
 	public function toArray() {
