@@ -1,7 +1,9 @@
 <?php
+/**
+ * @version $Id$
+ */
 
 require_once COBWEB_DIRECTORY . '/vendor/phpass/PasswordHash.php';
-
 	
 class User extends Doctrine_Record {
 	
