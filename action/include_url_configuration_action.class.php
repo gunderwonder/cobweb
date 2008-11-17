@@ -26,11 +26,9 @@ class IncludeURLConfigurationAction implements Action {
 	public function rules() {
 		foreach (Cobweb::get('APPLICATIONS_PATH') as $path) {
 			$urls_path = $path . $this->path();
-			if (file_exists($urls_path)) {		
-				require_once $urls_path;
-				return Router::map();
+			if (file_exists($urls_path))
+				return require_once $urls_path;
 
-			}
 		}
 		throw new CobwebConfigurationException(
 			"No URL configuration file found for {$this->label}");
