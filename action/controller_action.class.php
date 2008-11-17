@@ -28,6 +28,7 @@ class ControllerAction implements Action {
 		$this->dispatcher = $dispatcher;
 		$this->request = $request;
 		$this->pattern = $pattern;
+		$this->resolver = $resolver;
 
 		$this->initialize($specification, $arguments);
 		$this->loadController();
@@ -125,7 +126,7 @@ class ControllerAction implements Action {
 			// $object = new $class($this->dispatcher, $this->request);
 			// $response = call_user_func_array(array($object, $method), $arguments);
 			
-			$instance = $this->controller->newInstance($this->dispatcher, $this->request);
+			$instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
 			// $this->controller->getMethod('initialize')->invoke($instance);
 			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
@@ -207,15 +208,20 @@ class ControllerAction implements Action {
 	}
 	
 	
-	public static function invokeControllerAction($label, array $arguments = NULL) {
+	public static function invokeControllerAction($label, array $arguments = array()) {
 		$action = new ControllerAction(
 			Cobweb::get('__REQUEST__'),
 		    Cobweb::get('__DISPATCHER__'),
 		    Cobweb::get('__RESOLVER__'),
 		    '',
 		    $arguments,
-		    array_merge(array($label), 
-				is_null($arguments) ? array() : $arguments));
-		return $action->invoke();
+		    array_merge(array($label), $arguments)
+		);
+		
+		return Cobweb::get('__DISPATCHER__')->dispatch(
+			Cobweb::get('__REQUEST__'),
+			$action,
+			Cobweb::get('__MIDDLEWARE_MANAGER__')
+		);
 	}
 }
