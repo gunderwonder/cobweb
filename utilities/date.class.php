@@ -6,7 +6,9 @@
 /**
  * @package    Cobweb
  * @subpackage Utilities
- * 
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version    $Revision$
+ *
  * @see http://laughingmeme.org/2007/02/27/looking-at-php5s-datetime-and-datetimezone/
  */
 class Time extends DateTime {
@@ -97,6 +99,10 @@ class Time extends DateTime {
 
 	public function __toString() {
 		return $this->format(self::DATE_SQL);
+	}
+	
+	public function __toSQL() {
+		return $this->__toString();
 	}
 	
 	public static function sorter(Time $t_1, Time $t_2) {
