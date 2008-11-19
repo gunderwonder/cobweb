@@ -24,22 +24,44 @@ abstract class JSON {
 	}
 	
 	public static function encode($data) {
-		$array = array();
-		if (is_object($data)) {
-			if (method_exists($data, 'toArray')) 
-				$array = array_merge($array, $data->toArray());
-				
-			$array['class'] = get_class($data);
-		} else
-			$array = $data;
+		// $array = array();
+		// if (is_object($data)) {
+		// 	if (method_exists($data, '__toArray')) 
+		// 		$array = array_merge($array, $data->__toArray());
+		// 	else
+		// 		$array = $data;
+		// 		
+		// 	$array['class'] = get_class($data);
+		// } else
+		// 	$array = $data;
 			
 		
-		if (($json = @json_encode($array)) === false)
+		if (($json = @json_encode($data)) === false)
 			;
 			// throw new JSONEncodingException(
 			// 	'Could not encode specified data to JSON.');
 		
 		return $json;
+	}
+	
+	public static function debug($data) {
+		$array = array();
+		if (is_object($data)) {
+			$array['__CLASS__'] = get_class($data);
+			
+			if (method_exists($data, '__toArray'))
+				$array = array_merge($array, $data->__toArray());
+			else if (method_exists($data, 'toArray'))
+				$array = array_merge($array, $data->toArray());
+		}
+		
+		if (($json = @json_encode($data)) === false)
+			;
+			
+		$decoded = json_decode($json, true);
+		$decoded = is_array($decoded) ? array_merge($array, $decoded) : $decoded;
+		
+		return json_encode($decoded);
 	}
 	
 	public static function decode($json) {
