@@ -41,7 +41,22 @@ class CobwebLoader {
 		'CobwebManager' => '/manager/cobweb_manager.class.php',
 		'CobwebManagerCommand' => '/manager/cobweb_manager_command.class.php',
 		'HTTPResponseRedirect' => '/http/http_response.class.php',
-		'Permalinkable' => '/core/permalinkable.interface.php'
+		'HTTPResponseNotModified' => '/http/http_response.class.php',
+		'Permalinkable' => '/core/permalinkable.interface.php',
+		'Form' => '/forms/form.class.php',
+		'FormField' => '/forms/form_field.class.php',
+		'FormWidget' => '/forms/form_widget.class.php',
+		'FormException' => '/forms/form_exceptions.inc.php',
+		'FormValidationException' => '/forms/form_exceptions.inc.php',
+		'IntegerField' => '/forms/fields/integer_field.class.php',
+		'TextField' => '/forms/fields/text_field.class.php',
+		'TextInput' => '/forms/widgets/text_input.class.php',
+		'PositiveIntegerField' => '/forms/fields/positive_integer_field.class.php',
+		'ConcreteForm' => '/forms/concrete_form.class.php',
+		'Console' => '/utilities/logging/console.class.php',
+		'AJAXResponse' => '/http/ajax_response.class.php',
+		'Time' => '/utilities/date.class.php',
+		
 	);
 	
 	private static $external_classes = array();
@@ -66,5 +81,9 @@ class CobwebLoader {
 		
 		self::$external_classes[$class] = $path;
 		
+	}
+	
+	public static function autoload(array $classmap) {
+		self::$external_classes = array_merge(self::$external_classes, $classmap);
 	}
 }
