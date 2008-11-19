@@ -1,9 +1,9 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
- * Encapsulates an HTTP response to the client.
- * 
  * @package     Cobweb
  * @subpackage  HTTP
  * @author      Øystein Riiser Gundersen <oystein@upstruct.com>
@@ -35,8 +35,8 @@ class HTTPResponse extends Response {
 	public function __construct($body = '', 
 		                        $response_code = self::OK,
 		                        $mime_type = MIMEType::HTML) {
-		
-		$this->body = is_object($body) ? $body->__toString() : $body;
+		$this->body = '';
+		$this->write(is_object($body) ? $body->__toString() : $body);
 			
 		if (is_int($response_code))
 			$this->response_code = self::$HTTP_codes[$response_code];
@@ -74,12 +74,12 @@ class HTTPResponse extends Response {
 	}
 	
 	public function flush() {
-
 		$this->sendHeaders();
 		print $this->body;
 		flush();
 	}
 	
+	/**@+ @ignore */
 	public function offsetExists($key) {
 		if (is_int($key))
 			return false;
@@ -107,6 +107,7 @@ class HTTPResponse extends Response {
 		
 		$this->headers[$key] = '';
 	}
+	/**@- */
 	
 }
 
