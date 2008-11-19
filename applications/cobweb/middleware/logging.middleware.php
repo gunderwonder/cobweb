@@ -11,25 +11,30 @@ class LoggingMiddleware extends Middleware {
 	
 	public function processResponse(Request $request, Response $response) {
 		
+		$formatted_logs = '';
+		foreach ($this->loggers as $logger) {
+			$formatter = new FirebugLogFormatter($logger);
+			$formatted_logs .= $formatter->format();
+		}
+		
 		if ($response['Content-Type'] == MIMEType::HTML && $response->code() != 304) {
 			
-			foreach ($this->loggers as $logger) {
-				$formatter = new FirebugLogFormatter($logger);
-				$logs = $formatter->format();
-
 				// insert log javascript in header
 				if (($position = utf8_strpos($response->body, '</head>')) !== false)
-					$response->body = str_replace('</head>', $logs . "\n</head>", $response->body);
+					$response->body = str_replace(
+						'</head>', 
+						$formatted_logs . "\n</head>", 
+						$response->body
+					);
 				else
-					$response->body .= $logs;
-			}
+					$response->body .= $formatted_logs;
 			
 			
 			
 		} else if ($response['Content-Type'] == MIMEType::JSON) {
-			$r = JSON::decode($response->body);
-			$r['logs'] = $logs;
-			$response->body = JSON::encode($r);
+			$json = JSON::decode($response->body);
+			$json['logs'] = $formatted_logs;
+			$response->body = JSON::encode($json);
 		}
 
 		return $response;
