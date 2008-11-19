@@ -146,7 +146,7 @@
 										<tt>${$name}</tt>
 									</td>
 									<td>
-										{$arg.value} (<a href="#" onclick="console.log({$arg.json|escape})">{$arg.type}</a>)
+										{$arg.value} (<a href="javascript:console.log({$arg.json|escape})">{$arg.type}</a>)
 									</td>
 								</tr>
 							{/foreach}
@@ -180,7 +180,7 @@
 					<th>Method</th>
 					<td>{$REQUEST->method()}</td>
 				</tr>
-				<tr>
+				{*<tr>
 					<th>Request headers</th>
 					<td>
 						<table style="width: 100%; margin-top: 0px;">
@@ -193,7 +193,7 @@
 						</table>
 						</td>
 					</td>
-				</tr>
+				</tr>*}
 				<!-- <tr>
 					<th>Response headers</th>
 					<td>
