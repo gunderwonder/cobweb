@@ -10,10 +10,14 @@ class DebugController extends Controller {
 	
 	
 	/** 
+	 * 
 	 * @param   Exception     $exception  the thown exception
 	 * @return  HTTPResponse  500/404 response with detailed stacktrace/debug information
 	 */
 	public function debugger(Exception $exception) {
+		// if ($this->request->isAJAX())
+		// 	return $this->textDebugger($exception);
+		
 		$template = new Template();
 		
 		$template['exception_class'] = get_class($exception);
@@ -63,9 +67,12 @@ class DebugController extends Controller {
 
 		$template['response_headers'] = $this->responseHeaders();
 		$template['backtrace'] = $backtrace;
+		Cobweb::log($backtrace);
+		
 		$template->render(
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/exception.tpl', 
 			Template::ABSOLUTE_TEMPLATE_PATH);
+		
 		
 		$code = $exception instanceof HTTPException ? $exception->getCode() : 500;
 		
@@ -94,7 +101,7 @@ class DebugController extends Controller {
 					get_class($value) : 
 					$value;
 				try {
-					$named_parameters[$name]['json'] = json_encode($value);
+					$named_parameters[$name]['json'] = JSON::debug($value);
 				} catch (CobwebErrorException $e) {
 					$named_parameters[$name]['json'] = '';
 				}
@@ -136,6 +143,10 @@ class DebugController extends Controller {
 		}
 		
 		return $headers;
+	}
+	
+	private function textDebugger(Exception $e) {
+		// $code = $exception instanceof HTTPException ? $exception->getCode() : 500;
 	}
 }
 
