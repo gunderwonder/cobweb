@@ -49,9 +49,10 @@ p {
 }
 
 #content {
-	padding-left: 40px;
-	padding-top: 30px;
-	width: 80%;
+	margin-left: 40px;
+	margin-top: 30px;
+	width: 90%;
+	min-width: 900px;
 }
 
 a:link,
@@ -72,7 +73,7 @@ tt, pre, code {
 table {
 	font-size: 12px !important;
 	border: 1px solid LightGrey;
-	width: 1000px;
+	width: 100%;
 	padding: 0;
 	margin-top: 7px;
 	border-collapse: collapse;
