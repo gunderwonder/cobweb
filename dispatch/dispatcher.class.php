@@ -1,5 +1,7 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
  * Cobweb's central request dispatch hub
@@ -7,7 +9,7 @@
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
  * @subpackage Dispatch
- * @version    0.2
+ * @version    $Revision$
  */
 class Dispatcher {
 	
@@ -25,7 +27,6 @@ class Dispatcher {
 	
 	public function dispatch(Request $request, Action $action, MiddlewareManager $middleware) {
 		$response = NULL;
-		$request->GET = NULL;
 		
 		// pass request through middleware...
 		if ($middleware_response = $middleware->handleRequest($request))
@@ -56,7 +57,7 @@ class Dispatcher {
 		Cobweb::info('Cobweb ran for %o seconds', 
 		             microtime(true) - Cobweb::get('__COBWEB_START_TIME__'));
 		
-		// finally, pass return the respone as processed by the middleware
+		// finally, return the response processed by the middleware
 		return $middleware->handleResponse($request, $response);
 	}
 	
