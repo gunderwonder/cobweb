@@ -68,13 +68,15 @@ abstract class Controller {
 	 * @param Dispatcher $dispatcher  the request dispatcher
 	 * @param Request    $request     the request object
 	 */
-	public function __construct(Dispatcher $dispatcher, Request $request) {
+	public function __construct(Dispatcher $dispatcher, Request $request, Resolver $resolver) {
 		$this->request = $request;
 		$this->dispatcher = $dispatcher;
 		
 		// proxy request parameters
-		$this->POST = $this->request->POST;
-		$this->GET = $this->request->GET;
+		$this->POST = $request->POST;
+		$this->GET = $request->GET;
+		$this->resolver = $resolver;
+		
 		$this->initialize();
 	}
 	
@@ -105,9 +107,15 @@ abstract class Controller {
 	 * @param string $label     the controller action's label
 	 * @param string $arguments the arguments to apply to the action
 	 */
-	protected static function redirect($label, array $arguments = NULL) {
-		
+	protected function redirect($label, array $arguments = array()) {
+		if (str_starts_with($label, '@'))
+			$url = $this->resolver->reverse(utf8_substr($label, 1), $arguments);
+		else
+			$url = $label;
+			
+		return new HTTPResponseRedirect($url);
 	}
+	
 	
 	/**
 	 * Returns an {@link Response} containing a rendered template with the
