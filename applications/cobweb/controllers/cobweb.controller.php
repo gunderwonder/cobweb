@@ -6,6 +6,9 @@ class CobwebController extends Controller {
 		
 		if (!str_ends_with($this->request->path(), '/') && Cobweb::get('APPEND_SLASH_ON_404'))
 			return new HTTPResponseRedirect(Cobweb::get('URL_PREFIX') . $this->request->path() . '/');
+		
+		if (Cobweb::get('DEBUG'))
+			throw new HTTP404();
 			
 		return $this->render('404.tpl', 
 			array('uri' => $this->request->URI()), 
