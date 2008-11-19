@@ -33,7 +33,9 @@ class CobwebConfiguration implements Configurable {
 		if (!file_exists($file))
 			throw new FileNotFoundException("Settings file '$file' not found");
 			
-		require_once $file;
+		$settings = require_once $file;
+		
+		return $settings;
 	}
 	
 	private static function merge($settings, $other_settings) {
