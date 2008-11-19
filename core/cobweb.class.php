@@ -1,9 +1,15 @@
 <?php
+/**
+ * @version $Id$
+ */
 
 error_reporting(E_ALL);
 
 /**
- *
+ * @package     Cobweb
+ * @subpackage  Core
+ * @author      Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version     $Revision$
  */
 class Cobweb implements CobwebDeclaration {
 	
@@ -28,11 +34,16 @@ class Cobweb implements CobwebDeclaration {
 		
 		Cobweb::log('Loading settings...');
 		Cobweb::set('__COBWEB_START_TIME__', microtime(true));
-		$this->configuration->load(COBWEB_DIRECTORY . '/settings/settings.conf.php');
+		$this->configuration->configure(
+			$this->configuration->load(COBWEB_DIRECTORY . '/settings/settings.conf.php'));
 		
 		if (defined('COBWEB_PROJECT_DIRECTORY')) {
-			$this->configuration->load(COBWEB_PROJECT_DIRECTORY . '/settings/settings.conf.php');
-			$this->configuration->load(COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php');
+			
+			$this->configuration->configure(
+				$this->configuration->load(COBWEB_PROJECT_DIRECTORY . '/settings/settings.conf.php'));
+			
+			Router::connect($this->configuration->load(
+				COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
 		}
 		
 		Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
@@ -93,6 +104,7 @@ class Cobweb implements CobwebDeclaration {
 		date_default_timezone_set(Cobweb::get('TIMEZONE'));
 		
 		Cobweb::set('__REQUEST__', $this->request);
+		Cobweb::set('__MIDDLEWARE_MANAGER__', $this->middleware_manager);
 		Cobweb::set('__DISPATCHER__', $this->dispatcher);
 		Cobweb::set('__RESOLVER__', $this->resolver);
 		
@@ -101,6 +113,7 @@ class Cobweb implements CobwebDeclaration {
 		
 		$this->dispatcher->fire('middleware.loaded', array('manager' => $this->middleware()));
 		$this->dispatcher->fire('logging.register_logger', array('logger' => self::$logger));
+		$this->dispatcher->fire('logging.register_logger', array('logger' => Console::logger()));
 
 	}
 	
@@ -228,7 +241,10 @@ class Cobweb implements CobwebDeclaration {
 		return self::$logger->error(func_get_args());
 	}
 	
-	public static function logger() {
-		return self::$logger;
+	/**
+	 * @deprecated
+	 */
+	public static function setting($key) {
+		return self::get($key);
 	}
 }
