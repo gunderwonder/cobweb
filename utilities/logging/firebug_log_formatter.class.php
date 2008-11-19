@@ -25,9 +25,9 @@ class FirebugLogFormatter extends LogFormatter {
 		
 			for ($i = 0; $i < count($things); $i++) {
 				if ($i != 0) 
-					$message .= ',' . JSON::encode($things[$i]);
+					$message .= ',' . JSON::debug($things[$i]);
 				else
-					$message .= JSON::encode($things[$i]);
+					$message .= JSON::debug($things[$i]);
 			}
 				
         	
