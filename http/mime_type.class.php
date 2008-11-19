@@ -1,13 +1,13 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
- * Placeholder class for MIME type annotations
- * 
  * @package    Cobweb
  * @subpackage HTTP
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
- * @version    0.2
+ * @version    $Revision$
  */
 abstract class MIMEType {
 	
