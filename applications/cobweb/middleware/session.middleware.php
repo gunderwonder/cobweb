@@ -1,5 +1,10 @@
 <?php
 /**
+ * @version $Id$
+ */
+
+
+/**
  * $Id$
  * 
  * @package Cobweb
@@ -10,12 +15,22 @@
 
 class SessionMiddleware extends Middleware {
 	
+	private $session;
+	
+	public function initialize() {
+		Cobweb::log('Initializing session middleware...');
+		$this->session = new Session();
+	}
+	
 	public function processRequest(Request $request) {
-		Console::log('Initializing session middleware...');
+		if (!isset($request->session))
+			$request->session = $this->session;	
 		
-		
-		$request->session = new Session();	
-		Console::info('Session data: %o', $request->session);
+	}
+	
+	public function processResponse(Request $request, Response $response) {
+		Cobweb::info('Session data: %o', $request->session);
+		return $response;
 	}
 	
 	
