@@ -1,46 +1,58 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
- * Encapsulates an HTTP request
- * 
- * The request object is used throughout Cobweb to represent the current client
- * request. It provides access to GET and POST parameters as well as HTTP header
- * information. In addition, the Cobweb extensions such as middleware classes
- * may add its own properties to the request object
- * 
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
  * @subpackage HTTP
  * @version    $Revision$
- * 
  */
 class HTTPRequest extends Request implements ArrayAccess {
 		
-	protected
-		$dispatcher,
-		$headers,
-		$body;
+	/* @var Dispatcher */
+	protected $dispatcher;
 	
-	protected
-		$_GET,
-		$POST,
-		$COOKIES,
-		$META;
+	/* @var array */
+	protected $headers;
 	
+	/* @var string */
+	protected $body;
+	
+	// /* @var HTTPQueryDictionary */
+	// protected $GET;
+	// 
+	// /* @var HTTPQueryDictionary */
+	// protected $POST;
+	
+	/* @var MutableArray */
+	protected $COOKIES;
+	
+	/* @var ImmutableArray */
+	protected $META;
+	
+	/**
+	 * Instantiates a request object with the specified GET, POST, COOKIE and
+	 * MEtA parameters.
+	 * 
+	 * @param Dispatcher $dispatcher event dispatcher
+	 * @param array      GET         GET parameters (should contain URL-decoded values)
+	 * @param array      POST        POST parameters (should contain URL-decoded values)
+	 * @param array      META        an array compatible with the PHP <var>$_SERVER</var> array
+	 */
 	public function __construct(Dispatcher $dispatcher,
 		                        array $GET,
 		                        array $POST,
-		                        array $META,
-		                        array $COOKIES = NULL) {
-			
+		                        array $META) {
+
 		$this->dispatcher = $dispatcher;
 		
-		$this->GET  = new HTTPQueryDictionary($GET);
-		$this->POST = new HTTPQueryDictionary($POST);
+		$this->properties['GET']  = new HTTPQueryDictionary($GET);
+		$this->properties['POST'] = new HTTPQueryDictionary($POST);
 		$this->META = new ImmutableArray($META);
 		
-		$this->COOKIES = new MutableArray($_COOKIE);
+		// $this->COOKIES = new MutableArray($_COOKIE);
 		
 		$other_headers = array('CONTENT_TYPE', 'CONTENT_LENGTH');
 		$this->headers = array();
@@ -95,20 +107,42 @@ class HTTPRequest extends Request implements ArrayAccess {
 		return !empty($this->META['HTTPS']);
 	}
 	
+	/**
+	 * Returns true if this request is authenticated (by Cobweb's 
+	 * authentification framework or by HTTP authentification), false otherwise
+	 * 
+	 * @return boolean if this request is authenticated
+	 */
 	public function isAuthenticated() {
 		return !empty($this->META['AUTH_TYPE']) || 
 		              (isset($this->user) && $this->user->isAuthenticated());
 	}
 		
-	public function hash() {
 		
+	/**
+	 * Returns the hash component of the request URI.
+	 * 
+	 * Note that the hash is never sent to the server (it is used client side),
+	 * so this is only useful for testing purposes.
+	 * 
+	 * @return string hash component of the URI
+	 */
+	public function hash() {
 		$hash_offset = utf8_strpos($this->URI(), '#');
 		if ($hash_offset === false)
 			return '';
 			
 		return utf8_substr($this->URI(), $hash_offset + 1);
 	}
-	
+
+	/**
+	 * Returns the URI of this request (with GET parameters and all).
+	 * 
+	 * If present, a leading occurence of the `URL_PREFIX' setting is stripped
+	 * from the "real" URI.
+	 * 
+	 * @return string URI of this request
+	 */
 	public function URI() {
 		return lstrip($this->META['REQUEST_URI'], Cobweb::get('URL_PREFIX'));
 	}
@@ -137,22 +171,64 @@ class HTTPRequest extends Request implements ArrayAccess {
 		return explode('/', trim($this->path(), '/'));
 	}
 	
+	/**
+	 * Returns if this request did not originate from a referer or from the 
+	 * URI of this request
+	 * 
+	 * @return boolean if the request is direct
+	 */
 	public function isDirect() {
 		return !isset($this['Referer']) || $this['Referer'] != $this->URI() ;
 	}
 
+	/**
+	 * Returns if this request was made using an XMLHttpRequest, that is if
+	 * the request contains the 'X-Requested-With' header.
+	 * 
+	 * @return boolean if the request is an AJAX request
+	 */
 	public function isAJAX() {
 		return (isset($this['X-Requested-With']) && 
 		        $this['X-Requested-With'] == 'XMLHttpRequest');
 	}
 	
-	public function __get($key) {
-		if (in_array($key, array('GET', 'POST', 'META', 'COOKIES'))) {
-			$key = '_' . $key;
-			return $this->$key;
-		}
-	}
+	/**
+	 * @ignore
+	 */
+	// public function __get($key) {
+	// 	Cobweb::log('get %o => %o', $key);
+	// 	// if (in_array($key, array('GET', 'POST', 'META', 'COOKIES'))) {
+	// 	// 	return $this->$key;
+	// 	// }
+	// 	return $this->$key;
+	// }
+	// 
+	// public function __set($key, $value) {
+	// 	Cobweb::log('%o => %o', $key, $value);
+	// 	
+	// 	$this->$key = $value;
+	// }
 	
+	/**
+	 * Sets a cookie for this request
+	 * 
+	 * Fires the 'request.cookie_set' event.
+	 * 
+	 * @see   setcookie()
+	 * 
+	 * @param  string   $key        cookie name
+	 * @param  mixed    $value      cookie value
+	 * @param  integer  $expiry     cookie expiry time in seconds since the 1970.
+	 *                              Defaults to the time a month from now
+	 * @param  string   $path       path for this cookie.
+	 *                              Defaults to the path of this request
+	 * @param  string   $domain     domain for this cookie.
+	 *                              Defaults to the current server name
+	 * @param  boolean  $secure     if the cookie is set using HTTPS
+	 *                              Defaults to false
+	 * @param  boolean  $http_only  if the cookie should only be accessible using
+	 *                              HTTP (i.e. inaccessible from JavaScript) 
+	 */
 	public function setCookie($key, 
 		                      $value,
 		                      $expiry = NULL,
@@ -164,7 +240,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 		if (is_null($expiry))
 			$expiry = time() + 60 * 60 * 24 * 30;
 		if (is_null($path))
-		 	$path = $this->path;
+		 	$path = $this->path();
 		if (is_null($domain))
 			$domain = $this->META['SERVER_NAME'];
 
@@ -174,7 +250,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 			array('cookie' => array($key => $value), 'request' => $this));
 	}
 	
-
+	/**@+ @ignore */
 	public function offsetExists($header_name) {
 		$header_name = strtoupper($header_name);
 		return array_key_exists($header_name, $this->headers);
@@ -192,6 +268,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	public function offsetUnset($key) { 
 		throw new KeyError("HTTP request headers are immutable");
 	}
+	/**@- */
 	
 	public function __toArray() {
 		$formatted_headers = array();

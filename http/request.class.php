@@ -1,9 +1,9 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
- * Abstract base class for Cobweb requests.
- * 
  * @package    Cobweb
  * @subpackage HTTP
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
@@ -17,7 +17,7 @@ abstract class Request implements ArrayAccess {
 	const DELETE  = 'DELETE';
 	const HEAD  = 'HEAD';
 	
-	private $properties;
+	protected $properties = array();
 	
 	abstract public function __construct(
 		Dispatcher $dispatcher,
@@ -25,7 +25,7 @@ abstract class Request implements ArrayAccess {
 		array $POST,
 		array $COOKIES,
 		array $META);
-	
+		
 	/**
 	 * Returns the complete URI of the request
 	 * 
@@ -126,25 +126,25 @@ abstract class Request implements ArrayAccess {
 		return $this->method() == self::DELETE;
 	}
 	
-	/**
-	 * 
-	 */
+	/**#@+ @ignore */
 	public function __set($name, $value) {
-		if (isset($this->name))
-			throw new CobwebException("The property '{$name}' is allready set for this object");
+
+		if (isset($this->properties[$name]))
+			throw new CobwebException(
+				"The property '{$name}' is allready set for this request object");
+			
 		$this->properties[$name] = $value;
 	}
 	
 	public function __get($name) {
 		if (isset($this->properties[$name]))
 			return $this->properties[$name];
-		return NULL;
 	}
 	
 	public function __isset($name) {
 		if (isset($this->properties[$name]))
 			return true;
-		return NULL;
 	}
+	/**#@- */
 
 }
