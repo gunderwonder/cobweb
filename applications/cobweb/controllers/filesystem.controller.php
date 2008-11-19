@@ -24,6 +24,7 @@ class FilesystemController extends Controller {
 		if (!str_starts_with($file, $base_path) || !file_exists($file))
 			throw new HTTP404();
 		
+		// TODO: add conditional GET support based on modification date
 		return $this->respond(
 			file_get_contents($file), 
 			HTTPResponse::OK, 
