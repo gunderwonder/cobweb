@@ -1,5 +1,13 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @package    Cobweb
+ * @subpackage Dispatch
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ */
 class MiddlewareManager {
 	
 	protected static $manager;
@@ -96,8 +104,10 @@ class MiddlewareManager {
 	}
 	
 	/**
-	 * Sugss
-	 *
+	 * Convert a middleware label of the form `<application_name>.<foo>'
+	 * to its class name `FooMiddleware'
+	 * 
+	 * @return string class name of a middleware label
 	 */
 	protected static function classify($middleware_name) {
 		list($application, $middleware) = explode('.', $middleware_name);
@@ -128,5 +138,9 @@ class MiddlewareManager {
 			
 		return $path;
 			
+	}
+	
+	public function __toArray() {
+		return $this->middleware;
 	}
 }
