@@ -1,5 +1,13 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @package    Cobweb
+ * @subpackage Forms
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ */
 class IntegerField extends FormField {
 	
 	
@@ -17,6 +25,7 @@ class IntegerField extends FormField {
 		if ($cleaned[0] == '-')
 			if (ctype_digit(utf8_substr($cleaned, 1)))
 				return intval($cleaned);
+				
 		if (ctype_digit($cleaned))
 			return intval($cleaned);
 			

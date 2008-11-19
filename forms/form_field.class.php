@@ -22,18 +22,23 @@ abstract class FormField {
 	
 	private $label;
 	
-	public function __construct($label = NULL, 
-		                        array $specification = array(),
+	public function __construct(array $specification = array(),
 		                        FormWidget $widget = NULL) {
 			
-		$this->specification = array_merge($this->defaults, $specification);
+		$this->specification = new ImmutableArray(array_merge($this->defaults, $specification));
 		$this->widget = is_null($widget) ? $this->defaultWidget() : $widget;
 		
-		$this->error_messages = array_merge($this->error_messages, $this->errorMessages());
-		if (isset($this->specification['error_messages']))
-			$this->error_messages = array_merge($this->error_messages, $this->specification['error_messages']);
-		
-		
+		// merge default error messages with the concrete class' messages
+		$this->error_messages = array_merge($this->error_messages, 
+			$this->errorMessages());
+			
+		// merge error message with specification if provided
+		if (isset($this->specification['error_messages'])) {
+			$this->error_messages = array_merge(
+				$this->error_messages, 
+				$this->specification['error_messages']);
+			unset($this->specification['error_messages']);
+		}
 	}
 	
 	public function clean($value) {
@@ -57,6 +62,8 @@ abstract class FormField {
 	}
 	
 	public function label() {
+		if ($label = $this->specification->get('label', NULL))
+			return $label;
 		return self::labelize($this->name);
 	}
 	
@@ -80,10 +87,18 @@ abstract class FormField {
 		$this->name = $name;
 	}
 	
-	public function error($error_message_key) {
+	public function error($error_message_key, array $arguments = NULL) {
+		if (is_null($arguments))
+			$arguments = array($this->label());
+			
 		throw new FormValidationException(
-			array(sprintf($this->error_messages[$error_message_key], 
-				  $this->label())));
+			array(call_user_func_array(
+				  	'sprintf', 
+			      	array_merge(array($this->error_messages[$error_message_key]), 
+			      	            $arguments)
+				)
+			)
+		);
 	}
 	
 	public function errorMessage($key) {
@@ -93,5 +108,10 @@ abstract class FormField {
 	protected function errorMessages() {
 		return array();
 	}
+	
+	public function __toString() {
+		return $this->widget()->render();
+	}
+
 
 }

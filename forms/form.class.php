@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/../vendor/utf8/utf8.php';
  * @subpackage Forms
  * @version    $Revision$
  */
-abstract class Form {
+abstract class Form implements IteratorAggregate {
 	
 	private $fields = array();
 	private $errors;
@@ -96,9 +96,38 @@ abstract class Form {
 		throw new FormException("Unknown field '{$key}'");
 	}
 	
+	public function assign($object) {
+		if (!$this->isValid())
+			throw new FormException('Cannot assign form values to object. The form is invalid');
+		
+		if (!is_object($object))
+			throw new UnexpectedValueException('Can only assign form values to objects.');
+			
+		foreach ($this->fields as $clean_data => $field)
+			$object->$key = $this->clean_data[$key];
+	}
+	
+	public function data() {
+		return $this->data;
+	}
+	
+	public function field($key) {
+		return $this->fields[$key];
+	}
+	
+	public function cleanData() {
+		return $this->clean_data;
+	}
+	
+	public function getIterator() {
+		return new ArrayIterator($this->fields);
+	}
+	
 	public static function create(array $specification, array $data = NULL) {
 		return new ConcreteForm($specification, $data);
 	}
+	
+	
 	
 	
 }
