@@ -1,27 +1,23 @@
 <?php
 /**
- * $Id$
- * 
- * @package Cobweb
- * @subpackage HTTP
- * @author Øystein Riiser Gundersen <oystein@upstruct.com>
- * @version 0.1
+ * @version $Id$
  */
 
 /**
  * Represents an HTTP response to an AJAX request
  * 
  * The {@link AJAXResponse} class implements the server end side of a very 
- * simple `protocol' using JSON to make communication between client side
+ * simple protocol using JSON to make communication between client side
  * Javascript and Cobweb easier. This protocol defines a set of commands for
  * the client side to exectute (e.g. redirect to a URL or display an 
  * informational message to the user), a messaging mechanism, and the means
  * to convey the status of a server side operation (i.e 
  * {@link AJAXResponse::SUCCESS} or {@link AJAXResponse::FAILURE}).
  * 
- * @package Cobweb
+ * @package    Cobweb
  * @subpackage HTTP
- * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version    $Revision$
  */
 class AJAXResponse extends HTTPResponse {
 	
@@ -29,7 +25,7 @@ class AJAXResponse extends HTTPResponse {
 	/**
 	 * Command for specifying a message to be displayed
 	 * 
-	 * Specify the message to be displayed with the `<var>element</var>' key 
+	 * Specify the message to be displayed with the <var>element</var> key 
 	 * of the <var>$extra</var> array.
 	 * @var string
 	 */
