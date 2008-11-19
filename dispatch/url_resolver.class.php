@@ -1,5 +1,7 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
@@ -33,6 +35,7 @@ class URLResolver implements Resolver {
 		$this->include_options = $include_options;
 		$this->prefix_pattern  = $prefix_pattern; 
 		$this->rules  = $rules; 
+		$this->reverse_map = NULL;
 		
 	}
 	
@@ -67,14 +70,14 @@ class URLResolver implements Resolver {
 					return $action;
 			}
 
-				// if (isset($options['include']))	
-				// 	return $this->resolveInclude($pattern, $url, $options, $matches);
-				// else
-				// 	return array(
-				// 		$this->concatencatePatterns($this->prefix_pattern, $pattern), 
-				// 		array_merge($this->include_options, $options),
-				// 		array_merge($this->include_matches, $matches)
-				// 	);
+			// if (isset($options['include']))	
+			// 	return $this->resolveInclude($pattern, $url, $options, $matches);
+			// else
+			// 	return array(
+			// 		$this->concatencatePatterns($this->prefix_pattern, $pattern), 
+			// 		array_merge($this->include_options, $options),
+			// 		array_merge($this->include_matches, $matches)
+			// 	);
 		}
 		
  		return new ControllerAction(
@@ -122,9 +125,9 @@ class URLResolver implements Resolver {
 			$action->rules(),
 			$action->options(),
 			array_merge($this->include_matches, $matches),
-			$this->concatencatePatterns($this->preg_match, $pattern)
+			$pattern
 		);
-		return $include_router->resolveURL($request, $this->trimPattern($pattern, $url));
+		return $include_router->resolveURL($request, ltrim($this->trimPattern($pattern, $url), '/'));
 	}
 	
 	/**
@@ -242,7 +245,7 @@ class URLResolver implements Resolver {
 				$pattern
 			);
 			
-		} catch (CobwebResolverException $e) {
+		} catch (CobwebException $e) {
 			unset($this->reverse_arguments, 
 				  $this->current_argument, 
 				  $this->reverse_resolve_pattern);
@@ -255,6 +258,11 @@ class URLResolver implements Resolver {
 		
 		$resolved = str_replace('^', '', $resolved);
 		$resolved = str_replace('$', '', $resolved);
+		$resolved = str_replace('?', '', $resolved);
+		
+		if ($this->prefix_pattern)
+			$resolved = str_replace('^', '', $this->prefix_pattern) . '/' . $resolved;
+		
 		return $resolved;
 	}
 	
@@ -275,8 +283,9 @@ class URLResolver implements Resolver {
 		$value = NULL;          // the replacement value 
 		$test_regex = NULL;
 		
+		// match named/positional subpatterns
 		$pattern_matches = array();
-		preg_match($this->patternize('^\?<(\w+)>(.*?)$'), $pattern, $pattern_matches);
+		preg_match($this->patternize('^\?P?<(\w+)>(.*?)$'), $pattern, $pattern_matches);
 		
 		/* named subpattern:
 		 * $pattern_matches[1] is the group, 
@@ -287,7 +296,7 @@ class URLResolver implements Resolver {
 				$value = $this->reverse_arguments[$pattern_matches[1]];
 				$test_regex = $pattern_matches[2];
 			} else
-				throw new CobwebResolverException(
+				throw new CobwebException(
 					"Could not reverse resolve '{$this->reverse_resolve_pattern}' " .
 					"Named group '{$pattern_matches[1]}' is undefined"
 				);
@@ -299,19 +308,58 @@ class URLResolver implements Resolver {
 				$this->current_argument++; // move to the next pattern position
 				$test_regex = $pattern;
 			} else
-				throw new CobwebResolverException(
+				throw new CobwebException(
 					"Could not reverse resolve '{$this->reverse_resolve_pattern}' " .
 					"Positional argument number {$this->current_argument} is undefined"
 				);
 		
 		// test if the regex matches the found value
-		if (preg_match($this->patternize('^' . $test_regex . '$'), $value) === 0)
-			throw new CobwebResolverException(
+		if (preg_match($this->patternize("^{$test_regex}$"), $value) === 0)
+			throw new CobwebException(
 				"Could not reverse resolve '{$this->reverse_resolve_pattern}' " .
 				"The value '$value' did not match the pattern '$test_regex'"
 			);
 		
+		
 		return $value;
+	}
+	
+	private function buildReverseMap() {
+		if (!is_null($this->reverse_map))
+			return;
+		
+		$this->reverse_map = array();
+		$name = NULL;
+		foreach ($this->rules as $pattern => $action) {
+			
+			if (is_string($action))
+				$name = $action;
+			else if (is_array($action)) {
+				$last = end($action);
+				if (is_array($last) && isset($last['name']))
+					$name = $last['name'];
+				else if (isset($action[0]) && is_string($action[0]))
+					$name = $action[0];
+				
+			} else if (is_object($action)) 
+				$name = $action->name();
+				
+			if (!is_null($name))
+				$this->reverse_map[$name] = $pattern;
+			$name = NULL;
+		}
+		
+	}
+	
+	public function reverse($name, array $arguments = array()) {
+		
+		$this->buildReverseMap();
+
+		if (!isset($this->reverse_map[$name]))
+			throw new CobwebException("No URL mapped to action {$name}");
+			
+		return Cobweb::get('URL_PREFIX') . '/' . 
+		       $this->reverseResolve($this->reverse_map[$name], $arguments);
 	}
 	
 }
