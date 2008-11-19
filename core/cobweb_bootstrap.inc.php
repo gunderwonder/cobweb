@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 
 require_once COBWEB_DIRECTORY . '/core/exceptions.inc.php';
 require_once COBWEB_DIRECTORY . '/core/cobweb_loader.class.php';
