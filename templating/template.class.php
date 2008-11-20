@@ -105,11 +105,12 @@ class Template implements ArrayAccess {
 	 * @param  filename template to load
 	 * @throws FileNotFoundException if the file could not be found
 	 */
-	protected static function loadTemplate($filename) {
+	public static function loadTemplate($filename) {
 		
 		// look for templates in TEMPLATE_DIRECTORIES setting
 		foreach (Cobweb::get('TEMPLATE_DIRECTORIES', array()) as $directory) {
 			$template = $directory . '/' . $filename;
+			
 			if (file_exists($template))
 				return $template;
 		}
@@ -135,6 +136,10 @@ class Template implements ArrayAccess {
 	public function bind(array $bindings) {
 		$this->adapter->bind($bindings);
 		return $this;
+	}
+	
+	public static function create() {
+		return new Template();
 	}
 	
 	// ARRAY ACCESS IMPLEMENTATION
