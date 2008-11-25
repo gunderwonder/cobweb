@@ -17,9 +17,12 @@ class LoggingMiddleware extends Middleware {
 			$formatted_logs .= $formatter->format();
 		}
 		
-		if ($response['Content-Type'] == MIMEType::HTML && $response->code() != 304) {
+		if ($response->code() == 304)
+			return $response;
+		
+		// HTML
+		if ($response['Content-Type'] == MIMEType::HTML) {
 			
-				// insert log javascript in header
 				if (($position = utf8_strpos($response->body, '</head>')) !== false)
 					$response->body = str_replace(
 						'</head>', 
@@ -30,8 +33,8 @@ class LoggingMiddleware extends Middleware {
 					$response->body .= $formatted_logs;
 			
 			
-			
-		} else if ($response['Content-Type'] == MIMEType::JSON) {
+		// JSON
+		} else if ($request->isAJAX() && $response['Content-Type'] == MIMEType::JSON) {
 			$json = JSON::decode($response->body);
 			$json['logs'] = $formatted_logs;
 			$response->body = JSON::encode($json);
