@@ -4,7 +4,7 @@
  * @licence http://www.opensource.org/licenses/mit-license.php MIT
  */
 
-define('SMARTY_DIR', COBWEB_DIRECTORY . '/vendor/smarty/libs/');
+define('SMARTY_DIR', COBWEB_DIRECTORY . '/vendor/smarty/');
 require_once(SMARTY_DIR . 'Smarty.class.php');
 
 /**
