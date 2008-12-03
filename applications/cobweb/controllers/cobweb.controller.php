@@ -13,6 +13,14 @@ class CobwebController extends Controller {
 		return $this->render('404.tpl', 
 			array('uri' => $this->request->URI()), 
 			HTTPResponse::NOT_FOUND);
+			
+	}
+	
+	public function error(Exception $e) {
+		return $this->render(
+			Cobweb::get('ERROR_TEMPLATE', 'error.tpl'), 
+			array('exception' => $e)
+		);
 	}
 	
 }
