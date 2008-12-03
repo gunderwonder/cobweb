@@ -16,7 +16,7 @@ class CobwebController extends Controller {
 			
 	}
 	
-	public function gracefulException(Exception $e) {
+	public function gracefulException(Exception $exception) {
 		return $this->render(
 			Cobweb::get('ERROR_TEMPLATE', 'error.tpl'), 
 			array('exception' => $e)
