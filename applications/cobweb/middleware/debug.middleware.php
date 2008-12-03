@@ -6,7 +6,7 @@ class DebugMiddleware extends Middleware {
 		if (Cobweb::get('DEBUG'))
 			return Controller::invoke('cobweb.debug.debugger', array('exception' => $e));
 		else
-			return Controller::invoke('cobweb.cobweb.exception', array('exception' => $e));
+			return Controller::invoke('cobweb.cobweb.graceful_exception', array('exception' => $e));
 	}
 		
 }
