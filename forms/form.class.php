@@ -20,7 +20,7 @@ abstract class Form implements IteratorAggregate {
 	private $clean_data = array();
 
 	
-	public function __construct(array $data = NULL) {
+	public function __construct($data = NULL) {
 		$this->clean_data = array();
 		
 		$this->configure();
