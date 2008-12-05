@@ -51,6 +51,7 @@ class CobwebLoader {
 		'IntegerField' => '/forms/fields/integer_field.class.php',
 		'TextField' => '/forms/fields/text_field.class.php',
 		'TextInput' => '/forms/widgets/text_input.class.php',
+		'EmailField' => '/forms/fields/email_field.class.php',
 		'PositiveIntegerField' => '/forms/fields/positive_integer_field.class.php',
 		'ConcreteForm' => '/forms/concrete_form.class.php',
 		'Console' => '/utilities/logging/console.class.php',
