@@ -9,6 +9,12 @@ class EmailField extends FormField {
 		$cleaned = parent::clean($value);
 		
 		if (!preg_match(self::EMAIL_REGEX, $value))
-			// $this->error();
+			$this->error('invalid_email', array($this->label()));
+	}
+	
+	public function errorMessages() {
+		return array(
+			'invalid_email' => "'%s' is not a valid email address",
+		);
 	}
 }
