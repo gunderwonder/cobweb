@@ -37,7 +37,7 @@ abstract class FormField {
 			$this->error_messages = array_merge(
 				$this->error_messages, 
 				$this->specification['error_messages']);
-			unset($this->specification['error_messages']);
+			// unset($this->specification['error_messages']);
 		}
 	}
 	
