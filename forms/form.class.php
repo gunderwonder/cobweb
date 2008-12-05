@@ -123,7 +123,7 @@ abstract class Form implements IteratorAggregate {
 		return new ArrayIterator($this->fields);
 	}
 	
-	public static function create(array $specification, array $data = NULL) {
+	public static function create(array $specification, $data = NULL) {
 		return new ConcreteForm($specification, $data);
 	}
 	
