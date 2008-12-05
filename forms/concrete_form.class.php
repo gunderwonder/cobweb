@@ -3,7 +3,7 @@
 
 final class ConcreteForm extends Form {
 	
-	public function __construct(array $specification, array $data = NULL) {
+	public function __construct(array $specification, $data = NULL) {
 		foreach ($specification as $key => $field) {
 			$this->__set($key, $field);
 		}
