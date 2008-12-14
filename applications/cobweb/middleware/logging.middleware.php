@@ -34,7 +34,7 @@ class LoggingMiddleware extends Middleware {
 			
 			
 		// JSON
-		} else if ($request->isAJAX() && $response['Content-Type'] == MIMEType::JSON) {
+		} else if ($request instanceof AJAXResponse) {
 			$json = JSON::decode($response->body);
 			$json['logs'] = $formatted_logs;
 			$response->body = JSON::encode($json);
