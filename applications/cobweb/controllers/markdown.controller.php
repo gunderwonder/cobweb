@@ -1,10 +1,13 @@
 <?php
+/**
+ * @version $Id$
+ */
 
 require_once COBWEB_DIRECTORY . '/vendor/markdown/Markdown.php';
 
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.om>
- * @version    0.2
+ * @version    $Rev$
  * @package    Cobweb
  * @subpackage Cobweb Application
  */
@@ -22,6 +25,8 @@ class MarkdownController extends Controller {
 	}
 	
 }
+
+
 
 
 ?>
