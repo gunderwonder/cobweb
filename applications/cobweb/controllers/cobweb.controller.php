@@ -1,8 +1,21 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Cobweb Application
+ */
 class CobwebController extends Controller {
 	
-	public function notFound404($uri = NULL) {
+	/**
+	 * @param $uri       string
+	 * @param $exception Exception
+	 * @return HTTPResponse
+	 */
+	public function notFound404($uri = NULL, Exception $exception = NULL) {
 		
 		if (!str_ends_with($this->request->path(), '/') && Cobweb::get('APPEND_SLASH_ON_404'))
 			return new HTTPResponseRedirect(Cobweb::get('URL_PREFIX') . $this->request->path() . '/');
@@ -16,6 +29,10 @@ class CobwebController extends Controller {
 			
 	}
 	
+	/**
+	 * @param  $exception Exception 
+	 * @return HTTPResponse
+	 */
 	public function gracefulException(Exception $exception) {
 		return $this->render(
 			Cobweb::get('ERROR_TEMPLATE', 'error.tpl'), 
