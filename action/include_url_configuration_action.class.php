@@ -2,7 +2,7 @@
 
 class IncludeURLConfigurationAction implements Action {
 	
-	protected $application_name, $file;
+	protected $application_name, $file, $rules;
 	
 	public function __construct($label, array $options = NULL) {
 		$this->label = $label;
@@ -13,6 +13,7 @@ class IncludeURLConfigurationAction implements Action {
 				"'{$application_name}' is not in your 'INSTALLED_APPLICATIONS'.");
 		
 		$this->options = is_null($options) ? array() : $options;
+		$this->rules = NULL;
 	}
 	
 	public function invoke(array $arguments = NULL) {
@@ -24,10 +25,17 @@ class IncludeURLConfigurationAction implements Action {
 	}
 	
 	public function rules() {
+		if (!is_null($this->rules))
+			return $this->rules;
+		
 		foreach (Cobweb::get('APPLICATIONS_PATH') as $path) {
+			
 			$urls_path = $path . $this->path();
-			if (file_exists($urls_path))
-				return require_once $urls_path;
+			if (file_exists($urls_path)) {
+				$this->rules = require_once $urls_path;
+				return $this->rules;
+			}
+				
 
 		}
 		throw new CobwebConfigurationException(
@@ -36,6 +44,18 @@ class IncludeURLConfigurationAction implements Action {
 	
 	public function options() {
 		return $this->options;
+	}
+	
+	public function setResolver(Resolver $resolver) {
+		$this->resolver = $resolver;
+	}
+	
+	public function resolver() {
+		return $this->resolver;
+	}
+	
+	public function name() {
+		return '';
 	}
 	
 }
