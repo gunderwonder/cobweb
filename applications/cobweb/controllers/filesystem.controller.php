@@ -3,7 +3,8 @@
 
 /**
  * @author  Øystein Riiser Gundersen <oystein@upstruct.com>
- * @version 0.2
+ * @package Core
+ * @version $Rev$
  */
 class FilesystemController extends Controller {
 	

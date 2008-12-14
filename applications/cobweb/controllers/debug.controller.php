@@ -1,10 +1,13 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$ 
+ */
 
 /** 
- * @package Cobweb
- * @subpackage Debuggin
- * @author  Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package     Cobweb
+ * @subpackage  Core
+ * @author      Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version     $Rev$
  */ 
 class DebugController extends Controller {
 	

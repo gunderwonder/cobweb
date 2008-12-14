@@ -1,8 +1,19 @@
 <?php
+/**
+ * @version $Id$
+ */
 
-
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Cobweb Application
+ */
 class DocumentationController extends Controller {
 	
+	/**
+	 * @param  $slug string
+	 * @return HTTPResponse
+	 */
 	public function manual($slug = NULL) {
 		return self::invoke('cobweb.markdown.generate',
 			array(

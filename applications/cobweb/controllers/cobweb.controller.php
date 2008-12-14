@@ -6,7 +6,7 @@
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
- * @subpackage Cobweb Application
+ * @subpackage Core
  */
 class CobwebController extends Controller {
 	
