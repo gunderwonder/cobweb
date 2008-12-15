@@ -21,7 +21,11 @@ class SmartyTemplate extends Smarty {
 	public function __construct() {
 		$this->error_reporting = E_ALL; 
 		$this->debugging = false;
-		$this->plugins_dir[] = dirname(__FILE__) . '/plugins';
+		$this->plugins_dir = array_merge(
+			$this->plugins_dir,
+			array(dirname(__FILE__) . '/plugins'),
+			Cobweb::get('SMARTY_PLUGIN_DIRECTORIES', array())
+		);
 	}
 	
 	/**
