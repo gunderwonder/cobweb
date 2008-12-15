@@ -20,12 +20,6 @@ class HTTPRequest extends Request implements ArrayAccess {
 	/* @var string */
 	protected $body;
 	
-	// /* @var HTTPQueryDictionary */
-	// protected $GET;
-	// 
-	// /* @var HTTPQueryDictionary */
-	// protected $POST;
-	
 	/* @var MutableArray */
 	protected $COOKIES;
 	
@@ -147,7 +141,11 @@ class HTTPRequest extends Request implements ArrayAccess {
 		return lstrip($this->META['REQUEST_URI'], Cobweb::get('URL_PREFIX'));
 	}
 
-		
+	/**
+	 * Returns the path segment of this request's URI
+	 * 
+	 * @return string path
+	 */
 	public function path() {
 		$uri = $this->URI();
 		$query_part = utf8_strpos($uri, '?');
@@ -157,9 +155,14 @@ class HTTPRequest extends Request implements ArrayAccess {
 		return utf8_substr($uri, 0, $query_part);
 	}
 	
+	/**
+	 * Returns the query segment of this request's URI
+	 * 
+	 * @return string query
+	 */
 	public function query() {
 		 if (isset($this->META['QUERY_STRING']))
-			$this->META['QUERY_STRING'];
+			return $this->META['QUERY_STRING'];
 		
 		$hash = $this->hash();
 		$hash = $hash ? '#' . $hash : '';
@@ -167,12 +170,15 @@ class HTTPRequest extends Request implements ArrayAccess {
 		return lstrip(rstrip(lstrip($this->URI(), $this->path()), $hash), '?');
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function bits() {
 		return explode('/', trim($this->path(), '/'));
 	}
 	
 	/**
-	 * Returns if this request did not originate from a referer or from the 
+	 * Returns true if this request did not originate from a referer or from the 
 	 * URI of this request
 	 * 
 	 * @return boolean if the request is direct
@@ -262,11 +268,11 @@ class HTTPRequest extends Request implements ArrayAccess {
 	}
 	
 	public function offsetSet($key, $value) { 
-		throw new KeyError("HTTP request headers are immutable");
+		throw new CobwebException("HTTP request headers are immutable");
 	}
 	
 	public function offsetUnset($key) { 
-		throw new KeyError("HTTP request headers are immutable");
+		throw new CobwebException("HTTP request headers are immutable");
 	}
 	/**@- */
 	
