@@ -28,7 +28,8 @@ class URLResolver implements Resolver {
 		                        array $rules, 
 		                        array $include_options = array(), 
 		                        array $include_matches = array(),
-		                        $prefix_pattern = '') { 
+		                        $prefix_pattern = '',
+		                        Resolver $parent_resolver = NULL) { 
 		
 		$this->dispatcher      = $dispatcher;	
 		$this->include_matches = $include_matches;
@@ -36,7 +37,7 @@ class URLResolver implements Resolver {
 		$this->prefix_pattern  = $prefix_pattern; 
 		$this->rules  = $rules; 
 		$this->reverse_map = NULL;
-		
+		$this->parent_resolver = $parent_resolver;
 	}
 	
 	/**
@@ -119,15 +120,19 @@ class URLResolver implements Resolver {
 	private function resolveInclude(Request $request, 
 		                            IncludeURLConfigurationAction $action, 
 		                            $pattern, $matches, $url) {
-			
-		$include_router = new URLResolver(
+		
+		
+		$include_resolver = new URLResolver(
 			$this->dispatcher,
 			$action->rules(),
 			$action->options(),
 			array_merge($this->include_matches, $matches),
-			$pattern
+			$pattern,
+			$this
 		);
-		return $include_router->resolveURL($request, ltrim($this->trimPattern($pattern, $url), '/'));
+		$action->setResolver($include_resolver);
+		
+		return $include_resolver->resolveURL($request, ltrim($this->trimPattern($pattern, $url), '/'));
 	}
 	
 	/**
@@ -324,9 +329,10 @@ class URLResolver implements Resolver {
 		return $value;
 	}
 	
-	private function buildReverseMap() {
+	public function reverseMap() {
+		
 		if (!is_null($this->reverse_map))
-			return;
+			return $this->reverse_map;
 		
 		$this->reverse_map = array();
 		$name = NULL;
@@ -340,26 +346,47 @@ class URLResolver implements Resolver {
 					$name = $last['name'];
 				else if (isset($action[0]) && is_string($action[0]))
 					$name = $action[0];
+			
+			} else if ($action instanceof IncludeURLConfigurationAction) {
 				
+				// TODO: get resolver from action
+				$resolver = new URLResolver($this->dispatcher,
+		                        $action->rules(), // load URL patterns
+		                        $this->include_matches,          
+		                        $this->include_options,
+		                        $pattern,
+		                        $this);
+				
+				$reverse = $resolver->reverseMap();
+				foreach ($reverse as $a => $p) {
+					$this->reverse_map[$a] = $this->concatencatePatterns($pattern . '/', $p);
+				}
 			} else if (is_object($action)) 
-				$name = $action->name();
-				
+				;
+			
 			if (!is_null($name))
 				$this->reverse_map[$name] = $pattern;
 			$name = NULL;
 		}
 		
+		// if (!is_null($this->parent_resolver))
+		// 	return $this->parent_resolver->reverseMap();
+		return $this->reverse_map;
+		
 	}
 	
 	public function reverse($name, array $arguments = array()) {
 		
-		$this->buildReverseMap();
+		$reverse_map = $this->reverseMap();
+		
+		// if (!is_null($this->parent_resolver))
+		// 	return $this->parent_resolver->reverse($name, $arguments);
 
-		if (!isset($this->reverse_map[$name]))
+		if (!isset($reverse_map[$name]))
 			throw new CobwebException("No URL mapped to action {$name}");
 			
 		return Cobweb::get('URL_PREFIX') . '/' . 
-		       $this->reverseResolve($this->reverse_map[$name], $arguments);
+		       $this->reverseResolve($reverse_map[$name], $arguments);
 	}
 	
 }
