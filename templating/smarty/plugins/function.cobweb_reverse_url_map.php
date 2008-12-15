@@ -1,5 +1,14 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @author     Øystein Riiser Gundersen
+ * @package    Cobweb
+ * @subpackage Templating
+ * @version    $Rev$
+ */
 function smarty_function_cobweb_reverse_url_map($parameters, &$smarty) {
 
 	$map = array();
