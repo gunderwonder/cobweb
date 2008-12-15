@@ -63,7 +63,7 @@ function array_index_of($array, $value) {
 	
 }
 
-function array_to_sql_list($iterable, $key = NULL) {
+function array_to_sql_list($iterable, $key = NULL, $quote = false) {
 	$list = '(';
 	$is_array = is_array($iterable);
 	
@@ -77,6 +77,8 @@ function array_to_sql_list($iterable, $key = NULL) {
 			else
 				$value = $iterable[$i]->$key;
 
+		if ($quote)
+			$value = "'{$value}'";
 		$list .= $value . ($i != (count($iterable) - 1) ? ', ' : '');		
 	}
 	
