@@ -7,6 +7,7 @@
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
  * @subpackage Dispatch
+ * @version    $Rev$
  */
 class URLResolver implements Resolver {
 	
