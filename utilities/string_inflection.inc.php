@@ -7,6 +7,9 @@ function str_classify($string) {
 	);
 }
 
+/**
+ * @see http://www.mail-archive.com/django-users@googlegroups.com/msg03402.html
+ */
 function str_slugify($string) {
 	
 	$slug = str_replace(',', '', $string);
