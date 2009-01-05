@@ -50,6 +50,7 @@ class Dispatcher {
 			if ($middleware_response = $middleware->handleException($request, $exception)) {
 				Cobweb::info('Sending response: %o', $middleware_response);
 				return $middleware->handleResponse($request, $middleware_response);
+			}
 				
 			throw $exception;
 		}
