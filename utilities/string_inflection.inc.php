@@ -9,15 +9,17 @@ function str_classify($string) {
 
 function str_slugify($string) {
 	
-	$slug = htmlentities($string, ENT_COMPAT, 'UTF-8');
-	$slug = strtolower(preg_replace('/[_\s\.\'"]+/u', '-', trim($slug)));
+	$slug = str_replace(',', '', $string);
+	$slug = htmlentities($slug, ENT_NOQUOTES, 'UTF-8');
+	
+	$slug = utf8_strtolower(preg_replace('/[_\s\.\'"]+/u', '-', trim($slug)));
 	
   	$slug = preg_replace(
-		'/&(\w+)(uml|acute|grave|circ|tilde|slash|ring);/',
+		'/&(\w+)(uml|acute|grave|circ|tilde|slash|ring|lig);/',
 		'$1',
 		$slug);
 	
-  	return html_entity_decode($slug, ENT_COMPAT, 'UTF-8');
+  	return urlencode(html_entity_decode($slug, ENT_COMPAT, 'UTF-8'));
 }
 
 function str_camelize($string) {
