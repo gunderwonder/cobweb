@@ -45,6 +45,7 @@ class ControllerAction implements Action {
 		else
 			$this->action_label = $specification[0];
 		
+		// get the application, controller and action
 		if (count(@list($this->application_name,
 			           $this->controller_name,
 			           $this->action_name) = 
@@ -52,17 +53,19 @@ class ControllerAction implements Action {
 			throw new CobwebConfigurationException(
 				'Invalid controller action label ' . stringify($controller_action_name));
 		
+		// check if the application is installed
 		if (!in_array($this->application_name, Cobweb::get('INSTALLED_APPLICATIONS')))
 			throw new CobwebConfigurationException(
 				"The application '{$this->application_name}' is not in your 'INSTALLED_APPLICATIONS'.");
 		
+		// no options here...
 		if (!is_array($specification)) {
 			$this->options = array();
 			$this->arguments = $arguments;
 			return;
 		}
 		
-		// options if present
+		// options if present (oh, god this is some hairy code...)
 		array_shift($specification);
 		$ending = end($specification);
 		$key    = key($specification);
@@ -79,9 +82,7 @@ class ControllerAction implements Action {
 		Cobweb::loadApplication($this->application_name);
 		
 		$label = $this->controller_name;
-		if (!class_exists($this->controller_name . 'Controller'))
-			$this->controller_name = str_classify($this->controller_name) . 'Controller';
-		
+		$this->controller_name = str_classify($this->controller_name) . 'Controller';	
 		$this->loadControllerFile($label);
 		
 		if (!class_exists($this->controller_name)) {

@@ -44,12 +44,12 @@ class Dispatcher {
 		 * handle it or rethrow the exception
 		 */
 		} catch (Exception $exception) {
-			Cobweb::error('Caught exception! %o', $exception);
 			
+			Cobweb::error('Caught exception! %o', $exception);
+		
 			if ($middleware_response = $middleware->handleException($request, $exception)) {
 				Cobweb::info('Sending response: %o', $middleware_response);
 				return $middleware->handleResponse($request, $middleware_response);
-			}
 				
 			throw $exception;
 		}
