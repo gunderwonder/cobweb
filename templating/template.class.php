@@ -107,13 +107,16 @@ class Template implements ArrayAccess {
 	 */
 	public static function loadTemplate($filename) {
 		
-		// look for templates in TEMPLATE_DIRECTORIES setting
-		foreach (Cobweb::get('TEMPLATE_DIRECTORIES', array()) as $directory) {
-			$template = $directory . '/' . $filename;
-			
+		$template_directories = Cobweb::get('TEMPLATE_DIRECTORIES');
+		foreach (Cobweb::get('INSTALLED_APPLICATIONS') as $application)
+			$template_directories[] = Cobweb::loadApplication($application)->path() . '/templates';
+		
+		foreach ($template_directories as $directory) {
+			$template = $directory . '/' . $filename;	
 			if (file_exists($template))
 				return $template;
 		}
+		
 		throw new FileNotFoundException(
 			"Could not find template file '$filename'. Check your 'TEMPLATE_DIRECTORIES' setting");
 	}
