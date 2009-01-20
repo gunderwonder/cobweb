@@ -3,8 +3,10 @@
 class CobwebDoctrineManager {
 	
 	private static $connections;
+	private static $cached_model;
 	
-	public static function loadModels($caching = false) {
+	public static function loadModels($lazy_load = false) {
+		
 		
 		$applications = Cobweb::get('INSTALLED_APPLICATIONS');
 		foreach ($applications as $application) {
@@ -16,8 +18,20 @@ class CobwebDoctrineManager {
 					foreach (new DirectoryIterator($models_path) as $file)
 						if (!$file->isDir() && 
 						    	!$file->isDot() &&
-						    	!str_starts_with($file->getFilename(), '.'))
-							require_once $file->getPathname();
+						    	!str_starts_with($file->getFilename(), '.')) {
+							
+							if (!$lazy_load) {
+								require_once $file->getPathname();
+							} else {
+								
+								CobwebLoader::register(
+									self::classify($file->getFilename()), 
+									$file->getPathname()
+								);
+							}
+							
+						}
+							
 			}	
 		}
 	}
@@ -39,6 +53,15 @@ class CobwebDoctrineManager {
 	
 	public static function connections() {
 		return self::$connections;
+	}
+	
+	private static function classify($filename) {
+		$dotoffset = strpos($filename, '.');
+		if ($dotoffset === false)
+			return NULL;
+			
+		$model_name = substr($filename, 0, $dotoffset);
+		return str_classify($model_name);
 	}
 	
 	
