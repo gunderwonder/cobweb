@@ -2,7 +2,7 @@
 
 class HTTPQueryDictionary extends ImmutableArray {
 	
-	public function get($key, $nullvalue) {
+	public function get($key, $nullvalue = NULL) {
 		if (!empty($this[$key]))
 			return $this[$key];
 			
