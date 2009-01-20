@@ -62,10 +62,7 @@ class DebugController extends Controller {
 					$trace['is_controller'] = true;
 					
 			}
-			
 			$trace['stack_line'] = isset($backtrace[$i - 1]['line']) ? $backtrace[$i - 1]['line'] : -1;
-				
-			
 		}
 
 		$template['response_headers'] = $this->responseHeaders();
