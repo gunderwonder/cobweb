@@ -1,13 +1,20 @@
 <?php
 
+require_once COBWEB_DIRECTORY . '/applications/cobweb/middleware/cobweb.middleware.php';
+
+/**
+ * @deprecated
+ */
 class DebugMiddleware extends Middleware {
 	
-	public function processException(Request $request, Exception $e) {
-
-		if (Cobweb::get('DEBUG'))
-			return Controller::invoke('cobweb.debug.debugger', array('exception' => $e));
-		else
-			return Controller::invoke('cobweb.cobweb.graceful_exception', array('exception' => $e));
+	public function initialize() {
+		$this->middleware = new CobwebMiddleware();
 	}
-		
+	
+	private $error = false;
+	
+	public function processException(Request $request, Exception $e) {
+		return $this->middleware->processException($request, $e);
+	}
+
 }
