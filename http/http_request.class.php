@@ -24,7 +24,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	protected $COOKIES;
 	
 	/* @var ImmutableArray */
-	protected $META;
+	// protected $META;
 	
 	/**
 	 * Instantiates a request object with the specified GET, POST, COOKIE and
@@ -44,8 +44,9 @@ class HTTPRequest extends Request implements ArrayAccess {
 		
 		$this->properties['GET']  = new HTTPQueryDictionary($GET);
 		$this->properties['POST'] = new HTTPQueryDictionary($POST);
-		$this->META = new ImmutableArray($META);
 		
+		$this->properties['META'] = new ImmutableArray($META);
+		// $this->META = new ImmutableArray($META);
 		// $this->COOKIES = new MutableArray($_COOKIE);
 		
 		$other_headers = array('CONTENT_TYPE', 'CONTENT_LENGTH');
