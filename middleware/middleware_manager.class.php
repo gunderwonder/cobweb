@@ -33,7 +33,7 @@ class MiddlewareManager {
 	
 	public function handleResponse(Request $request, Response $response = NULL) {
 		foreach ($this->middleware_reversed as $middleware)
-			$response = $middleware->processResponse($request, $response);
+			$response = $this->assertResponse($middleware->processResponse($request, $response), $middleware);
 				
 		return $this->assertResponse($response, $middleware);
 	}
