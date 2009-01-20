@@ -8,7 +8,7 @@ class Usergroup extends Doctrine_Record {
 
 	public function setUp() {
 
-		$this->hasMany('Permission',
+		$this->hasMany('Permission as Permissions',
 			array(
 				'local' => 'usergroup_id',
 				'foreign' => 'permission_id',
@@ -18,7 +18,7 @@ class Usergroup extends Doctrine_Record {
 	}
 	
 	public function hasPermission($credential) {
-		foreach ($this->Permission as $p)
+		foreach ($this->Permissions as $p)
 			if ($p->credential == $credential)
 				return true;
 				
@@ -33,11 +33,11 @@ class Usergroup extends Doctrine_Record {
 		return true;
 	}
 	
-	public function getPermissions() {
-		return array_map(
-			create_function('$p', 'return $p->credential;'),
-			is_array($this->Permission) ? $this->Permission : array()
-		);
+	public function permissions() {
+		$permissions = array();
+		foreach ($this->Permissions as $permission)
+			$permissions[] = $permission->credential;
+		return $permissions;
 	}
 	
 	public static function table() {

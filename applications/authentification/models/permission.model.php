@@ -21,6 +21,14 @@ class Permission extends Doctrine_Record {
 				'refClass' => 'UsergroupPermission'
 			)
 		);
+		
+		$this->hasMany('User',
+			array(
+				'local' => 'permission_id',
+				'foreign' => 'user_id',
+				'refClass' => 'UserPermission'
+			)
+		);
 	}
 	
 	public function __toString() {

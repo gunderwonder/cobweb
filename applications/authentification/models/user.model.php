@@ -4,8 +4,9 @@
  */
 
 require_once COBWEB_DIRECTORY . '/vendor/phpass/PasswordHash.php';
-	
-class User extends Doctrine_Record {
+
+
+class User extends Model {
 	
 	private $hasher;
 	private $authenticated;
@@ -45,9 +46,17 @@ class User extends Doctrine_Record {
 			array(
 				'local' => 'usergroup_id',
 				'foreign' => 'id',
-				'notnull' => true
 			)
 		);
+		
+		$this->hasMany('Permission as Permissions', 
+			array(
+				'local' => 'user_id',
+				'foreign' => 'permission_id',
+				'refClass' => 'UserPermission'
+			)
+		);
+	
     }
 
 	public function fullname() {
@@ -77,11 +86,32 @@ class User extends Doctrine_Record {
 		if ($this->is_superuser)
 			return true;
 		
+		$user = Model::query('User', 'u')
+			->leftJoin('u.Permissions p')
+			->where('u.id = ?', $this->id)
+			->addWhere('p.credential = ?', $credential)
+			->fetchOne();
+		
+		if ($user)
+			return true;
+				
 		return $this->Usergroup->hasPermission($credential);
 	}
 	
-	public function getPermissions() {
-		return $this->Usergroup->getPermissions();
+	public function hasPermissions(array $credentials) {
+		foreach ($credentials as $c)
+			if (!$this->hasPermission($c))
+				return false;
+				
+		return true;
+	}
+	
+	public function permissions	() {
+		$permissions = array();
+		foreach ($this->Permissions as $permission)
+			$permissions[] = $permission->credential;
+
+		return array_merge($permissions, $this->Usergroup->permissions());
 	}
 	
 	

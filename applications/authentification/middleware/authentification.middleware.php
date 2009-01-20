@@ -27,10 +27,21 @@ class AuthentificationMiddleware extends Middleware {
 				
 		}
 		
+		
+		if ($request->isAuthenticated() &&
+		    $action->hasAnnotation('RequiresPermission')) {
+			
+			$permissions = $action->annotation('RequiresPermission')->value;
+			if (!is_array($permissions))
+				$permissions = array($permissions);
+			
+			if (!$request->user->hasPermissions($permissions))
+				return new HTTPResponseRedirect(Cobweb::get('LOGIN_URL'));
+		}
+		
 		if (!$request->isAuthenticated() &&
 			$request->path() != Cobweb::get('LOGIN_URL') &&
-			($action->controller()->hasAnnotation('RequiresAuthentification') ||
-		     $action->reflection()->hasAnnotation('RequiresAuthentification'))) {
+			$action->hasAnnotation('RequiresAuthentification')) {
 			
 			return new HTTPResponseRedirect(Cobweb::get('LOGIN_URL'));
 		}
