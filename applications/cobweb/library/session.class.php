@@ -22,7 +22,7 @@ class Session implements ArrayAccess {
 			$session_parameters['path'],
 			$session_parameters['domain'],
 			$session_parameters['secure'],
-			true
+			true // session cookies are HTTP Only
 		);
 		
 		session_start();
@@ -53,6 +53,18 @@ class Session implements ArrayAccess {
 		if (!isset($this[$key]) && !is_null($default))
 			return $default;
 		return $this[$key];
+	}
+	
+	public function __get($key) {
+		return $this[$key];
+	}
+	
+	public function __set($key, $value) {
+		return $this[$key] = $value;
+	}
+	
+	public function __isset($key) {
+		return isset($this[$key]);
 	}
 	
 	public function __toArray() {
