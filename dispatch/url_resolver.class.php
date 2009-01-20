@@ -131,7 +131,7 @@ class URLResolver implements Resolver {
 			$pattern,
 			$this
 		);
-		$action->setResolver($include_resolver);
+		// $action->setResolver($include_resolver);
 		
 		return $include_resolver->resolveURL($request, ltrim($this->trimPattern($pattern, $url), '/'));
 	}
