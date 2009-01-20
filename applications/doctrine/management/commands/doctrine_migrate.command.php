@@ -1,6 +1,19 @@
 <?php
+/**
+ * @version $Id$
+ */
 
+/**
+ * @author     Øystein Riiser Gundersen
+ * @package    Cobweb
+ * @subpackage Doctrine
+ * @version    $Rev$
+ */
 class DoctrineMigrateCommand extends CobwebManagerCommand {
+	
+	public function configure() {
+		$this->requiresProject();
+	}
 	
 	public function execute() {
 		
