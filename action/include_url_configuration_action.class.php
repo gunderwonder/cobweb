@@ -24,6 +24,14 @@ class IncludeURLConfigurationAction implements Action {
 		return "/{$this->application_name}/settings/{$this->file}.conf.php";
 	}
 	
+	public function hasAnnotation($annotation) {
+		return false;
+	}
+	
+	public function annotation($annotation) {
+		return NULL;
+	}
+	
 	public function rules() {
 		if (!is_null($this->rules))
 			return $this->rules;
@@ -46,15 +54,16 @@ class IncludeURLConfigurationAction implements Action {
 		return $this->options;
 	}
 	
-	public function setResolver(Resolver $resolver) {
-		$this->resolver = $resolver;
-	}
-	
-	public function resolver() {
-		return $this->resolver;
-	}
+	// public function setResolver(Resolver $resolver) {
+	// 	$this->resolver = $resolver;
+	// }
+	// 
+	// public function resolver() {
+	// 	return $this->resolver;
+	// }
 	
 	public function name() {
+		// XXX: should throw exception here
 		return '';
 	}
 	

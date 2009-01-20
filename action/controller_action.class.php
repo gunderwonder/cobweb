@@ -65,7 +65,7 @@ class ControllerAction implements Action {
 			return;
 		}
 		
-		// options if present (oh, god this is some hairy code...)
+		// options if present (oh, god, this is some hairy code...)
 		array_shift($specification);
 		$ending = end($specification);
 		$key    = key($specification);
@@ -159,7 +159,7 @@ class ControllerAction implements Action {
 			else if (isset($argument_values[$i]))
 				$arguments[$i] = $argument_values[$i];
 				
-			// use default if available
+			// use default when present
 			else if ($parameter->isDefaultValueAvailable())
 				$arguments[$i] = $parameter->getDefaultValue();
 					
@@ -208,8 +208,23 @@ class ControllerAction implements Action {
 		return $this->options;
 	}
 	
+	public function hasAnnotation($annotation) {
+		return $this->controller()->hasAnnotation($annotation) ||
+		       $this->reflection()->hasAnnotation($annotation);
+	}
+	
+	public function annotation($annotation) {
+		if ($this->reflection()->hasAnnotation($annotation))
+			return $this->reflection()->getAnnotation($annotation);
+			
+		if ($this->controller()->hasAnnotation($annotation))
+			return $this->controller()->getAnnotation($annotation);
+		return NULL;
+	}
 	
 	public static function invokeControllerAction($label, array $arguments = array()) {
+		
+		// XXX: ugh...
 		$action = new ControllerAction(
 			Cobweb::get('__REQUEST__'),
 		    Cobweb::get('__DISPATCHER__'),
