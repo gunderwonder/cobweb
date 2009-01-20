@@ -64,3 +64,5 @@ class HTTP500 extends HTTPException {
 class HeadersSentException extends HTTPException { }
 
 class CobwebDispatchException extends CobwebException { }
+
+class HTTPClientException extends RuntimeException { }
