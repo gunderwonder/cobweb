@@ -120,7 +120,7 @@ class Cobweb implements CobwebDeclaration {
 	protected function dispatch() {
 
 		Cobweb::log('Resolving URI...');
-		$action = $this->resolver()->resolve($this->request, Cobweb::get('URL_CONFIGURATION'));
+		$action = $this->resolver()->resolve($this->request, Cobweb::get('URL_CONFIGURATION', array()));
 		
 		Cobweb::log('Dispatching request...');
 		$response = $this->dispatcher->dispatch($this->request, $action, $this->middleware());
