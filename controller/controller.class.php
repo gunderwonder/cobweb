@@ -94,9 +94,9 @@ abstract class Controller {
 	 * @param string $label      the controller action's label
 	 * @param array  $arguments  the arguments to apply to the action
 	 * 
-	 * @return Response          the controller actitranon's response
+	 * @return Response          the controller action's response
 	 */
-	public static function invoke($label, array $arguments = NULL) {
+	public static function invoke($label, array $arguments = array()) {
 		return ControllerAction::invokeControllerAction($label, $arguments);
 	}
 	
@@ -109,7 +109,7 @@ abstract class Controller {
 	 */
 	protected function redirect($label, array $arguments = array()) {
 		if (str_starts_with($label, '@'))
-			$url = $this->resolver->reverse(utf8_substr($label, 1), $arguments);
+			$url = Cobweb::get('__RESOLVER__')->reverse(utf8_substr($label, 1), $arguments);
 		else
 			$url = $label;
 			
