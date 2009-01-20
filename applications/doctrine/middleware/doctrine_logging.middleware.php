@@ -50,7 +50,7 @@ class DoctrineLoggingMiddleware extends Middleware {
 	
 	public function formatSQL($sql) {
 		
-		$sql = preg_replace('/(\s)?(SELECT|FROM|WHERE|AND)(\s)/', "\n$2\n\t", $sql);
+		$sql = preg_replace('/(\s)?(SELECT|FROM|WHERE|AND|OR|LEFT JOIN|ORDER BY|LIMIT|VALUES|INSERT INTO)(\s)/', "\n$2\n\t", $sql);
 		$sql = preg_replace('/,\s/', ",\n\t", $sql);
 		return trim($sql);
 	}
