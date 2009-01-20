@@ -13,7 +13,7 @@ class CobwebMiddleware extends Middleware {
 		
 			return Controller::invoke('cobweb.debug.debugger', array('exception' => $e));
 		else if ($e instanceof HTTP404)
-			return Controller::invoke('cobweb.cobweb.not_found_404');
+			return Controller::invoke(Cobweb::get('404_ACTION', 'cobweb.cobweb.not_found_404'));
 		else
 			return Controller::invoke('cobweb.cobweb.graceful_exception', array('exception' => $e));
 			
