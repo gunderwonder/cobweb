@@ -10,7 +10,7 @@ CobwebLoader::register('CobwebDoctrineManager', dirname(__FILE__) . '/../library
 CobwebDoctrineManager::connect(Cobweb::get('DATABASE_SOURCE_NAME'));
 
 Cobweb::log('Loading models...');
-CobwebDoctrineManager::loadModels(Cobweb::get('DOCTRINE_LAZY_MODEL_LOADING', true));
+CobwebDoctrineManager::loadModels(Cobweb::get('DOCTRINE_LAZY_MODEL_LOADING', false));
 
 if (Cobweb::get('DEBUG'))
 	Cobweb::info('Done loading models %o', Doctrine::getLoadedModels());
