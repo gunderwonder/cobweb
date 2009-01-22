@@ -8,7 +8,7 @@ require_once COBWEB_DIRECTORY . '/applications/cobweb/middleware/cobweb.middlewa
 class DebugMiddleware extends Middleware {
 	
 	public function initialize() {
-		$this->middleware = new CobwebMiddleware($this->dispatcher, $this->request);
+		$this->middleware = new CobwebMiddleware($this->dispatcher);
 	}
 	
 	private $error = false;
