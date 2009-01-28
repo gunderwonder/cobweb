@@ -17,6 +17,7 @@ class HTTPResponse extends Response {
 	const OK                    = '200 OK';
 	
 	const REDIRECT              = '302 Found';
+	const PERMANENT_REDIRECT    = '301 Moved Permanently';
 	const NOT_MODIFIED          = '304 Not Modified';
 	
 	const UNAUTHORIZED          = '401 Unauthorized';
@@ -29,6 +30,7 @@ class HTTPResponse extends Response {
 		401 => self::UNAUTHORIZED,
 		404 => self::NOT_FOUND,
 		302 => self::REDIRECT,
+		301 => self::PERMANENT_REDIRECT,
 		500 => self::INTERNAL_SERVER_ERROR
 	);
 	
@@ -115,6 +117,15 @@ class HTTPResponseRedirect extends HTTPResponse {
 	
 	public function __construct($location) {
 		parent::__construct("", HTTPResponse::REDIRECT);
+		$this['Location'] = $location;	
+	}
+	
+}
+
+class HTTPResponsePermanentRedirect extends HTTPResponse {
+	
+	public function __construct($location) {
+		parent::__construct("", HTTPResponse::PERMANENT_REDIRECT);
 		$this['Location'] = $location;	
 	}
 	
