@@ -42,6 +42,7 @@ class CobwebLoader {
 		'CobwebManagerCommand' => '/manager/cobweb_manager_command.class.php',
 		'HTTPResponseRedirect' => '/http/http_response.class.php',
 		'HTTPResponseNotModified' => '/http/http_response.class.php',
+		'HTTPResponsePermanentRedirect' => '/http/http_response.class.php',
 		'Permalinkable' => '/core/permalinkable.interface.php',
 		'Form' => '/forms/form.class.php',
 		'FormField' => '/forms/form_field.class.php',
