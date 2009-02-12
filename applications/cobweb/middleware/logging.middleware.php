@@ -1,4 +1,7 @@
 <?php
+/**
+ * @version $Id$
+ */
 
 class LoggingMiddleware extends Middleware {
 	
@@ -10,6 +13,9 @@ class LoggingMiddleware extends Middleware {
 	}
 	
 	public function processResponse(Request $request, Response $response) {
+		
+		if (!Cobweb::get('DEBUG'))
+			return $response;
 		
 		$formatted_logs = '';
 		foreach ($this->loggers as $logger) {
@@ -34,7 +40,7 @@ class LoggingMiddleware extends Middleware {
 			
 			
 		// JSON
-		} else if ($request instanceof AJAXResponse) {
+		} else if ($response instanceof AJAXResponse) {
 			$json = JSON::decode($response->body);
 			$json['logs'] = $formatted_logs;
 			$response->body = JSON::encode($json);
