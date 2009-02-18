@@ -24,11 +24,15 @@ abstract class Form implements IteratorAggregate {
 		$this->clean_data = array();
 		
 		$this->configure();
+		$this->bind($data);
+		
+		$this->inspect();
+	}
+	
+	public function bind($data = NULL) {
 		$this->data = $data;
 		if ($this->isBound())
 			$this->validate($data);
-		
-		$this->inspect();
 	}
 	
 	abstract protected function configure() ;
