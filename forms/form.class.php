@@ -57,7 +57,7 @@ abstract class Form implements IteratorAggregate {
 	}
 	
 	public function addError($field_id, $error_message) {
-		if (!is_array($this->errors[$field_id]))
+		if (!isset($this->errors[$field_id]))
 			$this->errors[$field_id] = array();
 			
 		$this->errors[$field_id][] = $error_message;
