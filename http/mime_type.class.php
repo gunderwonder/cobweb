@@ -18,6 +18,9 @@ abstract class MIMEType {
 	const JAVASCRIPT = 'application/x-javascript';
 	const JPEG = 'image/jpg';
 	const PNG = 'image/png';
+	const GIF = 'image/gif';
+	const BMP = 'image/bmp';
+	const PSD = 'image/psd';
 	const TIFF = 'image/tiff';
 	const CSS = 'text/css';
 	const XML = 'application/xml; charset=UTF-8';
