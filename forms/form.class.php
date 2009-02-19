@@ -56,6 +56,14 @@ abstract class Form implements IteratorAggregate {
 		return $this->errors;
 	}
 	
+	public function addError($field_id, $error_message) {
+		if (!is_array($this->errors[$field_id]))
+			$this->errors[$field_id] = array();
+			
+		$this->errors[$field_id][] = $error_message;
+			
+	}
+	
 	public function validate() {
 		
 		$this->clean_data = array();
@@ -92,9 +100,11 @@ abstract class Form implements IteratorAggregate {
 		
 		if (isset($this->clean_data[$key]))
 			return $this->clean_data[$key];
-			
 		
-		if (isset($this->fields[$key]))
+		if (isset($this->data[$key]))
+			return $this->data[$key];
+		
+		if (!isset($this->fields[$key]))
 			throw new FormException("Field '{$key}' is not defined");
 			
 		throw new FormException("Unknown field '{$key}'");
