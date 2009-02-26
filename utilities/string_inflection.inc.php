@@ -11,17 +11,23 @@ function str_classify($string) {
  * @see http://www.mail-archive.com/django-users@googlegroups.com/msg03402.html
  */
 function str_slugify($string) {
+    
+    $slug = strip_tags($string);
+
+	$strip = array(
+		',', '-', '.', '!', '?', ':', ';', '=', 
+		'(', ')', '/', '\\', '&', '$', '\'', '"'
+	);
+	$slug = str_replace($strip, '', $slug);    
 	
-	$slug = str_replace(',', '', $string);
-	$slug = htmlentities($slug, ENT_NOQUOTES, 'UTF-8');
-	
-	$slug = utf8_strtolower(preg_replace('/[_\s\.\'"]+/u', '-', trim($slug)));
-	
+    $slug = htmlentities(trim($slug), ENT_NOQUOTES, 'UTF-8');
+    $slug = strtolower(preg_replace('/[_\s\.\'"]+/u', '-', trim($slug)));
   	$slug = preg_replace(
-		'/&(\w+)(uml|acute|grave|circ|tilde|slash|ring|lig);/',
-		'$1',
-		$slug);
-	
+    	'/&(\w+)(uml|acute|grave|circ|tilde|slash|ring|lig);/',
+    	'$1',
+    	$slug
+	);
+    
   	return urlencode(html_entity_decode($slug, ENT_COMPAT, 'UTF-8'));
 }
 
