@@ -130,7 +130,7 @@ abstract class Controller {
 	 *                                rendered template with the specified
 	 *                                status code and MIME type
 	 */
-	protected function render(
+	public function render(
 			$template_name,
 			$bindings = array(),
 			$code = HTTPResponse::OK,
