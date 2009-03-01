@@ -98,11 +98,17 @@ abstract class Form implements IteratorAggregate {
 		if (method_exists($this, $getter))
 			return $this->$getter();
 		
+		$htmlized_key = FormField::HTMLize($key);
+		
 		if (isset($this->clean_data[$key]))
+			return $this->clean_data[$key];
+		if (isset($this->clean_data[$htmlized_key]))
 			return $this->clean_data[$key];
 		
 		if (isset($this->data[$key]))
 			return $this->data[$key];
+		if (isset($this->data[$htmlized_key]))
+			return $this->data[$htmlized_key];
 		
 		if (!isset($this->fields[$key]))
 			throw new FormException("Field '{$key}' is not defined");
