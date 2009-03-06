@@ -89,7 +89,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return string server name
 	 */
 	public function domain() {
-		$this->META['SERVER_NAME'];
+		$this->properties['META']['SERVER_NAME'];
 	}
 	
 	/**
@@ -99,7 +99,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return boolean whether the request was made using HTTPs or not
 	 */
 	public function isSecure() {
-		return !empty($this->META['HTTPS']);
+		return !empty($this->properties['META']['HTTPS']);
 	}
 	
 	/**
