@@ -4,6 +4,11 @@
  */
 
 /**
+ * The {@link MiddlewareManager} provides an interface to the Cobweb's 
+ * middleware framework. It is responsible for loading the appropriate middleware
+ * classes based on the `INSTALLED_MIDDLEWARE` setting and passing request, response
+ * and action instances with the middleware objects it manages.
+ * 
  * @package    Cobweb
  * @subpackage Dispatch
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
@@ -12,17 +17,39 @@ class MiddlewareManager {
 	
 	protected static $manager;
 	
-	protected 
-		$middleware,
-		$middleware_reversed,
-		$dispatcher,
-		$application_manager;
+	/** @var array */
+	protected $middleware;
 	
+	/** @var array */
+	protected $middleware_reversed;
+	
+	/** @var Dispatcher */
+	protected $dispatcher;
+	
+	/** @var ApplicationManager */
+	protected $application_manager;
+	
+	/**
+	 * Instantiates a {@link MiddlewareManager} with the specified {@link Dispatcher}
+	 * and {@link ApplicationManager}
+	 */
 	public function __construct(Dispatcher $dispatcher, ApplicationManager $application_manager) {
 		$this->dispatcher = $dispatcher;
 		$this->application_manager = $application_manager;
 	}
 	
+	/**
+	 * Runs the specified request through the middleware objects
+	 * of this manager.
+	 * 
+	 * Each middleware object is called in order with the 
+	 * {@link Middleware::processRequest()} method. If a middleware object
+	 * returns a {@link Response} object, the loop short curcuits and returns
+	 * the given response; otherwise NULL is returned.
+	 * 
+	 * @param  Request  $request
+	 * @return Response|NULL
+	 */
 	public function handleRequest(Request $request) {
 		foreach ($this->middleware as $middleware)
 			if (($response = $middleware->processRequest($request)))
@@ -31,6 +58,19 @@ class MiddlewareManager {
 		return NULL;
 	}
 	
+	/**
+	 * Runs the specified response through the middleware objects
+	 * of this manager.
+	 * 
+	 * Each middleware object is called in reverse order with the 
+	 * {@link Middleware::processResponse()} method. Each middleware is expected to,
+	 * return a response, which is passed to next middleware instance etc.;
+	 * otherwise a {@link CobwebMiddlewareException} is thrown. 
+	 * 
+	 * @param  Request  $request
+	 * @return Response|NULL
+	 * @throws CobwebMiddlewareException
+	 */
 	public function handleResponse(Request $request, Response $response = NULL) {
 		foreach ($this->middleware_reversed as $middleware)
 			$response = $this->assertResponse($middleware->processResponse($request, $response), $middleware);
@@ -38,6 +78,19 @@ class MiddlewareManager {
 		return $this->assertResponse($response, $middleware);
 	}
 	
+	/**
+	 * Runs the specified exception through the middleware objects
+	 * of this manager.
+	 * 
+	 * Each middleware object is called in reverse order with the 
+	 * {@link Middleware::processException()} method. If a middleware object
+	 * returns a {@link Response} object, the loop short curcuits and returns
+	 * the given response; otherwise NULL is returned.
+	 * 
+	 * @param  Request  $request
+	 * @return Response|NULL
+	 * @throws CobwebMiddlewareException
+	 */
 	public function handleException(Request $request, Exception $exception) {
 		foreach ($this->middleware_reversed as $middleware)
 			if (($response = $middleware->processException($request, $exception)))
@@ -45,6 +98,19 @@ class MiddlewareManager {
 		return NULL;
 	}
 	
+	/**
+	 * Runs the specified action through the middleware objects
+	 * of this manager.
+	 * 
+	 * Each middleware object is called in order with the 
+	 * {@link Middleware::processAction()} method. If a middleware object
+	 * returns a {@link Response} object, the loop short curcuits and returns
+	 * the given response; otherwise NULL is returned.
+	 * 
+	 * @param  Request  $request
+	 * @return Response|NULL
+	 * @throws CobwebMiddlewareException
+	 */
 	public function handleAction(Request $request, Action $action) {
 		foreach ($this->middleware as $middleware)
 			if (($response = $middleware->processAction($request, $action)))
@@ -52,9 +118,41 @@ class MiddlewareManager {
 		return NULL;
 	}
 	
-	public function load() {
+	/**
+	 * Throws a {@link CobwebMiddlewareException} if the specified response is
+	 * invalid; if not, returns the response
+	 * 
+	 * @param  mixed      $response
+	 * @param  Middleware $middleware the middleware returning the response
+	 * @return Response
+	 * @throws CobwebMiddlewareException
+	 */
+	protected function assertResponse($response, Middleware $middleware) {
+		if (!($response instanceof Response))
+			throw new CobwebMiddlewareException(
+				get_class($middleware) . ' did not return HTTPResponse, got ' . 
+				gettype($response));
+		return $response;
+	}
+	
+	/**
+	 * Loads and instantiates middleware as specified by by the <var>$installed_middleware</var>
+	 * parameter or the value of the <var>INSTALLED_MIDDLEWARE</var> setting.
+	 * 
+	 * @param  array $installed_middleware if NULL, uses <var>INSTALLED_MIDDLEWARE</var>
+	 * @return array the loaded middleware objects
+	 */
+	public function load(array $installed_middleware = NULL) {
 		$this->middleware = array();
-		foreach (Cobweb::get('INSTALLED_MIDDLEWARE') as $middleware_name) {
+		
+		$installed_middleware = $installed_middleware ? 
+			$installed_middleware :
+			Cobweb::get('INSTALLED_MIDDLEWARE', array());
+			
+		if (empty($installed_middleware))
+			$installed_middleware[] = 'cobweb.cobweb';
+
+		foreach ($installed_middleware as $middleware_name) {
 			
 			$middleware_class = self::classify($middleware_name);
 			
@@ -77,16 +175,10 @@ class MiddlewareManager {
 				
 			Cobweb::info('Loaded middleware: %o', $middleware_names);
 		}	
-		
+		return $this->middleware;
 	}
 	
-	protected function assertResponse($response, Middleware $middleware) {
-		if (!($response instanceof HTTPResponse))
-			throw new CobwebMiddlewareException(
-				get_class($middleware) . ' did not return HTTPResponse, got ' . 
-				gettype($response));
-		return $response;
-	}
+	
 	
 	/**
 	 * Throws an exception if the specified middleware class does not exist.
