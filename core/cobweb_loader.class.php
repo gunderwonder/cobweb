@@ -43,6 +43,7 @@ class CobwebLoader {
 		'HTTPResponseRedirect' => '/http/http_response.class.php',
 		'HTTPResponseNotModified' => '/http/http_response.class.php',
 		'HTTPResponsePermanentRedirect' => '/http/http_response.class.php',
+		'HTTPResponseMethodNotAllowed' => '/http/http_response.class.php',
 		'Permalinkable' => '/core/permalinkable.interface.php',
 		'Form' => '/forms/form.class.php',
 		'FormField' => '/forms/form_field.class.php',
@@ -58,7 +59,6 @@ class CobwebLoader {
 		'Console' => '/utilities/logging/console.class.php',
 		'AJAXResponse' => '/http/ajax_response.class.php',
 		'Time' => '/utilities/date.class.php',
-		
 	);
 	
 	private static $external_classes = array();
