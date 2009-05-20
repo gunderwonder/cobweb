@@ -201,5 +201,14 @@ abstract class Controller {
 		return $this->request->isPUT();
 	}
 	
+	public function processRequest() {
+		return NULL;
+	}
+	
+	
+	public function processResponse($response) {
+		return $response;
+	}
+	
 	
 }

@@ -130,8 +130,12 @@ class ControllerAction implements Action {
 			$instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
 			// $this->controller->getMethod('initialize')->invoke($instance);
 			
+			if(($response = $this->controller->getMethod('processRequest')->invoke($instance)))
+				return $response;
+			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
 			$response = $this->action->invokeArgs($instance, $arguments);
+			$response = $this->controller->getMethod('processResponse')->invoke($instance, $response);
 	
 		} catch (ReflectionException $e) { 
 			throw new CobwebDispatchException(
@@ -224,7 +228,6 @@ class ControllerAction implements Action {
 	
 	public static function invokeControllerAction($label, array $arguments = array()) {
 		
-		// XXX: ugh...
 		$action = new ControllerAction(
 			Cobweb::get('__REQUEST__'),
 		    Cobweb::get('__DISPATCHER__'),
