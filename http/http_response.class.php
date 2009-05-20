@@ -22,6 +22,7 @@ class HTTPResponse extends Response {
 	
 	const UNAUTHORIZED          = '401 Unauthorized';
 	const NOT_FOUND             = '404 Not Found';
+	const METHOD_NOT_ALLOWED    = '405 Method Not Allowed';
 	
 	const INTERNAL_SERVER_ERROR = '500 Internal Server Error';
 	
@@ -29,6 +30,7 @@ class HTTPResponse extends Response {
 		200 => self::OK,
 		401 => self::UNAUTHORIZED,
 		404 => self::NOT_FOUND,
+		405 => self::METHOD_NOT_ALLOWED,
 		302 => self::REDIRECT,
 		301 => self::PERMANENT_REDIRECT,
 		500 => self::INTERNAL_SERVER_ERROR
@@ -96,9 +98,7 @@ class HTTPResponse extends Response {
 	public function offsetSet($key, $value) {
 		if (is_int($key))
 			throw new KeyException('HTTPResponse::offsetSet() does not allow numeric indices');
-		
-		// if (isset($this->headers[$key]))
-			
+
 		$this->headers[$key] = $value;
 		
 	}
@@ -152,6 +152,13 @@ class HTTPResponseNotModified extends HTTPResponse {
 		$this['Pragma'] = 'Private';
 		$this['Expires'] = '-1';
 		$this['Date'] = gmdate('r');
+	}
+}
+
+class HTTPResponseMethodNotAllowed extends HTTPResponse {
+	public function __construct(array $allowed_methods) {
+		parent::__construct('<h1>405 Method Not Allowed</h1>', self::METHOD_NOT_ALLOWED);
+		$this['Allow'] = implode(', ', $allowed_methods);
 	}
 }
 
