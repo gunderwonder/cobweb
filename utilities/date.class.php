@@ -15,6 +15,9 @@ class Time extends DateTime {
 	
 	const DATE_SQL = 'Y-m-d H:i:s';
 
+	public static function create($time) {
+		return new Time($time);
+	}
 	
 	public function set($year = NULL, $month = NULL, $day = NULL, 
 		                $hours = NULL, $minutes = NULL, $seconds = NULL) {
@@ -75,8 +78,7 @@ class Time extends DateTime {
 			
 			default : return $this->$key = $value;
 		}
-		
-		return $this;
+	 	return $this;
 	}
 	
 	public function timestamp() {
@@ -113,6 +115,8 @@ class Time extends DateTime {
 		$clone = clone $this;
 		return $clone;
 	}
+	
+	
 }
 
 class TimeDelta {
