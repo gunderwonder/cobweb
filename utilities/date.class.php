@@ -15,7 +15,7 @@ class Time extends DateTime {
 	
 	const DATE_SQL = 'Y-m-d H:i:s';
 
-	public static function create($time) {
+	public static function create($time = 'now') {
 		return new Time($time);
 	}
 	
