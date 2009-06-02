@@ -76,7 +76,7 @@ class Dispatcher {
 		if (!isset($this->event_listeners[$event_name]))
 			$this->event_listeners[$event_name] = array();
 			
-		$this->event_listeners[$event_name] = $callable;
+		$this->event_listeners[$event_name][] = $callable;
 	}
 	
 	/**
@@ -93,7 +93,7 @@ class Dispatcher {
 			return;
 		
 		$event = new CobwebEvent($event_name, $memo ? $memo : array());
-		foreach ($this->event_listeners as $callable)
+		foreach ($this->event_listeners[$event_name] as $callable)
 			if (!$event->isStopped())
 				call_user_func_array($callable, array($event));
 				
