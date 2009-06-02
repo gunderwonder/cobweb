@@ -148,7 +148,7 @@ class ControllerAction implements Action {
 		return $response;
 	}
 	
-	public function controller() {
+	public function controllerInstance() {
 		return $this->instance;
 	}
 	
