@@ -17,7 +17,8 @@ class ControllerAction implements Action {
 		$action          = NULL,
 		$action_name     = NULL,
 	 	$options         = NULL,
-	    $pattern         = NULL;
+	    $pattern         = NULL,
+		$instance        = NULL;
 	
 	public function __construct(HTTPRequest $request,
 		                        Dispatcher $dispatcher,
@@ -127,15 +128,15 @@ class ControllerAction implements Action {
 			// $object = new $class($this->dispatcher, $this->request);
 			// $response = call_user_func_array(array($object, $method), $arguments);
 			
-			$instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
+			$this->instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
 			// $this->controller->getMethod('initialize')->invoke($instance);
 			
-			if(($response = $this->controller->getMethod('processRequest')->invoke($instance)))
+			if(($response = $this->controller->getMethod('processRequest')->invoke($this->instance)))
 				return $response;
 			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
-			$response = $this->action->invokeArgs($instance, $arguments);
-			$response = $this->controller->getMethod('processResponse')->invoke($instance, $response);
+			$response = $this->action->invokeArgs($this->instance, $arguments);
+			$response = $this->controller->getMethod('processResponse')->invoke($this->instance, $response);
 	
 		} catch (ReflectionException $e) { 
 			throw new CobwebDispatchException(
@@ -145,7 +146,11 @@ class ControllerAction implements Action {
 		}
 	
 		return $response;
-	} 
+	}
+	
+	public function controller() {
+		return $this->instance;
+	}
 	
 	private function validateArguments($argument_values) {
 		$required_parameter_count = $this->action->getNumberOfRequiredParameters();
