@@ -1,6 +1,16 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
-
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version    $Revision$
+ * @package    Cobweb
+ * @subpackage Doctrine Application
+ */
 abstract class Model extends Doctrine_Record {
 	
 	public static function table($model_name) {

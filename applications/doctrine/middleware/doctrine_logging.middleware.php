@@ -1,5 +1,16 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+/**
+ * @author     Øystein Riiser Gundersen
+ * @package    Cobweb
+ * @subpackage Doctrine
+ * @version    $Revision$
+ */
 class DoctrineLoggingMiddleware extends Middleware {
 	
 	/** @var Doctrine_Manager */
@@ -49,7 +60,6 @@ class DoctrineLoggingMiddleware extends Middleware {
 	}
 	
 	public function formatSQL($sql) {
-		
 		$sql = preg_replace('/(\s)?(SELECT|FROM|WHERE|AND|OR|LEFT JOIN|ORDER BY|LIMIT|VALUES|INSERT INTO)(\s)/', "\n$2\n\t", $sql);
 		$sql = preg_replace('/,\s/', ",\n\t", $sql);
 		return trim($sql);

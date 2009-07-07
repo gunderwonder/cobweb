@@ -1,18 +1,20 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 /**
  * @author     Øystein Riiser Gundersen
  * @package    Cobweb
  * @subpackage Doctrine
- * @version    $Rev$
+ * @version    $Revision$
  */
 class DoctrineMigrateCommand extends CobwebManagerCommand {
 	
 	public function configure() {
-		$this->requiresProject();
+		// $this->requiresProject();
 	}
 	
 	public function execute() {
@@ -32,16 +34,18 @@ class DoctrineMigrateCommand extends CobwebManagerCommand {
 		
 		$migration = new Doctrine_Migration($path);
 		
+		$new_index = 0;
 		try {
 			if (is_null($migration_index))
-				$migration->migrate();
+				$new_index = $migration->migrate();
 			else
-				$migration->migrate($migration_index);
+				$new_index = $migration->migrate($migration_index);
 			
 		} catch (Exception $e) {
 			$class = get_class($e);
-			$this->manager->fail("cobweb: Migration error '{$class}'. The error was: '{$e->getMessage()}'");
+			$this->manager->fail("Migration error '{$class}'. The error was: '{$e->getMessage()}'");
 		}
+		$this->info("Sucessfully migrated {$application_name} to version {$new_index}");
 	}
 	
 }

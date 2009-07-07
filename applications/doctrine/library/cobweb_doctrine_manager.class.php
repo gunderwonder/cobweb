@@ -1,13 +1,24 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version    $Revision$
+ * @package    Cobweb
+ * @subpackage Doctrine Application
+ */
 class CobwebDoctrineManager {
 	
 	private static $connections;
 	private static $cached_model;
 	
 	public static function loadModels($lazy_load = false) {
-		
-		
+				
 		$applications = Cobweb::get('INSTALLED_APPLICATIONS');
 		foreach ($applications as $application) {
 			
@@ -30,8 +41,7 @@ class CobwebDoctrineManager {
 								);
 							}
 							
-						}
-							
+						}	
 			}	
 		}
 	}
@@ -43,7 +53,7 @@ class CobwebDoctrineManager {
 		$manager = Doctrine_Manager::getInstance();
 		$manager->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_ALL);
 		  
-		$connection = $manager->openConnection($dsn);
+		$connection = Doctrine_Manager::connection($dsn);
 		$connection->setCharset('utf8');
 		$connection->setAttribute(Doctrine::ATTR_QUOTE_IDENTIFIER, true);
 		Cobweb::log('Connected to database %o', $connection);
@@ -63,6 +73,5 @@ class CobwebDoctrineManager {
 		$model_name = substr($filename, 0, $dotoffset);
 		return str_classify($model_name);
 	}
-	
-	
+
 }
