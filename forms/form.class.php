@@ -1,11 +1,15 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 require_once dirname(__FILE__) . '/../vendor/utf8/utf8.php';
 
 /**
+ * TODO: add global error messages/translations
+ * 
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
  * @subpackage Forms
@@ -72,10 +76,10 @@ abstract class Form implements IteratorAggregate {
 				
 			try {
 				$this->clean_data[$key] = $field->clean(
-					$field->widget()->value($this->data, $key, NULL));
+					$field->widget()->value($this->data, FormField::HTMLize($key), NULL));
 			
 			} catch (FormValidationException $e) {
-				$this->errors[$key] = $e->errors();
+				$this->errors[FormField::HTMLize($key)] = $e->errors();
 			}
 
 		}

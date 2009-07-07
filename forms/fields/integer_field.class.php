@@ -1,12 +1,15 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 /**
- * @package    Cobweb
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
  * @subpackage Forms
- * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version $Revision$
  */
 class IntegerField extends FormField {
 	
@@ -19,12 +22,11 @@ class IntegerField extends FormField {
 	
 	public function clean($value) {
 		$cleaned = parent::clean($value);
-		if (utf8_strlen($cleaned) === 0)
+		if (empty($cleaned) === 0)
 			$this->error('invalid');
 		
-		if ($cleaned[0] == '-')
-			if (ctype_digit(utf8_substr($cleaned, 1)))
-				return intval($cleaned);
+		if ($cleaned[0] == '-' && ctype_digit(utf8_substr($cleaned, 1)))
+			return intval($cleaned);
 				
 		if (ctype_digit($cleaned))
 			return intval($cleaned);
