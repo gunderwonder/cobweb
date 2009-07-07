@@ -73,4 +73,3 @@ function strip_magic_quotes($v) {
            array_map('strip_magic_quotes', $v) : 
            stripslashes($v);
 }
-?>

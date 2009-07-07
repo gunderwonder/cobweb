@@ -1,4 +1,9 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
 function str_classify($string) {
 	return preg_replace_callback('/[_-](\w)/',

@@ -11,12 +11,12 @@
  *
  * @see http://laughingmeme.org/2007/02/27/looking-at-php5s-datetime-and-datetimezone/
  */
-class Time extends DateTime {
+class CWDateTime extends DateTime {
 	
 	const DATE_SQL = 'Y-m-d H:i:s';
 
 	public static function create($time = 'now') {
-		return new Time($time);
+		return new CWTime($time);
 	}
 	
 	public function set($year = NULL, $month = NULL, $day = NULL, 
@@ -43,13 +43,6 @@ class Time extends DateTime {
 		return $t_1 === $t_2 ? 0 : 
 		       $t_1 >   $t_2 ? 1 : 
 		       -1;
-		// 
-		// if ($t_1 === $t_2)
-		// 	return 0;
-		// if ($t_1 > $t_2)
-		// 	return 1;
-		// if ($t_1 < $t_2)
-		// 	return -1;
 	}
 	
 	public function __get($key) {
@@ -119,10 +112,9 @@ class Time extends DateTime {
 	
 }
 
-class TimeDelta {
+class CWTimeDelta {
 	private $timestamp;
 
-	
 	public function __construct($timestamp) {
 		$this->timestamp = $timestamp;
 	}

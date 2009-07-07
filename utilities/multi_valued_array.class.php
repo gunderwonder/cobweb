@@ -1,8 +1,9 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
-
 
 /** 
  * Implements a multi-valued array
