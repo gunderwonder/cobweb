@@ -1,11 +1,18 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 require_once COBWEB_DIRECTORY . '/vendor/phpass/PasswordHash.php';
 
-
+/**
+ * @author     Øystein Riiser Gundersen
+ * @package    Cobweb
+ * @subpackage Authentification
+ * @version    $Revision$
+ */
 class User extends Model {
 	
 	private $hasher;
@@ -56,7 +63,6 @@ class User extends Model {
 				'refClass' => 'UserPermission'
 			)
 		);
-	
     }
 
 	public function fullname() {
