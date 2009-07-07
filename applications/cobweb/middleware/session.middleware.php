@@ -1,18 +1,16 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
-
 
 /**
- * $Id$
- * 
  * @package Cobweb
- * @subpackage Session
+ * @subpackage Cobweb application
  * @author Øystein Riiser Gundersen <oystein@upstruct.com>
- * @version 0.1
+ * @version $Revision$
  */
-
 class SessionMiddleware extends Middleware {
 	
 	private $session;

@@ -16,7 +16,7 @@
     <script type="text/javascript">
 		{literal}
 
-		hljs.initHighlightingOnLoad();
+		hljs.initHighlightingOnLoad('php');
 		Event.observe(window, 'load', function(e) {
 			$$('.php').each(function (p) {
 				var old = p.innerHTML.replace(/^\t/gm, '');
@@ -53,10 +53,7 @@
 							if (j == chars.size() - 1)
 								buffer += "</span>\n";
 							j++;
-							// if (c.match(/$/))
-							// 	buffer += "\n";
 						});
-						// buffer += '' + l + '</span>' + "\n";
 					}
 					else
 						buffer += l + "\n";
