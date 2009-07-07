@@ -1,5 +1,15 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Dispatch
+ */
 class IncludeURLConfigurationAction implements Action {
 	
 	protected $application_name, $file, $rules;
@@ -44,8 +54,6 @@ class IncludeURLConfigurationAction implements Action {
 				$this->rules = require_once $urls_path;
 				return $this->rules;
 			}
-				
-
 		}
 		throw new CobwebConfigurationException(
 			"No URL configuration file found for {$this->label}");

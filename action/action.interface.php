@@ -8,7 +8,7 @@
 /**
  * @author Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package Cobweb
- * @subpackage Action
+ * @subpackage Dispatch
  */
 interface Action  {
 	
