@@ -1,6 +1,16 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
-
+/**
+ * @package Cobweb
+ * @subpackage Core
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @version $Revision$
+ */
 class CobwebLoader {
 	
 	protected static $cobweb_classes = array(
@@ -19,10 +29,12 @@ class CobwebLoader {
 		'MiddlewareManager' => '/middleware/middleware_manager.class.php',
 		'Action' => '/controller/action.class.php',
 		'Controller' => '/controller/controller.class.php',
+		'CallableAction' => '/action/callable_action.class.php',
 		'ControllerAction' => '/action/controller_action.class.php',
 		'Action' => '/action/action.interface.php',
 		'Annotation' => '/vendor/addendum/annotations.php',
 		'ReflectionAnnotatedClass' => '/vendor/addendum/annotations.php',
+		'ReflectionAnnotatedFunction' => '/vendor/addendum/annotations.php',
 		'ApplicationManager' => '/application/application_manager.class.php',
 		'Application' => '/application/application.class.php',
 		'Middleware' => '/middleware/middleware.class.php',
@@ -63,7 +75,7 @@ class CobwebLoader {
 	
 	private static $external_classes = array();
 	
-	public static function load($class) {	
+	public static function load($class) {
 		
 		if (isset(self::$cobweb_classes[$class])) {
 			require_once COBWEB_DIRECTORY . self::$cobweb_classes[$class];
@@ -85,7 +97,15 @@ class CobwebLoader {
 		
 	}
 	
-	public static function autoload(array $classmap) {
+	public static function autoload($prefix, $classmap = array()) {
+		if (is_array($prefix)) {
+			$classmap = $prefix;
+		} else {
+			foreach ($classmap as $class => $path)
+				$classmap[$class] = $prefix . $path;
+		}
+		
+		
 		self::$external_classes = array_merge(self::$external_classes, $classmap);
 	}
 }

@@ -1,7 +1,13 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ * @package Cobweb
+ * @subpackage Core
+ */
 
 class FileNotFoundException extends Exception { }
-
 class CobwebException extends Exception { }
 class CobwebErrorException extends ErrorException {
 	
@@ -37,8 +43,9 @@ class CobwebErrorException extends ErrorException {
 			
 		if (preg_match('/^Undefined offset: /', $message))
 			throw new OutOfBoundsException($message);
+			
+		// TODO: add more Exception types here...
 	}
-	
 
 }
 
