@@ -50,6 +50,7 @@ class URLResolver implements Resolver {
 	 * @return Action                  resolved action
 	 */
 	protected function resolveURL(Request $request, $url) {
+		
 		foreach ($this->rules as $pattern => $action) {
 
 			if (!is_string($pattern))
@@ -64,8 +65,9 @@ class URLResolver implements Resolver {
 				
 				if (is_string($action) || is_array($action)) {
 					$action = is_array($action) ? $action : array($action);
-					return new ControllerAction(
-						$request, $this->dispatcher, $this, $pattern, $matches, $action);
+					return CallableAction::create(
+						$request, $this->dispatcher, $this, $pattern, $matches, $action
+					);
 				} else if ($action instanceof IncludeURLConfigurationAction) {
 					return $this->resolveInclude($request, $action, $pattern, $matches, $url);
 				} else if ($action instanceof Action)
@@ -86,7 +88,7 @@ class URLResolver implements Resolver {
 						$request, 
 						$this->dispatcher,
 						$this,
-						$pattern,
+						empty($pattern) ? '' : $pattern,
 						array(),
 						array('cobweb.cobweb.not_found_404'));
 	}

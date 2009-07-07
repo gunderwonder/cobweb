@@ -1,5 +1,10 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
+
 
 /**
  * Represents an {@link Action} that invokes a {@link Controller} action.
@@ -9,33 +14,15 @@
  * @subpackage Dispatch
  * @version    $Revision$
  */
-class ControllerAction implements Action {
+class ControllerAction extends CallableAction {
 	
 	private 
 		$controller_name = NULL,
 		$controller      = NULL,
-		$action          = NULL,
 		$action_name     = NULL,
-	 	$options         = NULL,
-	    $pattern         = NULL,
 		$instance        = NULL;
 	
-	public function __construct(HTTPRequest $request,
-		                        Dispatcher $dispatcher,
-		                        Resolver $resolver,
-		                        $pattern,
-		                        $arguments,
-		                        array $specification) {
-		$this->dispatcher = $dispatcher;
-		$this->request = $request;
-		$this->pattern = $pattern;
-		$this->resolver = $resolver;
-
-		$this->initialize($specification, $arguments);
-		$this->loadController();
-	}
-	
-	private function initialize($specification, $arguments) {
+	protected function initialize($specification, $arguments) {
 		
 		$this->action_label = '';
 		if (is_string($specification))
@@ -79,7 +66,7 @@ class ControllerAction implements Action {
 		$this->arguments = array_merge($specification, $arguments);
 	}
 	
-	private function loadController() {
+	protected function loadAction() {
 		Cobweb::loadApplication($this->application_name);
 		
 		$label = $this->controller_name;
@@ -152,36 +139,7 @@ class ControllerAction implements Action {
 		return $this->instance;
 	}
 	
-	private function validateArguments($argument_values) {
-		$required_parameter_count = $this->action->getNumberOfRequiredParameters();
-		$parameter_count = $this->action->getNumberOfParameters();
-		$arguments = array();
-		$parameters = $this->action->getParameters();
-		for ($i = 0; $i < count($parameters); $i++) {
-			$parameter = $parameters[$i];
-			
-			// named argument
-			if (isset($argument_values[$parameter->getName()]))
-				$arguments[$i] = $argument_values[$parameter->getName()];
-			
-			// positional argument
-			else if (isset($argument_values[$i]))
-				$arguments[$i] = $argument_values[$i];
-				
-			// use default when present
-			else if ($parameter->isDefaultValueAvailable())
-				$arguments[$i] = $parameter->getDefaultValue();
-					
-			// missing required argument throws exception
-			else
-				throw new CobwebDispatchException(
-					"Error invoking '{$this->reflection()->getName()}' in controller " .
-					"{$this->controller()->getName()} for URL '{$this->request->path()}'. " . 
-					"Required parameter '{$parameter->getName()}' is not specified");
-		}
-		return $arguments;
-	}
-	
+
 	private function loadControllerFile($controller_label) {
 	
 		foreach (Cobweb::get('APPLICATIONS_PATH') as $path) {
@@ -205,16 +163,8 @@ class ControllerAction implements Action {
 		return $this->action;
 	}
 	
-	public function arguments() {
-		return $this->arguments;
-	}
-	
-	public function matchingPattern() {
-		return $this->pattern;
-	}
-	
-	public function options() {
-		return $this->options;
+	public function __toString() {
+		return "{$this->controller()->getName()}::{$this->reflection()->getName()}";
 	}
 	
 	public function hasAnnotation($annotation) {
