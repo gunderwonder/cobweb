@@ -1,5 +1,15 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Application
+ */
 class Application {
 	
 	protected 
@@ -20,6 +30,10 @@ class Application {
 	}
 	
 	protected function initialize() {
+		$application_path_constant = strtoupper(str_replace('-', '_', $this->name)) . '_DIRECTORY';
+		if (!defined($application_path_constant))
+			define($application_path_constant, $this->path);
+		
 		if (file_exists($this->path . '/settings/bootstrap.inc.php'))
 			require_once $this->path . '/settings/bootstrap.inc.php';
 	}
