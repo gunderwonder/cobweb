@@ -1,11 +1,16 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
 
 $settings = array(
 	'DEBUG' => true,
 	'ERROR_REPORTING' => E_ALL | E_STRICT,
 	'INSTALLED_MIDDLEWARE' => array(),
-	'INSTALLED_APPLICATIONS' => array(),
+	'INSTALLED_APPLICATIONS' => array('cobweb'),
 	
 	'URL_PREFIX' => '',
 	
@@ -15,7 +20,7 @@ $settings = array(
 		'Cobweb::processTemplate'
 	),
 	
-	'APPEND_SLASH_ON_404' => true
+	'APPEND_SLASH_ON_404' => true,
 );
 
 
