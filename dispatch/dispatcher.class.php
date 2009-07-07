@@ -1,10 +1,15 @@
 <?php
 /**
- * @version $Id$ 
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
+
 /**
- * Cobweb's central request dispatch hub
+ * Cobweb's event/request dispatcher
+ * 
+ * TODO: more logic from `Cobweb` class should be moved here
  *
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb

@@ -1,5 +1,9 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
 /**
  * Represents an event in the Cobweb event notification system
