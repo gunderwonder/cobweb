@@ -1,6 +1,8 @@
 <?php
 /**
- * @version $Id$ 
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 /**
@@ -20,17 +22,24 @@ class HTTPResponse extends Response {
 	const PERMANENT_REDIRECT    = '301 Moved Permanently';
 	const NOT_MODIFIED          = '304 Not Modified';
 	
+	const BAD_REQUEST           = '400 Bad Request';
 	const UNAUTHORIZED          = '401 Unauthorized';
+	const FORBIDDEN             = '403 Forbidden';
 	const NOT_FOUND             = '404 Not Found';
 	const METHOD_NOT_ALLOWED    = '405 Method Not Allowed';
+	const GONE                  = '410 Gone';
 	
 	const INTERNAL_SERVER_ERROR = '500 Internal Server Error';
+
 	
 	private static $HTTP_codes = array(
 		200 => self::OK,
+		400 => self::BAD_REQUEST,
 		401 => self::UNAUTHORIZED,
+		403 => self::FORBIDDEN,
 		404 => self::NOT_FOUND,
 		405 => self::METHOD_NOT_ALLOWED,
+		410 => self::GONE,
 		302 => self::REDIRECT,
 		301 => self::PERMANENT_REDIRECT,
 		500 => self::INTERNAL_SERVER_ERROR
@@ -63,7 +72,7 @@ class HTTPResponse extends Response {
 		return $this->response_code;
 	}
 	
-	private function sendHeaders() {
+	protected function sendHeaders() {
 		if (headers_sent())
 			throw new HeadersSentException("Headers already sent!");
 		
@@ -114,34 +123,47 @@ class HTTPResponse extends Response {
 }
 
 class HTTPResponseRedirect extends HTTPResponse {
-	
 	public function __construct($location) {
 		parent::__construct("", HTTPResponse::REDIRECT);
 		$this['Location'] = $location;	
 	}
-	
 }
 
 class HTTPResponsePermanentRedirect extends HTTPResponse {
-	
 	public function __construct($location) {
 		parent::__construct("", HTTPResponse::PERMANENT_REDIRECT);
 		$this['Location'] = $location;	
 	}
+}
+
+class HTTPResponseGone extends HTTPResponse {
 	
+	public function __construct($location) {
+		parent::__construct("", HTTPResponse::GONE);
+	}
 }
 
 class HTTPResponseUnauthorized extends HTTPResponse {
-	
 	public function __construct($body = "") {
 		parent::__construct($body, self::UNAUTHORIZED);
 	}
 }
 
+class HttpResponseBadRequest extends HTTPResponse {
+	public function __construct($body = "400 Bad Request") {
+		parent::__construct($body, self::BAD_REQUEST);
+	}
+}
+
 class HTTPResponseNotFound extends HTTPResponse {
-	
 	public function __construct($body = "404 Not Found") {
 		parent::__construct($body, self::NOT_FOUND);
+	}
+}
+
+class HTTPResponseForbidden extends HTTPResponse {
+	public function __construct($body = "404 Forbidden") {
+		parent::__construct($body, self::FORBIDDEN);
 	}
 }
 
@@ -157,7 +179,7 @@ class HTTPResponseNotModified extends HTTPResponse {
 
 class HTTPResponseMethodNotAllowed extends HTTPResponse {
 	public function __construct(array $allowed_methods) {
-		parent::__construct('<h1>405 Method Not Allowed</h1>', self::METHOD_NOT_ALLOWED);
+		parent::__construct('405 Method Not Allowed', self::METHOD_NOT_ALLOWED);
 		$this['Allow'] = implode(', ', $allowed_methods);
 	}
 }

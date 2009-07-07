@@ -1,6 +1,8 @@
 <?php
 /**
- * @version $Id$ 
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 /**
@@ -253,7 +255,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 
 		setcookie($key, $value, $expiry, $path, $domain, $secure, $http_only);
 		
-		$dispatcher->fire('request.cookie_set', 
+		$this->dispatcher->fire('request.cookie_set', 
 			array('cookie' => array($key => $value), 'request' => $this));
 	}
 	
