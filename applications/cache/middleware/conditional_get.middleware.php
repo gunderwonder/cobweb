@@ -1,5 +1,16 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+/**
+ * @author     Øystein Riiser Gundersen
+ * @package    Cobweb
+ * @subpackage Cache
+ * @version    $Revision$
+ */
 class ConditionalGetMiddleware extends Middleware {
 	
 	public function processResponse(Request $request, Response $response) {
