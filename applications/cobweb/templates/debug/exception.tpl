@@ -7,9 +7,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.6/prototype.js"></script>
-	<script type="text/javascript" src="{$URL_PREFIX}/static/cobweb/vendor/highlight/highlight.js"></script>
+	<script type="text/javascript" src="/static/cobweb/vendor/highlight/highlight.pack.js"></script>
 	
 	<style type="text/css" media="screen">
+		{literal}
 		body {
 			background-color: white;
 		}
@@ -181,7 +182,7 @@
 		}
 		
 		input[type=button].source-toggler {
-			background: transparent url(../img/text_align_left.png);
+			background: transparent url(/static/cobweb/img/text_align_left.png);
 			width: 16px;
 			border: none;
 			cursor: pointer;
@@ -204,6 +205,7 @@
 		.controller-stackpoint td b {
 			color: maroon;
 		}
+		{/literal}
 	</style>
 
 	
@@ -402,7 +404,7 @@
 			</tbody>
 		</table>
 		
-		<div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; text-align: right;">
+		<div style="position: absolute; bottom: 20px; right: 20px; font-size: 12px; text-align: right;">
 			Regards, <br />
 			<div style="padding-top: 10px;">Øystein</div>
 			Your friendly <br />neighborhood <br />programmer
