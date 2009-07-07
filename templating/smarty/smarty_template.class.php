@@ -41,8 +41,8 @@ class SmartyTemplate extends Smarty {
 		// set $template_dir and $compile_id with respect to template name
 		$this->template_dir = dirname($template);
 		$this->compile_id = dirname($template); 
-		$this->compile_dir = Cobweb::get('COMPILED_TEMPLATES_DIRECTORY', COBWEB_PROJECT_DIRECTORY . '/templates/compiled/');ex
-		$this->cache_dir = Cobweb::get('TEMPLATE_CACHE_DIRECTORY', COBWEB_PROJECT_DIRECTORY . '/templates/cache/');		
+		$this->compile_dir = Cobweb::get('COMPILED_TEMPLATES_DIRECTORY', COBWEB_PROJECT_DIRECTORY . '/templates/compiled/');
+		$this->cache_dir = Cobweb::get('TEMPLATE_CACHE_DIRECTORY', COBWEB_PROJECT_DIRECTORY . '/templates/cache/');	
 		$this->caching = Cobweb::get('SMARTY_TEMPLATE_CACHING', 0);
 		
 		if (!Cobweb::get('DEBUG'))
