@@ -1,5 +1,18 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
+/**
+ * Implements a simple command line tool for the Cobweb framework.
+ * 
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Management
+ * @version    $Revision$
+ */
 abstract class CobwebManagerCommand {
 	
 	/** @var CobwebManager */

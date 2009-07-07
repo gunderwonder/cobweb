@@ -1,5 +1,4 @@
 <?php
-
-Router::connect(array(
-	
-));
+return array(
+	'^$' => 'cobweb.cobweb.start'
+);

@@ -1,5 +1,4 @@
 <?php
-
-Cobweb::configure(array(
-	
-));
+return array(
+	'INSTALLED_APPLICATIONS' => array('cobweb')
+);

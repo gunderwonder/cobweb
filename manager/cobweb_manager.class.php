@@ -1,12 +1,17 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
 /**
  * Implements a simple command line tool for the Cobweb framework.
  * 
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
- * @subpackage Manager
+ * @subpackage Management
+ * @version    $Revision$
  */
 class CobwebManager {
 	
@@ -86,36 +91,39 @@ class CobwebManager {
 	 * @return  CobwebManagerCommand the loaded command
 	 */
 	protected function loadCommand($command) {
-		$classname = self::classify($command);
 		
+		$classname = self::classify($command);
 		$builtin_path = COBWEB_DIRECTORY . '/manager/builtins/' . self::pathify($command);
 		
+		if ($command == 'shell')
+			define('COBWEB_PROJECT_DIRECTORY', getcwd());
+		
 		if (file_exists($builtin_path)) {
+			Cobweb::initialize();
 			require_once $builtin_path;
 			
 			if (class_exists($classname))
 				return new $classname($this, $this->command, $this->arguments, $this->flags);
 		}
 		
+		
 		define('COBWEB_PROJECT_DIRECTORY', getcwd());
 		Cobweb::initialize();
 		
-		foreach (Cobweb::get('APPLICATIONS_PATH', array()) as $application_path) {
-			foreach (Cobweb::get('INSTALLED_APPLICATIONS', array()) as $application) {
-				$path = "{$application_path}/{$application}/management/commands/" . 
-				             self::pathify($command);
-
-				if (file_exists($path)) {
-					Cobweb::loadApplication($application);
-					require_once $path;
-				}
-					
-				if (class_exists($classname))
-					return new $classname($this, $this->command, $this->arguments, $this->flags);
+		foreach (Cobweb::get('INSTALLED_APPLICATIONS', array()) as $application) {
+			$application_path = Cobweb::loadApplication($application);
+			$path = "{$application_path->path()}/management/commands/" . self::pathify($command);
+			
+			if (file_exists($path)) {
+				Cobweb::loadApplication($application);
+				require_once $path;
 			}
+				
+			if (class_exists($classname))
+				return new $classname($this, $this->command, $this->arguments, $this->flags);
 		}
+			
 		$this->fail("Unknown command '{$command}'");
-
 	}
 	
 	/**
