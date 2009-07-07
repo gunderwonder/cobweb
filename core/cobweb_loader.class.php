@@ -70,7 +70,7 @@ class CobwebLoader {
 		'ConcreteForm' => '/forms/concrete_form.class.php',
 		'Console' => '/utilities/logging/console.class.php',
 		'AJAXResponse' => '/http/ajax_response.class.php',
-		'Time' => '/utilities/date.class.php',
+		'CWDateTime' => '/utilities/datetime.inc.php',
 	);
 	
 	private static $external_classes = array();
