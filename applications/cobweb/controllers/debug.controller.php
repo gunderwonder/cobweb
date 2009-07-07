@@ -1,14 +1,17 @@
 <?php
 /**
- * @version $Id$ 
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
-/** 
- * @package     Cobweb
- * @subpackage  Core
- * @author      Øystein Riiser Gundersen <oystein@upstruct.com>
- * @version     $Rev$
- */ 
+
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Cobweb Application
+ * @version    $Revision$
+ */
 class DebugController extends Controller {
 	
 	
@@ -67,7 +70,6 @@ class DebugController extends Controller {
 
 		$template['response_headers'] = $this->responseHeaders();
 		$template['backtrace'] = $backtrace;
-		Cobweb::log($backtrace);
 		
 		$template->render(
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/exception.tpl', 
@@ -102,7 +104,7 @@ class DebugController extends Controller {
 					$value;
 				try {
 					$named_parameters[$name]['json'] = JSON::debug($value);
-				} catch (CobwebErrorException $e) {
+				} catch (ErrorException $e) {
 					$named_parameters[$name]['json'] = '';
 				}
 			}
@@ -164,13 +166,7 @@ class DebugController extends Controller {
 }
 
 function read_file_lines($file, $from, $to) {
-	if (!$file)
-		return '';
-		
-	$lines = file($file);
-	
-	if (!$lines)
-		return '';
+	if (!$file || !($lines = file($file))) return '';
 	return implode('', array_slice($lines, $from - 1, $to - $from + 1));
 }
 

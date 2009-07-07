@@ -1,10 +1,16 @@
 <?php
-/* $Id$ */
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
+
 
 /**
- * @author  Øystein Riiser Gundersen <oystein@upstruct.com>
- * @package Core
- * @version $Rev$
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Cobweb Application
+ * @version    $Revision$
  */
 class FilesystemController extends Controller {
 	
