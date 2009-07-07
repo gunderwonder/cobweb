@@ -1,7 +1,8 @@
 <?php
 /**
  * @version $Id$
- * @licence http://www.opensource.org/licenses/mit-license.php MIT
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
 
 /**
