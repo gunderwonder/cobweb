@@ -1,7 +1,10 @@
 <?php
 /**
  * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
  */
+
 
 /**
  * The {@link MiddlewareManager} provides an interface to the Cobweb's 
@@ -224,7 +227,7 @@ class MiddlewareManager {
 		$application = Cobweb::loadApplication($path[0]);
 		$path = $application->path() . "/middleware/{$path[1]}.middleware.php";
 		
-		if (!file_exists($path) || !is_file($path))
+		if (!is_file($path))
 			throw new FileNotFoundException(
 				"Unable to load middleware '{$middleware_name}' from '$path'");
 			

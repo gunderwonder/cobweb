@@ -1,5 +1,10 @@
 <?php
-/** @version $Id$ */
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
+
 
 /**
  * Abstract base class for {@link Middleware}. 
@@ -14,8 +19,7 @@
  * 3. Before a response is flushed ({@link Middleware::processResponse()})
  * 4. If an exception is thrown ({@link Middleware::processException()})
  * 
- * A middleware implementation needs to override one or more of these methods
- * and may e
+ * A middleware implementation needs to override one or more of these methods.
  * 
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package    Cobweb
