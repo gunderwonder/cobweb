@@ -34,8 +34,16 @@ class CreateProjectCommand extends CobwebManagerCommand {
 		}
 		
 		system("cp -R {$skeleton} {$destination}");
-		system("find {$destination} -name '.svn' -exec rm -r {} \;");
-		chmod($destination . '/templates/compiled', 0774);
+		system("find {$destination} -type d -name '.svn' | xargs rm -rf");
+		
+		chdir($destination);
+		
+		$index_file = './www/index.php';
+		$contents = file_get_contents($index_file);
+		$contents = preg_replace('/%project_directory%/u', $destination, $contents);
+		$contents = preg_replace('/%cobweb_directory%/u', COBWEB_DIRECTORY, $contents);
+		file_put_contents($index_file, $contents);
+		
 		$this->info("Created project '{$project_name}' in {$destination}");
 	}
 	

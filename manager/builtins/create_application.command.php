@@ -37,6 +37,8 @@ class CreateApplicationCommand extends CobwebManagerCommand {
 		}
 
 		system("cp -R {$skeleton} {$destination}");
+		system("find {$destination} -type d -name '.svn' | xargs rm -rf");
+		
 		print "cobweb: Successfully created application '{$application_name}'\n";
 	}
 	
