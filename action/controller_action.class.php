@@ -39,7 +39,7 @@ class ControllerAction extends CallableAction {
 			           $this->action_name) = 
 			      explode('.', $this->action_label)) != 3)
 			throw new CobwebConfigurationException(
-				'Invalid controller action label ' . stringify($controller_action_name));
+				'Invalid controller action label ' . stringify($this->action_label));
 		
 		// check if the application is installed
 		if (!in_array($this->application_name, Cobweb::get('INSTALLED_APPLICATIONS')))
