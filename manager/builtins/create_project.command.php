@@ -34,6 +34,7 @@ class CreateProjectCommand extends CobwebManagerCommand {
 		}
 		
 		system("cp -R {$skeleton} {$destination}");
+		system("find {$destination} -name '.svn' -exec rm -r {} \;");
 		chmod($destination . '/templates/compiled', 0774);
 		$this->info("Created project '{$project_name}' in {$destination}");
 	}

@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# if the file does not exist...
+RewriteCond %{REQUEST_FILENAME} !-f	
+
+# ...and it is not a directory...
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ...rewrite it to index.php
+RewriteRule . index.php
