@@ -44,4 +44,8 @@ class CobwebController extends Controller {
 		);
 	}
 	
+	public function start() {
+		return $this->render('/debug/cobweb_installed.tpl');
+	}
+	
 }
