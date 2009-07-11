@@ -48,15 +48,12 @@ class HTTPRequest extends Request implements ArrayAccess {
 		$this->properties['POST'] = new HTTPQueryDictionary($POST);
 		
 		$this->properties['META'] = new ImmutableArray($META);
-		// $this->META = new ImmutableArray($META);
-		// $this->COOKIES = new MutableArray($_COOKIE);
 		
 		$other_headers = array('CONTENT_TYPE', 'CONTENT_LENGTH');
 		$this->headers = array();
 		
 		foreach($this->META as $header => $value) {
 			if (strpos($header, 'HTTP_') === 0 || in_array($header, $other_headers)) {
-				
 				$name = str_replace(array('HTTP_', '_'), array('', '-'), $header);
 				$this->headers[$name] = $value;
 			}
@@ -74,14 +71,15 @@ class HTTPRequest extends Request implements ArrayAccess {
 	}
 	
 	/**
-	 * Returns the body, headers and all of this request
+	 * Returns the body (headers and all) of this request
 	 * 
-	 * @return string body of the request
+	 * @return string request body
 	 */
 	public function body() {
 		if (!$this->body)
-			$this->body = @file_get_contents('php://input');
-			
+			$this->body = isset($this->properties['META']['HTTP_RAW_POST_DATA']) ?
+				$this->properties['META']['HTTP_RAW_POST_DATA'] :
+				@file_get_contents('php://input');
 		return $this->body;
 	}
 	
@@ -113,23 +111,6 @@ class HTTPRequest extends Request implements ArrayAccess {
 	public function isAuthenticated() {
 		return !empty($this->META['AUTH_TYPE']) || 
 		              (isset($this->user) && $this->user->isAuthenticated());
-	}
-		
-		
-	/**
-	 * Returns the hash component of the request URI.
-	 * 
-	 * Note that the hash is never sent to the server (it is used client side),
-	 * so this is only useful for testing purposes.
-	 * 
-	 * @return string hash component of the URI
-	 */
-	public function hash() {
-		$hash_offset = utf8_strpos($this->URI(), '#');
-		if ($hash_offset === false)
-			return '';
-			
-		return utf8_substr($this->URI(), $hash_offset + 1);
 	}
 
 	/**
@@ -202,23 +183,6 @@ class HTTPRequest extends Request implements ArrayAccess {
 	}
 	
 	/**
-	 * @ignore
-	 */
-	// public function __get($key) {
-	// 	Cobweb::log('get %o => %o', $key);
-	// 	// if (in_array($key, array('GET', 'POST', 'META', 'COOKIES'))) {
-	// 	// 	return $this->$key;
-	// 	// }
-	// 	return $this->$key;
-	// }
-	// 
-	// public function __set($key, $value) {
-	// 	Cobweb::log('%o => %o', $key, $value);
-	// 	
-	// 	$this->$key = $value;
-	// }
-	
-	/**
 	 * Sets a cookie for this request
 	 * 
 	 * Fires the 'request.cookie_set' event.
@@ -257,6 +221,31 @@ class HTTPRequest extends Request implements ArrayAccess {
 		
 		$this->dispatcher->fire('request.cookie_set', 
 			array('cookie' => array($key => $value), 'request' => $this));
+	}
+	
+	/**
+	 * Get the value of a request cookie. If the cookie is undefined, the value of
+	 * <var>$default</var> is returned (by default, NULL)
+	 * 
+	 * @param string $key cookie name
+	 * @param mixed value to return if the cookie is unset
+	 */
+	public function cookie($key, $default = NULL) {
+		if (!isset($_COOKIE[$key]))
+			return $default;
+		return $_COOKIE[$key];
+	}
+	
+	/**
+	 * Deletes the specified cookie
+	 * 
+	 * @param string $key the cookie name
+	 * @return mixed the cookie value
+	 */
+	public function clearCookie($key) {
+		$value = $this->cookie($key);
+		unset($_COOKIE[$key]);
+		return $value;
 	}
 	
 	/**@+ @ignore */

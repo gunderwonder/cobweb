@@ -27,6 +27,14 @@ abstract class Request implements ArrayAccess {
 		array $POST,
 		array $COOKIES,
 		array $META);
+	
+	
+	/**
+	 * Returns the body of the request
+	 * 
+	 * @return string request body
+	 */
+	abstract public function body();	
 		
 	/**
 	 * Returns the complete URI of the request
@@ -56,13 +64,6 @@ abstract class Request implements ArrayAccess {
 	 * @return string query parh of the URI
 	 */
 	abstract public function query();
-	
-	/**
-	 * Returns the segment component of the URI of this request
-	 * 
-	 * @return string query segment of the URI
-	 */
-	abstract public function hash();
 	
 	/**
 	 * Returns true if the request is made over a secure channel, false otherwise
