@@ -48,8 +48,14 @@ function str_titlecase($string) {
 
 
 function stringify($object) {
+	static $seen = array();
+	
 	if (is_object($object)) {
 		$class = get_class($object);
+		
+		if (in_array($object, $seen))
+			return "< $class >";
+		$seen[] = $object;
 		$vars = get_object_vars($object);
 		
 		if (method_exists($object, 'toArray'))
@@ -59,6 +65,7 @@ function stringify($object) {
 			$vars = "{$object->__toString()}";
 			
 		$vars = stringify($vars);
+		$seen = array();
 		return "< $class ⇒ $vars >";
 	
 	

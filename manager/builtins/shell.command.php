@@ -1,9 +1,14 @@
+
 <?php
 /**
  * @version $Id$
  * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
  * @copyright Upstruct Berlin Oslo
  */
+
+function __shell_print_var($var) {
+	echo stringify($var);
+}
 
 /**
  * @author Øystein Riiser Gundersen <oystein@upstruct.com>
