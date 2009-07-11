@@ -9,3 +9,38 @@ Redistributions in binary form must reproduce the above copyright notice, this l
 Neither the name of Cobweb nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 	
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Included Software and Licenses
+The following third party software is distributed with Cobweb and is provided under other licenses and/or has source available from other locations.
+
+- Doctrine (/vendor/doctrine) is licenced under the LGPL:
+	http://trac.doctrine-project.org/browser/branches/1.1/LICENSE
+
+- Smarty (/vendor/smarty) is licenced under the LGPL:
+	http://smarty-php.googlecode.com/svn/trunk/COPYING.lib
+	
+- Addendum (/vendor/addendum) is licenced under the LGPL:
+	http://code.google.com/p/addendum/source/browse/trunk/LICENSE
+	
+- FirePHP (/vendor/firephp) is licenced under the New BSD License:
+	http://firephp.googlecode.com/svn/tags/Library-FirePHPCore-0.2.1/lib/FirePHPCore/LICENSE
+	
+- Markdown (/vendor/markdown) is licenced under a BSD-style licence:
+	http://michelf.com/projects/php-markdown/license/
+	
+- PHP_Shell (/vendor/phpshell) is licenced under a MIT-style licence:
+	http://cvs.php.net/viewvc.cgi/pear/PHP_Shell/PHP/Shell.php?revision=1.3&view=markup
+	
+- Portable PHP password hashing framework (/vendor/phpass) is in the public domain:
+	http://www.openwall.com/phpass/
+	
+- PHPUnit (/vendor/phpunit) is licenced under a BSD-style licence:
+	http://www.phpunit.de/wiki/Copyright
+	
+- SwiftMailer (/vendor/swiftmailer) is licenced under the LGPL:
+	http://github.com/swiftmailer/swiftmailer/blob/ea6417f4840e1bd8d8242fe9527c7b8f314da2a4/LICENSE.LGPL
+	
+- PHPUTF8 (/vendor/utf8) is licenced under the LGPL:
+	http://phputf8.cvs.sourceforge.net/viewvc/phputf8/utf8/LICENSE?view=markup
+	
