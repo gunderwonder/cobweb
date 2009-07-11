@@ -75,6 +75,10 @@ class CWDateTime extends DateTime {
 	}
 	
 	public function timestamp() {
+		// PHP >= 5.3
+		if (method_exists($this, 'getTimestamp'))
+			return $this->getTimestamp();
+			
 		return intval($this->format('U'));
 	}
 	
@@ -87,7 +91,7 @@ class CWDateTime extends DateTime {
 		return new TimeDelta($this->timestamp() - $t_2->format('U'));
 	}
 	
-	public function add(TimeDelta $d) {		
+	public function add(CWTimeDelta $d) {		
 		$modifier = $d->difference() < 0 ? '-' : '+';
 		return $this->copy()->modify("{$modifier}{$d->difference()} seconds");
 	}
