@@ -7,8 +7,15 @@
  * @subpackage Core
  */
 
-class FileNotFoundException extends Exception { }
-class CobwebException extends Exception { }
+class NotImplementedException extends RuntimeException { }
+
+class SecurityException extends RuntimeException { }
+class AccessControlException extends SecurityException { }
+
+class IOException extends RuntimeException { }
+class FileNotFoundException extends IOException { }
+
+class CobwebException extends RuntimeException { }
 class CobwebErrorException extends ErrorException {
 	
 	/** @var string */
@@ -64,11 +71,15 @@ class HTTP404 extends HTTPException {
 class HTTP500 extends HTTPException { 
 	public function __construct($message = '') {
 		$message = ($message == '' ? '' : ': ' . $message);
-		parent::__construct('Internal server error' . $message, 500);
+		parent::__construct("Internal server error{$message}", 500);
 	}
 }
 
-class HeadersSentException extends HTTPException { }
+class HeadersSentException extends HTTPException {
+	public function __construct($message = '') {
+		parent::__construct($message, 500);
+	}
+}
 
 class CobwebDispatchException extends CobwebException { }
 
