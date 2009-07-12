@@ -16,9 +16,9 @@ class SmartyTemplateAdapter extends TemplateAdapter {
 		parent::__construct();
 	}
 	
-	public function renderFile($file) {
+	public function interpolate($template, $interpolation_mode = TemplateAdapter::INTERPOLATE_FILE) {
 		$this->smarty->assign($this->bindings());
-		return $this->smarty->renderFile($file);
+		return $this->smarty->renderFile($template);
 	}
 	
 	
