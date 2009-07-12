@@ -5,6 +5,7 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+// THIS CODE NEEDS SERIOUS CLEANUP...
 
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
@@ -14,9 +15,7 @@
  */
 class DebugController extends Controller {
 	
-	
 	/** 
-	 * 
 	 * @param   Exception     $exception  the thown exception
 	 * @return  HTTPResponse  500/404 response with detailed stacktrace/debug information
 	 */
@@ -56,9 +55,18 @@ class DebugController extends Controller {
 				if ($trace['class'] == 'ReflectionMethod')
 					;
 				else {
-					$reflector = new ReflectionClass($trace['class']);
-					$method = $reflector->getMethod($trace['function']);
-					$this->functionInformation($method, $trace);
+					
+					/**
+					 * oddly, PHP does not care about method calls whose
+					 * methods are invalid (methods with names that contain e.g. `include` )
+					 */
+					try {
+						$reflector = new ReflectionClass($trace['class']);
+						$method = $reflector->getMethod($trace['function']);
+						$this->functionInformation($method, $trace);
+					} catch (Exception $e) {
+						
+					}
 				}
 				
 				if (str_ends_with($trace['class'], 'Controller'))
@@ -77,7 +85,7 @@ class DebugController extends Controller {
 		
 		
 		$code = $exception instanceof HTTPException ? $exception->getCode() : 500;
-		
+
 		return new HTTPResponse($template, $code);
 	}
 	
