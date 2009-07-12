@@ -73,3 +73,15 @@ function strip_magic_quotes($v) {
            array_map('strip_magic_quotes', $v) : 
            stripslashes($v);
 }
+
+if (!function_exists('__')) {
+	if (!function_exists('_')) {
+		function __($message) {
+			return $message;
+		}
+	} else {
+		function __($message) {
+			return _($message);
+		}
+	}
+}
