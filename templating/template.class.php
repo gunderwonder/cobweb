@@ -31,7 +31,10 @@ class Template implements ArrayAccess {
 	 * @param  string $template_adapter name of class to use as adapter for this template
 	 * @return Template
 	 */
-	public function __construct($template_adapter = 'SmartyTemplateAdapter') {
+	public function __construct($template_adapter = NULL) {
+		$template_adapter = is_null($template_adapter) ?
+			Cobweb::get('TEMPLATE_ADAPTER', 'SmartyTemplateAdapter') :
+			$template_adapter;
 		
 		$this->adapter = new $template_adapter();
 		$this->buffer = '';
@@ -142,8 +145,8 @@ class Template implements ArrayAccess {
 		return $this;
 	}
 	
-	public static function create() {
-		return new Template();
+	public static function create($template_adapter = NULL) {
+		return new Template($template_adapter);
 	}
 	
 	// ARRAY ACCESS IMPLEMENTATION

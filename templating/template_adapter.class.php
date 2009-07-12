@@ -14,11 +14,18 @@
  */
 abstract class TemplateAdapter implements ArrayAccess {
 	
+	const INTERPOLATE_STRING = 'string';
+	const INTERPOLATE_FILE = 'file';
+	const INTERPOLATE_RESOURCE = 'resource';
+	
 	protected $bindings;
 	
 	public function __construct(array $bindings = NULL) {
 		$this->bindings = array();
+		$this->initialize();
 	}
+	
+	protected function initialize() { }
 	
 	public function bindings() {
 		return $this->bindings;
@@ -47,6 +54,15 @@ abstract class TemplateAdapter implements ArrayAccess {
 		unset($this->bindings[$key]);
 	}
 	
-	abstract public function renderFile($filename);
+	
+	abstract public function interpolate($template, $interpolation_mode = self::INTERPOLATE_FILE);
+	
+	/**
+	 * @deprecated use `TemplateAdapter::interpolate()` instead
+	 */
+	public function renderFile($filename) {
+		return $this->interpolate($filename, self::INTERPOLATE_FILE);
+	}
+	
 	
 }
