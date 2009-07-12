@@ -13,6 +13,6 @@ abstract class LogFormatter {
 		$this->logger = $logger;
 	}
 	
-	abstract public function format();
+	abstract public function format(Response $response);
 	
 }

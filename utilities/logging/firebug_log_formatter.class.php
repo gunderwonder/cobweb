@@ -8,9 +8,9 @@
 class FirebugLogFormatter extends LogFormatter {
 	
 	
-	public function format() {
+	public function format(Response $response) {
 		if ($this->logger->isEmpty())
-			return '';
+			return;
 		
 		$log = "<script type=\"text/javascript\" charset=\"utf-8\">\n" .
 			"\t// <![CDATA[\n" .
@@ -25,7 +25,6 @@ class FirebugLogFormatter extends LogFormatter {
 			$things = $invocation[1];
 			if (!is_array($things) || count($things) == 0) {
 				$message .= "null);\n";
-				return;
 			}
 		
 			for ($i = 0; $i < count($things); $i++) {
@@ -37,10 +36,27 @@ class FirebugLogFormatter extends LogFormatter {
 				
         	
 			$log .= $message . ");\n";
-			
-				
 		}
-		return $log . "\t\tconsole.groupEnd()\n\t}\n\t// ]]>\n</script>";
+		$log .= "\t\tconsole.groupEnd()\n\t}\n\t// ]]>\n</script>";
+		
+		// HTML
+		if ($response['Content-Type'] == MIMEType::HTML) {
+			
+				if (($position = utf8_strpos($response->body, '</head>')) !== false)
+					$response->body = str_replace(
+						'</head>', 
+						$log . "\n</head>", 
+						$response->body
+					);
+				else
+					$response->body .= $log;
+			
+		// AJAXResponse
+		} else if ($response instanceof AJAXResponse) {
+			$json = JSON::decode($response->body);
+			$json['logs'] = $log;
+			$response->body = JSON::encode($json);
+		}
 	}
 	
 	
