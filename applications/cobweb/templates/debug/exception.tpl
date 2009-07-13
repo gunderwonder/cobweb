@@ -15,7 +15,7 @@
 		{literal}
 		// TODO: this needs a rewrite...
 		
-		if (hljs) hljs.initHighlightingOnLoad('php');
+		if (typeof hljs != 'undefined') hljs.initHighlightingOnLoad('php');
 		Event.observe(window, 'load', function(e) {
 			$$('.php').each(function (p) {
 				var old = p.innerHTML.replace(/^\t/gm, '');
@@ -106,7 +106,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			{foreach from=$backtrace item=trace}
+			{foreach from=$backtrace item=trace name=loop}
 			<tr {if isset($trace.is_controller)}class="controller-stackpoint"{/if}>
 				<td style="text-align: right;">{$trace.line|default:""}</td>
 				<td>{if isset($trace.file)}<a title="{$trace.file}" href="txmt://open?url=file://{$trace.file}&amp;line={$trace.line}">{$trace.base_filename}{/if}</td>
@@ -123,7 +123,7 @@
 				</td>
 			</tr>
 			{if isset($trace.source)}
-			<tr style="display: none;">
+			<tr {if $smarty.foreach.loop.index != 0}style="display: none;"{/if}>
 				<td colspan="4" >
 					<div style="clear: both; margin-left: 30px;">
 					
@@ -176,11 +176,11 @@
 					<th>Method</th>
 					<td>{$REQUEST->method()}</td>
 				</tr>
-				{*<tr>
+				<tr>
 					<th>Request headers</th>
 					<td>
 						<table style="width: 100%; margin-top: 0px;">
-						{foreach from=$REQUEST item=value key=header}
+						{foreach from=$REQUEST->headers() item=value key=header}
 							<tr>
 								<td><b>{$header}</b></td>
 								<td>{$value}</td>
@@ -189,7 +189,7 @@
 						</table>
 						</td>
 					</td>
-				</tr>*}
+				</tr>
 				<!-- <tr>
 					<th>Response headers</th>
 					<td>

@@ -58,10 +58,10 @@ body {
 }
 
 #header {
-	color: Maroon;
-	background-color: #eaeaea;
+	color: white;
+	background-color: #555;
 	width: 100%;
-	border-bottom: 1px solid LightGrey; 
+	border-bottom: 1px solid black; 
 	margin: 0;
 	
 	
@@ -73,9 +73,9 @@ table.vertical-table-header th {
 }
 
 h1 {
-	font-size: 30px;
-	font-weight: lighter;
-	padding: 20px;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 10px 10px 10px 40px;
 	margin: 0;
 	
 }
@@ -85,13 +85,13 @@ h2 {
 }
 
 h3 {
-	
 	font-weight: normal;
-	font-size: 11px;
+	font-size: 12px;
 	text-transform: uppercase;
-	letter-spacing: .2em;
+	letter-spacing: .15em;
 	margin-top: 0px;
 	margin-bottom: 0px;
+	color: black;
 }
 
 p {
