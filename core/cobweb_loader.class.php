@@ -51,6 +51,7 @@ class CobwebLoader {
 		// actions
 		'Action' => '/controller/action.class.php',
 		'Controller' => '/controller/controller.class.php',
+		'CobwebController' => '/applications/cobweb/controllers/cobweb.controller.php',
 		'CallableAction' => '/action/callable_action.class.php',
 		'ControllerAction' => '/action/controller_action.class.php',
 		'Action' => '/action/action.interface.php',
