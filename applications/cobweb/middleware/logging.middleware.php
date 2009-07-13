@@ -5,6 +5,9 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+class LoggingDisabled extends Annotation { }
+class LoggingEnabled extends Annotation { }
+
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @version    $Rev$
@@ -15,9 +18,19 @@ class LoggingMiddleware extends Middleware {
 	
 	protected $loggers;
 	
+	protected $logging_enabled = NULL;
+	
 	public function initialize() {
 		$this->loggers = array();
 		$this->dispatcher->observe('logging.register_logger', array($this, 'registerLogger'));
+	}
+	
+	public function processAction(Request $request, Action $action) {
+		
+		if ($action->hasAnnotation('LoggingEnabled'))
+			$this->logging_enabled = true;
+		else if ($action->hasAnnotation('LoggingDisabled'))
+			$this->logging_enabled = false;
 	}
 	
 	public function processResponse(Request $request, Response $response) {
@@ -25,11 +38,11 @@ class LoggingMiddleware extends Middleware {
 		if (in_array($response->code(), array(304)))
 			return $response;
 		
-		if (!Cobweb::get('DEBUG'))
+		if ($this->logging_enabled === false || !Cobweb::get('DEBUG'))
 			return $response;
 		
 		foreach ($this->loggers as $logger) {
-			$formatter_class = Cobweb::get('LOG_FORMATTER_CLASSNAME', 'FirebugLogFormatter');
+			$formatter_class = Cobweb::get('LOG_FORMATTER', 'FirebugLogFormatter');
 			$formatter = new $formatter_class($logger);
 			$formatter->format($response);
 		}
