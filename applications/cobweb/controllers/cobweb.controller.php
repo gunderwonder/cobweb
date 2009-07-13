@@ -14,6 +14,8 @@
  */
 class CobwebController extends Controller {
 	
+	const STATIC_PATH_RE = '^static/cobweb/(?<path>.+)';
+	
 	/**
 	 * @param $uri       string
 	 * @param $exception Exception
@@ -48,6 +50,13 @@ class CobwebController extends Controller {
 	
 	public function start() {
 		return $this->render('/debug/cobweb_installed.tpl');
+	}
+	
+	public function serveStaticData($path) {
+		return self::invoke('cobweb.filesystem.serve', array(
+			'base_path' => COBWEB_DIRECTORY . '/applications/cobweb/static/',
+			'path' => $path
+		));
 	}
 	
 }
