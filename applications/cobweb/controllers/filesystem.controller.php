@@ -25,6 +25,8 @@ class FilesystemController extends Controller {
 	 * @param  $base_path   base path in which the file resides
 	 * @return HTTPResponse response containing the file with a MIME type guessed from its filename
 	 * @throws HTTP404      if the file does not exist 
+	 * 
+	 * @LoggingDisabled
 	 */
 	public function serve($path, $base_path) {
 		$file = realpath($base_path . '/' . $path);

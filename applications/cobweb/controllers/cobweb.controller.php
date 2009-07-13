@@ -18,6 +18,8 @@ class CobwebController extends Controller {
 	 * @param $uri       string
 	 * @param $exception Exception
 	 * @return HTTPResponse
+	 * 
+	 * @LoggingDisabled
 	 */
 	public function notFound404($uri = NULL, Exception $exception = NULL) {
 		
@@ -27,7 +29,7 @@ class CobwebController extends Controller {
 		if (Cobweb::get('DEBUG'))
 			throw new HTTP404();
 			
-		return $this->render('404.tpl', 
+		return $this->render(Cobweb::get('HTTP404_TEMPLATE', '404.tpl'), 
 			array('uri' => $this->request->URI()), 
 			HTTPResponse::NOT_FOUND);
 			
@@ -39,7 +41,7 @@ class CobwebController extends Controller {
 	 */
 	public function gracefulException(Exception $exception) {
 		return $this->render(
-			Cobweb::get('ERROR_TEMPLATE', 'error.tpl'), 
+			Cobweb::get('HTTP500_TEMPLATE', '500.tpl'), 
 			array('exception' => $exception)
 		);
 	}
