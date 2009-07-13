@@ -18,6 +18,9 @@ abstract class TemplateAdapter implements ArrayAccess {
 	const INTERPOLATE_FILE = 'file';
 	const INTERPOLATE_RESOURCE = 'resource';
 	
+	const SMARTY = 'SmartyTemplateAdapter';
+	const PHP = 'PHPTemplate';
+	
 	protected $bindings;
 	
 	public function __construct(array $bindings = NULL) {
