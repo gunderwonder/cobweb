@@ -268,7 +268,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	}
 	/**@- */
 	
-	public function __toArray() {
+	public function headers() {
 		$formatted_headers = array();
 		foreach ($this->headers as $header => $value) {
 			$formatted_key = preg_replace_callback(
@@ -280,6 +280,10 @@ class HTTPRequest extends Request implements ArrayAccess {
 		}
 		
 		return $formatted_headers;
+	}
+	
+	public function __toArray() {
+		return $this->headers();
 	}
 
 }
