@@ -112,18 +112,16 @@ class ControllerAction extends CallableAction {
 			$class = $this->controller->getName();
 			$method = $this->action->getName();
 			
-			// $object = new $class($this->dispatcher, $this->request);
-			// $response = call_user_func_array(array($object, $method), $arguments);
-			
 			$this->instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
-			// $this->controller->getMethod('initialize')->invoke($instance);
 			
-			if(($response = $this->controller->getMethod('processRequest')->invoke($this->instance)))
+			if(($response = $this->controller->getMethod('processRequest')->invoke($this->instance, $this->request)))
+				return $response;
+			if(($response = $this->controller->getMethod('processAction')->invoke($this->instance, $this->request, $this)))
 				return $response;
 			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
 			$response = $this->action->invokeArgs($this->instance, $arguments);
-			$response = $this->controller->getMethod('processResponse')->invoke($this->instance, $response);
+			$response = $this->controller->getMethod('processResponse')->invoke($this->instance, $this->request, $response);
 	
 		} catch (ReflectionException $e) { 
 			throw new CobwebDispatchException(

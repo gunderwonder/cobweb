@@ -52,7 +52,7 @@
  * @see        Response
  * @see        ControllerAction
  */
-abstract class Controller {
+abstract class Controller implements RequestProcessor {
 	
 	/** @var Request */
 	protected $request;
@@ -202,14 +202,34 @@ abstract class Controller {
 		return $this->request->isPUT();
 	}
 	
-	public function processRequest() {
+	/**
+	 * @param mixed $value
+	 * @return mixed the value passed to this function
+	 * @throws HTTP404 if the specified value evaluates to false
+	 */
+	protected function ensure($value) {
+		if (!$value) throw new HTTP404();
+		return $value;
+	}
+	
+	
+	// REQUEST PROCESSOR IMPLEMENTATION
+	public function processRequest(Request $request) {
 		return NULL;
 	}
 	
-	
-	public function processResponse($response) {
+	public function processResponse(Request $request, Response $response) {
 		return $response;
 	}
+	
+	public function processAction(Request $request, Action $action) {
+		return NULL;
+	}
+	
+	public function processException(Request $request, Exception $exception) {
+		return NULL;
+	}
+	
 	
 	
 }
