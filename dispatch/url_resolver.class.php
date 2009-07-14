@@ -17,6 +17,8 @@ class URLResolver implements Resolver {
 	const PATTERN_RIGHT_SENTINEL = '}';
 	
 	private $rules = NULL;
+	protected $attempted_patterns;
+	protected $matching_pattern;
 	
 	/**
 	 * Instantiates a URL resolver.
@@ -41,6 +43,7 @@ class URLResolver implements Resolver {
 		$this->rules  = $rules; 
 		$this->reverse_map = NULL;
 		$this->parent_resolver = $parent_resolver;
+
 	}
 	
 	/**
@@ -54,7 +57,9 @@ class URLResolver implements Resolver {
 	protected function resolveURL(Request $request, $url) {
 		
 		foreach ($this->rules as $pattern => $action) {
-
+			
+			$this->attempted_patterns[] = $pattern;
+			
 			if (!is_string($pattern))
 				throw new CobwebConfigurationException(
 					'Invalid URL dispatch rule. ' .
@@ -62,6 +67,7 @@ class URLResolver implements Resolver {
 				);
 
 			if (($matches = $this->match($pattern, $url)) !== false) {
+				$this->matching_pattern = $pattern;
 				Cobweb::info("Request URI %o resolved to action %o using pattern %o",  
 					$request->URI(), $action, $pattern);
 				
@@ -75,15 +81,6 @@ class URLResolver implements Resolver {
 				} else if ($action instanceof Action)
 					return $action;
 			}
-
-			// if (isset($options['include']))	
-			// 	return $this->resolveInclude($pattern, $url, $options, $matches);
-			// else
-			// 	return array(
-			// 		$this->concatencatePatterns($this->prefix_pattern, $pattern), 
-			// 		array_merge($this->include_options, $options),
-			// 		array_merge($this->include_matches, $matches)
-			// 	);
 		}
 		
  		return new ControllerAction(
@@ -95,6 +92,10 @@ class URLResolver implements Resolver {
 						array('cobweb.cobweb.not_found_404'));
 	}
 	
+	protected function query(Request $request) {
+		return ltrim($request->path(), '/');
+	}
+	
 	/**
 	 * Resolves the {@link Action} of a request
 	 * 
@@ -102,12 +103,8 @@ class URLResolver implements Resolver {
 	 * @return Action  resolved action
 	 */
 	public function resolve(Request $request) {
-		// $url = $request->path() == '/' ? 
-		//        $request->path() :
-		//        ltrim($request->path(), '/');
-		
-		$url = ltrim($request->path(), '/');
-		return $this->resolveURL($request, $url);
+
+		return $this->resolveURL($request, $this->problem($request));
 	}
 	
 	
@@ -135,7 +132,6 @@ class URLResolver implements Resolver {
 			$pattern,
 			$this
 		);
-		// $action->setResolver($include_resolver);
 		
 		return $include_resolver->resolveURL($request, ltrim($this->trimPattern($pattern, $url), '/'));
 	}
@@ -363,9 +359,8 @@ class URLResolver implements Resolver {
 		                        $this);
 				
 				$reverse = $resolver->reverseMap();
-				foreach ($reverse as $a => $p) {
+				foreach ($reverse as $a => $p)
 					$this->reverse_map[$a] = $this->concatencatePatterns($pattern . '/', $p);
-				}
 			} else if (is_object($action)) 
 				;
 			
@@ -392,6 +387,14 @@ class URLResolver implements Resolver {
 			
 		return Cobweb::get('URL_PREFIX') . '/' . 
 		       $this->reverseResolve($reverse_map[$name], $arguments);
+	}
+	
+	public function attemptedPatterns() {
+		return $this->attempted_patterns;
+	}
+	
+	public function matchingPattern() {
+		return $this->matching_pattern;
 	}
 	
 }
