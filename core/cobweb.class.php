@@ -28,11 +28,11 @@ class Cobweb implements CobwebDeclaration {
 	
 	public function __construct() {
 		self::$cobweb = $this;
+		self::$logger = new Logger('Cobweb');
 		
 		Cobweb::info('This is Cobweb %s...', self::VERSION);
 		$this->dispatcher = $this->createDispatcher(array());
 		$this->configuration = $this->createConfiguration(array('dispatcher' => $this->dispatcher));
-		
 		
 		Cobweb::log('Loading settings...');
 		Cobweb::set('__COBWEB_START_TIME__', microtime(true));
@@ -68,7 +68,7 @@ class Cobweb implements CobwebDeclaration {
 		if (self::$initialized)
 			return;
 		
-		self::$logger = new Logger('Cobweb');
+		
 		
 		if (is_null(self::$cobweb))
 			self::$cobweb = is_null($cobweb) ? new Cobweb() : $cobweb;
@@ -105,10 +105,10 @@ class Cobweb implements CobwebDeclaration {
 		// error_reporting(Cobweb::get('ERROR_REPORTING'));
 		date_default_timezone_set(Cobweb::get('TIMEZONE'));
 		
-		Cobweb::set('__REQUEST__', $this->request);
-		Cobweb::set('__MIDDLEWARE_MANAGER__', $this->middleware_manager);
-		Cobweb::set('__DISPATCHER__', $this->dispatcher);
-		Cobweb::set('__RESOLVER__', $this->resolver);
+		Cobweb::set('__REQUEST__', $this->request());
+		Cobweb::set('__MIDDLEWARE_MANAGER__', $this->middlewareManager());
+		Cobweb::set('__DISPATCHER__', $this->dispatcher());
+		Cobweb::set('__RESOLVER__', $this->resolver());
 		
 		Cobweb::log('Loading middleware...');
 		$this->middleware()->load();
@@ -120,7 +120,6 @@ class Cobweb implements CobwebDeclaration {
 	}
 	
 	protected function dispatch() {
-
 		Cobweb::log('Resolving URI...');
 		$action = $this->resolver()->resolve($this->request, Cobweb::get('URL_CONFIGURATION', array()));
 		
@@ -129,9 +128,7 @@ class Cobweb implements CobwebDeclaration {
 		
 		$this->dispatcher->fire('dispatcher.dispatched_request', array('response' => $response));
 		$this->dispatcher->finalize($response);
-		$this->dispatcher->fire('dispatcher.finalized_response', array('response' => $response));
-		
-		
+		$this->dispatcher->fire('dispatcher.finalized_response', array('response' => $response));	
 	}
 	
 	public function createConfiguration(array $settings) {
@@ -140,6 +137,10 @@ class Cobweb implements CobwebDeclaration {
 	
 	public function createMiddlewareManager(array $settings) {
 		return new MiddlewareManager($settings['dispatcher'], $settings['application_manager']);
+	}
+	
+	public function middlewareManager() {
+		return $this->middleware_manager;
 	}
 	
 	public function createDispatcher(array $settings) {
@@ -188,6 +189,9 @@ class Cobweb implements CobwebDeclaration {
 		return $this->application_manager;
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public static function load($class) {
 		return CobwebLoader::load($class);
 	}
@@ -243,9 +247,9 @@ class Cobweb implements CobwebDeclaration {
 		return self::$logger->error(func_get_args());
 	}
 	
-	public static function start() {
+	public static function start(CobwebDeclaration $cobweb = NULL) {
 		try {
-			Cobweb::initialize();
+			Cobweb::initialize($cobweb);
 			Cobweb::run();
 		} catch (Exception $e) {
 			if (Cobweb::get('DEBUG')) {

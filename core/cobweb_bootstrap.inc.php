@@ -13,12 +13,12 @@ require_once COBWEB_DIRECTORY . '/core/cobweb_declaration.interface.php';
 
 require_once COBWEB_DIRECTORY . '/core/cobweb.class.php';
 
-spl_autoload_register(array('Cobweb', 'load'));
+spl_autoload_register(array('CobwebLoader', 'load'));
 set_error_handler(array('Cobweb', 'handleError'));
+
+require_once COBWEB_DIRECTORY . '/vendor/utf8/utf8.php';
+require_once COBWEB_DIRECTORY . '/vendor/utf8/str_ireplace.php';
 
 require_once COBWEB_DIRECTORY . '/utilities/string.inc.php';
 require_once COBWEB_DIRECTORY . '/utilities/string_inflection.inc.php';
 require_once COBWEB_DIRECTORY . '/utilities/array.inc.php';
-
-require_once COBWEB_DIRECTORY . '/vendor/utf8/utf8.php';
-require_once COBWEB_DIRECTORY . '/vendor/utf8/str_ireplace.php';
