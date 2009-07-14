@@ -14,7 +14,7 @@ class RunCobwebTestsCommand extends CobwebManagerCommand {
 	
 	public function execute() {
 		chdir(COBWEB_DIRECTORY . '/test');
-		system('run-tests');
+		system('run-tests ' . implode(array_slice($_SERVER['argv'], 2), ' '));
 	}
 	
 }
