@@ -29,9 +29,9 @@ class DebugController extends Controller {
 		$template['e'] = $exception;
 		
 		$template['file_path'] = lstrip($exception->getFile(), COBWEB_PROJECT_DIRECTORY);
-		
-		$backtrace = $exception instanceof CobwebErrorException ? 
-			$exception->context() : 
+	
+		$backtrace = $exception instanceof CobwebErrorException || in_array($template['exception_class'], CobwebErrorException::rethrowedExceptions()) ? 
+			CobwebErrorException::currentStacktrace() : 
 			$exception->getTrace();
 
 		foreach ($backtrace as $i => &$trace) {
@@ -79,6 +79,13 @@ class DebugController extends Controller {
 
 		$template['response_headers'] = $this->responseHeaders();
 		$template['backtrace'] = $backtrace;
+		
+		$template['attempted_patterns'] = $template['matching_pattern'] = NULL;
+		$resolver = Cobweb::get('__RESOLVER__');	
+		if (method_exists($resolver, 'attemptedPatterns'))
+			$template['attempted_patterns'] = $resolver->attemptedPatterns();
+		if (method_exists($resolver, 'matchingPattern'))
+			$template['matching_pattern'] = $resolver->matchingPattern();
 		
 		$template->render(
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/exception.tpl', 

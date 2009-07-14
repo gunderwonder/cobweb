@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- {$exception_class}: {$e->getMessage()} -->
 <html lang="en">
 <head>
 	
@@ -12,97 +13,38 @@
 	</style>
 	
     <script type="text/javascript">
-		{literal}
-		// TODO: this needs a rewrite...
-		
-		if (typeof hljs != 'undefined') hljs.initHighlightingOnLoad('php');
-		Event.observe(window, 'load', function(e) {
-			$$('.php').each(function (p) {
-				var old = p.innerHTML.replace(/^\t/gm, '');
-				var line = 0;
-				var startLine = 0;
-				p.classNames().each(function(className) {
-					if (className.startsWith('stack-line-')) {
-						line = className.substring('stack-line-'.length);
-						line = parseInt(line);
-						
-					}
-				});
-				if (p.hasClassName('backtrace-comment')) {
-					p.innerHTML = old;
-					return;
-				}
-					
-					
-				var lines = old.split('\n'), i = 0, buffer = '';
-				lines.each(function(l) {
-					if (i == line) {
-						var nonWhitespaceSeen = false;
-						var j = 0;
-						var chars = $A(l.split(''));
-						chars.each(function(c) {
-							if (nonWhitespaceSeen)
-								buffer += c;
-							else if (c.match(/\s/))
-								buffer += c;
-							else {
-								buffer += '<span class="stack-line">' + c;
-								nonWhitespaceSeen = true;
-							}
-							if (j == chars.size() - 1)
-								buffer += "</span>\n";
-							j++;
-						});
-					}
-					else
-						buffer += l + "\n";
-					i++;
-				})
-
-				p.innerHTML = buffer;
-			})
-			
-		});
-		function toggleAllSource() {
-				$$('.source-toggler').each(function(t) {
-					if (t.id == 'toggle-all')	
-						return;
-					t.click();
-				})
-			}
-		{/literal}
+		{include file='cobweb_debug.js'}
     </script>
 	
-
-	<title>Cobweb</title>
-	
+	<title>Cobweb exception: {$exception_class}</title>
 </head>
 
 <body>
 	<div id="header"><h1>Cobweb caught an exception</h1></div>
 	<div id="content">
-		<h3>caught exception</h3>
+		<h3>Caught exception</h3>
 		<h2>{$exception_class}</h2>
 		<h3>it was thrown in</h3>
-		<p><a href="txmt://open?url=file://{$e->getFile()}&amp;line={$e->getLine()}"><tt>{$file_path}</tt></a>
-			<span style="font-size: 12px;">on line {$e->getLine()}</span></p>
+		<p>
+			<a href="txmt://open?url=file://{$e->getFile()}&amp;line={$e->getLine()}">
+				<tt>{$file_path}</tt>
+			</a>
+			<span style="font-size: 12px;">on line {$e->getLine()}</span>
+		</p>
 		
-		<h3>message</h3>
+		<h3>Message</h3>
 		<p>{$e->getMessage()}</p>
 		
-
-		
-		<h3>stacktrace</h3>
+		<h3>Stacktrace</h3>
 		<table cellspacing="0" cellpadding="0" border-collapse="0" style="margin-bottom: 30px;">
 			<thead>
-					<tr>
+				<tr>
 					<th style="width: 30px;"></th>
 					<th>File</th>
 					<th>Context</th>
 					<th style="width: 20px;">
-						<input id="toggle-all" class="source-toggler" type="button" onclick="toggleAllSource();" value="" />
+						<input id="toggle-all" class="source-toggler" type="button" onclick="Cobweb.Stacktrace.toggleAllSource();" value="" />
 					</th>
-				</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -114,9 +56,7 @@
 					<tt><b>{$trace.class|default:""}</b>
 						{if isset($trace.type)}{if $trace.type == "->"}→{else}{$trace.type|truncate:150}{/if}{/if}
 						{$trace.function}
-						({*{if isset($trace.args) && count($trace.args) > 0}<span class="args" title="{foreach from=$trace.named_args key=name item=arg name=loop}{$name} → {$arg}{if not $smarty.foreach.loop.last}&#10;{/if}{/foreach}">arguments</span>{/if}*})
 					</tt>
-					
 				</td>
 				<td style="width: 20px;">
 					{if isset($trace.source)}<input class="source-toggler" type="button" onclick="$(this).up().up().next().toggle();" value="" />{/if}
@@ -152,8 +92,7 @@
 					
 						<h4 style="margin-bottom: 0;">Source</h4>
 					</div>
-					<div style="float: left; margin-right: 15px; margin-left: 30px;">
-					
+					<div style="float: left; margin-right: 15px; margin-left: 30px;">	
 						<pre style="background-color: #EAEAEA;">{foreach from=$trace.source_range item=line}{$line}
 {/foreach}</pre>
 					</div>
@@ -190,28 +129,32 @@
 						</td>
 					</td>
 				</tr>
-				<!-- <tr>
-					<th>Response headers</th>
+				{if $attempted_patterns}
+				<tr>
+					<th>Attempted to match URL patterns...</th>
 					<td>
 						<table style="width: 100%; margin-top: 0px;">
-						{foreach from=$response_headers item=value key=header}
+						{foreach from=$attempted_patterns item=pattern}
 							<tr>
-								<td><b>{$header}</b></td>
-								<td>{$value}</td>
+								<td><tt>{$pattern|escape}</tt></td>
 							</tr>
 						{/foreach}
 						</table>
 						</td>
 					</td>
-				</tr> -->
+				</tr>
+				{/if}
+				{if $matching_pattern}
+				<tr>
+					<th>Matching URL pattern</th>
+					<td>
+						<tt>{$matching_pattern|escape}</tt>
+					</td>
+				</tr>
+				{/if}
 			</tbody>
 		</table>
 		
-		<div style="position: absolute; bottom: 20px; right: 20px; font-size: 12px; text-align: right;">
-			Regards, <br />
-			<div style="padding-top: 10px;">Øystein</div>
-			Your friendly <br />neighborhood <br />programmer
-		</div>
 	</div>
 </body>
 </html>
