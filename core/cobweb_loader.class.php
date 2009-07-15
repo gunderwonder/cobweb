@@ -72,8 +72,10 @@ class CobwebLoader {
 		'Template' => '/templating/template.class.php',
 		'TemplateAdapter' => '/templating/template_adapter.class.php',
 		'SmartyTemplateAdapter' => '/templating/smarty/smarty_template_adapter.class.php',
+		'SmartyTemplate' => '/templating/smarty/smarty_template.class.php',
 		'PHPTemplate' => '/templating/php_template/php_template.class.php',
 		'PHPTemplatePlugin' => '/templating/php_template/php_template_plugin.interface.php',
+		'SmartyCachesTemplate' => '/applications/cache/middleware/smarty_caching.middleware.php',
 		
 		// logging
 		'Logger' => '/utilities/logging/logger.class.php',
