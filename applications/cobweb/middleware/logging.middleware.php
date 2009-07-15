@@ -26,11 +26,14 @@ class LoggingMiddleware extends Middleware {
 	}
 	
 	public function processAction(Request $request, Action $action) {
-		
 		if ($action->hasAnnotation('LoggingEnabled'))
 			$this->logging_enabled = true;
 		else if ($action->hasAnnotation('LoggingDisabled'))
 			$this->logging_enabled = false;
+			
+		$this->logging_enabled = is_null($this->logging_enabled) ?
+			Cobweb::get('DEBUG') :
+			$this->logging_enabled;
 	}
 	
 	public function processResponse(Request $request, Response $response) {
@@ -38,7 +41,7 @@ class LoggingMiddleware extends Middleware {
 		if (in_array($response->code(), array(304)))
 			return $response;
 		
-		if ($this->logging_enabled === false || !Cobweb::get('DEBUG'))
+		if (!$this->logging_enabled)
 			return $response;
 		
 		foreach ($this->loggers as $logger) {
