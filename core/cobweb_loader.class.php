@@ -59,6 +59,11 @@ class CobwebLoader {
 		'Action' => '/action/action.interface.php',
 		'IncludeURLConfigurationAction' => '/action/include_url_configuration_action.class.php',
 		
+		// caching
+		'CacheEngine' => '/applications/cache/engine/cache_engine.class.php',
+		'CacheStore' => '/applications/cache/engine/cache_store.class.php',
+		'DatabaseCacheEngine' => '/applications/cache/engine/database_cache_engine.class.php',
+		
 		// annotations
 		'Annotation' => '/vendor/addendum/annotations.php',
 		'ReflectionAnnotatedClass' => '/vendor/addendum/annotations.php',
