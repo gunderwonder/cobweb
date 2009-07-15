@@ -46,7 +46,9 @@ class CobwebErrorException extends ErrorException {
 	}
 	
 	public static function currentStacktrace() {
-		return self::$current_stacktrace;
+		$stacktrace = self::$current_stacktrace;
+		self::$current_stacktrace = NULL;
+		return $stacktrace;
 	}
 	
 	public function rethrow($message) {

@@ -22,12 +22,6 @@ class HTTPRequest extends Request implements ArrayAccess {
 	/* @var string */
 	protected $body;
 	
-	/* @var MutableArray */
-	protected $COOKIES;
-	
-	/* @var ImmutableArray */
-	// protected $META;
-	
 	/**
 	 * Instantiates a request object with the specified GET, POST, COOKIE and
 	 * MEtA parameters.
@@ -40,14 +34,16 @@ class HTTPRequest extends Request implements ArrayAccess {
 	public function __construct(Dispatcher $dispatcher,
 		                        array $GET,
 		                        array $POST,
-		                        array $META) {
+		                        array $META,
+		                        array $COOKIES,
+                        		array $FILES) {
 
 		$this->dispatcher = $dispatcher;
 		
 		$this->properties['GET']  = new HTTPQueryDictionary($GET);
 		$this->properties['POST'] = new HTTPQueryDictionary($POST);
-		
 		$this->properties['META'] = new ImmutableArray($META);
+		$this->properties['FILES'] = new UploadedFilesArray($FILES);
 		
 		$other_headers = array('CONTENT_TYPE', 'CONTENT_LENGTH');
 		$this->headers = array();
@@ -145,13 +141,10 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return string query
 	 */
 	public function query() {
-		 if (isset($this->META['QUERY_STRING']))
+		if (isset($this->META['QUERY_STRING']))
 			return $this->META['QUERY_STRING'];
 		
-		$hash = $this->hash();
-		$hash = $hash ? '#' . $hash : '';
-
-		return lstrip(rstrip(lstrip($this->URI(), $this->path()), $hash), '?');
+		return '';
 	}
 	
 	/**

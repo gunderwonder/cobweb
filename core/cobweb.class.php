@@ -153,7 +153,8 @@ class Cobweb implements CobwebDeclaration {
 			strip_magic_quotes($_GET),
 			strip_magic_quotes($_POST),
 			$_SERVER,
-			$_COOKIE);
+			$_COOKIE,
+			$_FILES);
 	}
 	
 	public function createResolver(array $settings) {

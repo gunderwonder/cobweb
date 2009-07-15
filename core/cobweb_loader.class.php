@@ -38,6 +38,8 @@ class CobwebLoader {
 		'HttpResponseBadRequest' => '/http/http_response.class.php',
 		'HTTPQueryDictionary' => '/http/http_query_dictionary.class.php',
 		'AJAXResponse' => '/http/ajax_response.class.php',
+		'UploadedFilesArray' => '/http/utilities/uploaded_files_array.class.php',
+		'UploadedFile' => '/http/utilities/uploaded_files_array.class.php',
 		
 		// collections
 		'ImmutableArray' => '/utilities/immutable_array.class.php',

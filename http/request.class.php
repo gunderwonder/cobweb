@@ -25,8 +25,9 @@ abstract class Request implements ArrayAccess {
 		Dispatcher $dispatcher,
 		array $GET,
 		array $POST,
+		array $META,
 		array $COOKIES,
-		array $META);
+		array $FILES);
 	
 	
 	/**
