@@ -31,8 +31,9 @@ class DebugController extends Controller {
 		$template['file_path'] = lstrip($exception->getFile(), COBWEB_PROJECT_DIRECTORY);
 	
 		$backtrace = $exception instanceof CobwebErrorException || in_array($template['exception_class'], CobwebErrorException::rethrowedExceptions()) ? 
-			CobwebErrorException::currentStacktrace() : 
+			CobwebErrorException::currentStacktrace(): 
 			$exception->getTrace();
+		if (empty($backtrace)) $backtrace = $exception->getTrace();
 
 		foreach ($backtrace as $i => &$trace) {
 			$trace['base_filename'] = isset($trace['file']) ? basename($trace['file']) : NULL;
