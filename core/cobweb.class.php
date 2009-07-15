@@ -100,9 +100,15 @@ class Cobweb implements CobwebDeclaration {
 		
 	}
 	
+	/**
+	 * @internal
+	 */
+	public static function instance() {
+		return self::$cobweb;
+	}
+	
 	protected function setup() {
 		
-		// error_reporting(Cobweb::get('ERROR_REPORTING'));
 		date_default_timezone_set(Cobweb::get('TIMEZONE'));
 		
 		Cobweb::set('__REQUEST__', $this->request());
