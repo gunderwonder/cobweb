@@ -104,7 +104,7 @@ class URLResolver implements Resolver {
 	 */
 	public function resolve(Request $request) {
 
-		return $this->resolveURL($request, $this->problem($request));
+		return $this->resolveURL($request, $this->query($request));
 	}
 	
 	
