@@ -16,7 +16,13 @@ class CWDateTime extends DateTime {
 	const DATE_SQL = 'Y-m-d H:i:s';
 
 	public static function create($time = 'now') {
-		return new CWTime($time);
+		return new CWDateTime($time);
+	}
+	
+	public static function createfromDateTime(DateTime $dt) {
+		if ($dt instanceof CWDateTime)
+			return $dt;
+		return new CWDateTime($dt->format(self::DATE_SQL));
 	}
 	
 	public function set($year = NULL, $month = NULL, $day = NULL, 
@@ -35,6 +41,7 @@ class CWDateTime extends DateTime {
 
 		return $this;
 	}
+	
 	
 	public function compare(DateTime $d) {
 		$t_1 = $this->timestamp();
@@ -88,10 +95,10 @@ class CWDateTime extends DateTime {
 	}
 	
 	public function subtract(DateTime $t_2) {
-		return new TimeDelta($this->timestamp() - $t_2->format('U'));
+		return new CWTimeDelta($this, $t_2);
 	}
 	
-	public function add(CWTimeDelta $d) {		
+	public function add(CWTimeDelta $d) {
 		$modifier = $d->difference() < 0 ? '-' : '+';
 		return $this->copy()->modify("{$modifier}{$d->difference()} seconds");
 	}
@@ -104,8 +111,8 @@ class CWDateTime extends DateTime {
 		return $this->__toString();
 	}
 	
-	public static function sorter(Time $t_1, Time $t_2) {
-		return $t_1->compare($t_2);
+	public static function comparator(DateTime $t_1, DateTime $t_2) {
+		return self::createfromDateTime($t_1)->compare($t_2);
 	}
 	
 	public function copy() {
@@ -113,14 +120,19 @@ class CWDateTime extends DateTime {
 		return $clone;
 	}
 	
-	
+	/**
+	 * @deprecated
+	 */
+	public static function sorter(CWDateTime $t_1, CWDateTime $t_2) {
+		return self::comparator($t_1, $t_2);
+	}
 }
 
 class CWTimeDelta {
 	private $timestamp;
 
-	public function __construct($timestamp) {
-		$this->timestamp = $timestamp;
+	public function __construct(DateTime $t_0, DateTime $_1) {
+		$this->timestamp = $t_0->format('U') - $t_1->format('U');
 	}
 	
 	public function difference() {
