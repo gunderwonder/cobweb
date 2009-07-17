@@ -87,7 +87,9 @@ class CobwebLoader {
 		'LogFormatter' => '/utilities/logging/log_formatter.class.php',
 		'FirePHPLogFormatter' => '/utilities/logging/firephp_log_formatter.class.php',
 		'FirebugLogFormatter' => '/utilities/logging/firebug_log_formatter.class.php',
-		'Console' => '/utilities/logging/console.class.php',		
+		'Console' => '/utilities/logging/console.class.php',
+		'LoggingEnabled' => '/applications/cobweb/middleware/logging.middleware.php',
+		'LoggingDisabled' => '/applications/cobweb/middleware/logging.middleware.php',
 
 		// manager
 		'CobwebManager' => '/manager/cobweb_manager.class.php',
