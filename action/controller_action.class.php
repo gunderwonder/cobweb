@@ -70,8 +70,11 @@ class ControllerAction extends CallableAction {
 		Cobweb::loadApplication($this->application_name);
 		
 		$label = $this->controller_name;
-		$this->controller_name = str_classify($this->controller_name) . 'Controller';	
-		$this->loadControllerFile($label);
+		
+		if (!is_subclass_of($this->controller_name, 'Controller')) {
+			$this->controller_name = str_classify($this->controller_name) . 'Controller';	
+			$this->loadControllerFile($label);
+		}
 		
 		if (!class_exists($this->controller_name)) {
 			throw new CobwebConfigurationException(
