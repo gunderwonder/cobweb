@@ -88,7 +88,8 @@ class HTTP500 extends HTTPException {
 
 class HeadersSentException extends HTTPException {
 	public function __construct($message = '') {
-		parent::__construct($message, 500);
+		assert(headers_sent($file, $line));
+		parent::__construct($message . " Output started in $file on line $line", 500);
 	}
 }
 
