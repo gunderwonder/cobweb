@@ -5,7 +5,6 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-
 require_once COBWEB_DIRECTORY . '/vendor/firephp/FirePHP.class.php';
 
 /**
@@ -22,6 +21,7 @@ class CobwebFirePHP extends FirePHP {
 	public function __construct(Response $response) {
 		$this->cw_response = $response;
 		parent::__construct();
+		$this->setObjectFilter('User', array('password'));
 	}
 	
 	/**
