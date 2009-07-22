@@ -71,7 +71,7 @@ class ControllerAction extends CallableAction {
 		
 		$label = $this->controller_name;
 		
-		if (!is_subclass_of($this->controller_name, 'Controller')) {
+		if (!class_exists($this->controller_name) || !is_subclass_of($this->controller_name, 'Controller')) {
 			$this->controller_name = str_classify($this->controller_name) . 'Controller';	
 			$this->loadControllerFile($label);
 		}
