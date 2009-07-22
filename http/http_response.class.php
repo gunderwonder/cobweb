@@ -168,12 +168,11 @@ class HTTPResponseForbidden extends HTTPResponse {
 }
 
 class HTTPResponseNotModified extends HTTPResponse {
-	public function __construct() {
+	public function __construct($expiration_seconds = 3600) {
 		parent::__construct('', self::NOT_MODIFIED);
-		$this['Cache-Control'] = 'Private';
-		$this['Pragma'] = 'Private';
-		$this['Expires'] = '-1';
 		$this['Date'] = gmdate('r');
+		$this['Cache-Control'] = 'must-revalidate';
+		$this['Expires'] = CWDateTime::create('now + 3600 seconds')->format(DateTime::RFC1123);
 	}
 }
 
