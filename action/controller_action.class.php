@@ -124,6 +124,12 @@ class ControllerAction extends CallableAction {
 			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
 			$response = $this->action->invokeArgs($this->instance, $arguments);
+			if (!$response instanceof Request)
+				throw new CobwebException(
+					"Action '{$class}::{$method}' must return a response instance, got " .
+					(is_object($response) ? get_class($response) . ' instance' : gettype($response))
+				);
+			
 			$response = $this->controller->getMethod('processResponse')->invoke($this->instance, $this->request, $response);
 	
 		} catch (ReflectionException $e) { 
