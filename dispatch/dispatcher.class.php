@@ -59,9 +59,9 @@ class Dispatcher {
 				
 			throw $exception;
 		}
-
-		Cobweb::info('Cobweb ran for %o seconds', 
-		             microtime(true) - Cobweb::get('__COBWEB_START_TIME__'));
+		
+		Cobweb::info('Cobweb ran for %o milliseconds', 
+		            round((microtime(true) - Cobweb::get('__COBWEB_START_TIME__')) * 1000, 4));
 		
 		// finally, return the response processed by the middleware
 		return $middleware->handleResponse($request, $response);
