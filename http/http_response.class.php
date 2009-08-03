@@ -171,7 +171,10 @@ class HTTPResponseNotModified extends HTTPResponse {
 	public function __construct($expiration_seconds = 3600, $must_revalidate = true) {
 		parent::__construct('', self::NOT_MODIFIED);
 		$this['Date'] = CWDateTime::create()->format(DateTime::RFC1123);
-		$this['Expires'] = CWDateTime::create('now + 3600 seconds')->format(DateTime::RFC1123);
+		
+		if (!is_null($expiration_seconds))
+			$this['Expires'] = CWDateTime::create("now + {$expiration_seconds} seconds")
+				->format(DateTime::RFC1123);
 		
 		if ($must_revalidate)
 			$this['Cache-Control'] = 'must-revalidate';
