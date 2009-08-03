@@ -153,9 +153,6 @@ class MiddlewareManager {
 		$installed_middleware = $installed_middleware ? 
 			$installed_middleware :
 			Cobweb::get('INSTALLED_MIDDLEWARE', array());
-			
-		if (empty($installed_middleware))
-			$installed_middleware[] = 'cobweb.cobweb';
 
 		foreach ($installed_middleware as $middleware_name) {
 			
@@ -179,7 +176,8 @@ class MiddlewareManager {
 				$middleware_names[] = get_class($m);
 				
 			Cobweb::info('Loaded middleware: %o', $middleware_names);
-		}	
+		}
+
 		return $this->middleware;
 	}
 	
