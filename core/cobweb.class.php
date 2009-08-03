@@ -116,6 +116,12 @@ class Cobweb implements CobwebDeclaration {
 		Cobweb::set('__DISPATCHER__', $this->dispatcher());
 		Cobweb::set('__RESOLVER__', $this->resolver());
 		
+		
+		$middleware = Cobweb::get('INSTALLED_MIDDLEWARE');
+		
+		if (!in_array('cobweb.cobweb', $middleware))
+			array_unshift($middleware, 'cobweb.cobweb');
+
 		Cobweb::log('Loading middleware...');
 		$this->middleware()->load();
 		

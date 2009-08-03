@@ -22,7 +22,12 @@ class ApplicationManager {
 		$this->request = $request;
 		$this->loaded_applications = array();
 		
-		foreach (Cobweb::get('INSTALLED_APPLICATIONS') as $application_name)
+		$installed_applications = Cobweb::get('INSTALLED_APPLICATIONS');
+		if (!in_array('cobweb', $installed_applications))
+			array_unshift($installed_applications, 'cobweb');
+		Cobweb::set('INSTALLED_APPLICATIONS', $installed_applications);
+		
+		foreach ($installed_applications as $application_name)
 			$this->load($application_name);
 	}
 	

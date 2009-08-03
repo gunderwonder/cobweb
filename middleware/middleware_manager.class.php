@@ -36,9 +36,11 @@ class MiddlewareManager {
 	 * Instantiates a {@link MiddlewareManager} with the specified {@link Dispatcher}
 	 * and {@link ApplicationManager}
 	 */
-	public function __construct(Dispatcher $dispatcher, ApplicationManager $application_manager) {
+	public function __construct(Dispatcher $dispatcher, ApplicationManager $application_manager, array $middleware = array()) {
 		$this->dispatcher = $dispatcher;
 		$this->application_manager = $application_manager;
+		$this->middleware = $middleware;
+		$this->middleware_reversed = $middleware;
 	}
 	
 	/**
