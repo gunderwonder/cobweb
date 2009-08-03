@@ -50,6 +50,11 @@ class CobwebLoader {
 		'Middleware' => '/middleware/middleware.class.php',
 		'RequestProcessor' => '/middleware/request_processor.interface.php',
 		
+		// annotations
+		'ActionAnnotation' => '/middleware/action_annotation.class.php',
+		'AllowedMethods' => '/applications/cobweb/annotations/allowed_methods.annotation.php',
+		'CacheControl' => '/applications/cobweb/annotations/cache_control.annotation.php',
+		
 		// actions
 		'Action' => '/controller/action.class.php',
 		'Controller' => '/controller/controller.class.php',
@@ -104,6 +109,7 @@ class CobwebLoader {
 		'IntegerField' => '/forms/fields/integer_field.class.php',
 		'TextField' => '/forms/fields/text_field.class.php',
 		'TextInput' => '/forms/widgets/text_input.class.php',
+		//'PasswordInput' => '/forms/widgets/password_input.class.php',
 		'EmailField' => '/forms/fields/email_field.class.php',
 		'PositiveIntegerField' => '/forms/fields/positive_integer_field.class.php',
 		'ConcreteForm' => '/forms/concrete_form.class.php',

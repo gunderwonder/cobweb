@@ -5,6 +5,12 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package    Cobweb
+ * @subpackage Middleware
+ * @version    $Revision$
+ */
 interface RequestProcessor {
 	public function processRequest(Request $request);
 	public function processResponse(Request $request, Response $response);

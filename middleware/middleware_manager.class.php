@@ -13,7 +13,7 @@
  * and action instances with the middleware objects it manages.
  * 
  * @package    Cobweb
- * @subpackage Dispatch
+ * @subpackage Middleware
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  */
 class MiddlewareManager {
@@ -40,7 +40,7 @@ class MiddlewareManager {
 		$this->dispatcher = $dispatcher;
 		$this->application_manager = $application_manager;
 		$this->middleware = $middleware;
-		$this->middleware_reversed = $middleware;
+		$this->middleware_reversed = array_reverse($middleware);
 	}
 	
 	/**
@@ -58,7 +58,7 @@ class MiddlewareManager {
 	public function handleRequest(Request $request) {
 		foreach ($this->middleware as $middleware)
 			if (($response = $middleware->processRequest($request)))
-				return $this->assertResponse($response);
+				return $this->assertResponse($response, $middleware);
 				
 		return NULL;
 	}
@@ -132,7 +132,7 @@ class MiddlewareManager {
 	 * @return Response
 	 * @throws CobwebMiddlewareException
 	 */
-	protected function assertResponse($response, Middleware $middleware) {
+	protected function assertResponse($response, RequestProcessor $middleware) {
 		if (!($response instanceof Response))
 			throw new CobwebMiddlewareException(
 				get_class($middleware) . ' did not return HTTPResponse, got ' . 
