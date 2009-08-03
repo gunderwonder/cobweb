@@ -12,5 +12,16 @@
  * @subpackage Cobweb Application
  */
 class TemplateController extends Controller {	
-	// use array(cobweb.template.render, template => 'template.tpl') to invoke this controller
+	
+	public function render(
+			$template_name,
+			$bindings = array(),
+			$code = HTTPResponse::OK,
+			$mime_type = MIMEType::HTML,
+			$template_adapter = NULL, 
+			$loading = Template::RELATIVE_TEMPLATE_PATH) {
+				
+		return parent::render($template_name, $bindings, $code, $mime_type, $template_adapter, $loading);
+	}
 }
+
