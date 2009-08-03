@@ -22,6 +22,9 @@ class HTTPRequest extends Request implements ArrayAccess {
 	/* @var string */
 	protected $body;
 	
+	/* @var array */
+	protected $path_info;
+	
 	/**
 	 * Instantiates a request object with the specified GET, POST, COOKIE and
 	 * MEtA parameters.
@@ -39,21 +42,20 @@ class HTTPRequest extends Request implements ArrayAccess {
                         		array $FILES) {
 
 		$this->dispatcher = $dispatcher;
-		
 		$this->properties['GET']  = new HTTPQueryDictionary($GET);
 		$this->properties['POST'] = new HTTPQueryDictionary($POST);
 		$this->properties['META'] = new ImmutableArray($META);
 		$this->properties['FILES'] = new UploadedFilesArray($FILES);
 		
-		$other_headers = array('CONTENT_TYPE', 'CONTENT_LENGTH');
 		$this->headers = array();
-		
 		foreach($this->META as $header => $value) {
-			if (strpos($header, 'HTTP_') === 0 || in_array($header, $other_headers)) {
+			if (strpos($header, 'HTTP_') === 0 || in_array($header, array('CONTENT_TYPE', 'CONTENT_LENGTH'))) {
 				$name = str_replace(array('HTTP_', '_'), array('', '-'), $header);
 				$this->headers[$name] = $value;
 			}
-		}		
+		}
+		
+		$this->path_info = parse_url($this->META['REQUEST_URI']);
 	}
 
 	/**
@@ -85,7 +87,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return string server name
 	 */
 	public function domain() {
-		$this->properties['META']['SERVER_NAME'];
+		$this->META['SERVER_NAME'];
 	}
 	
 	/**
@@ -95,7 +97,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return boolean whether the request was made using HTTPs or not
 	 */
 	public function isSecure() {
-		return !empty($this->properties['META']['HTTPS']);
+		return !empty($this['META']['HTTPS']);
 	}
 	
 	/**
@@ -118,7 +120,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return string URI of this request
 	 */
 	public function URI() {
-		return lstrip($this->META['REQUEST_URI'], Cobweb::get('URL_PREFIX'));
+		return $this->META['REQUEST_URI'];
 	}
 
 	/**
@@ -127,12 +129,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return string path
 	 */
 	public function path() {
-		$uri = $this->URI();
-		$query_part = utf8_strpos($uri, '?');
-		if ($query_part === false)
-			return $uri;
-
-		return utf8_substr($uri, 0, $query_part);
+		return $this->path_info['path'];
 	}
 	
 	/**
