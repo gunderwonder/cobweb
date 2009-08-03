@@ -13,10 +13,13 @@
  */
 abstract class MIMEType {
 	
-	const HTML  = 'text/html; charset=UTF-8';
-	const JSON  = 'application/json; charset=UTF-8';
-	const XHTML = 'application/xhtml+xml; charset=UTF-8';
-	const RSS = 'application/rss+xml; charset=UTF-8';
+	const HTML  = 'text/html';
+	const JSON  = 'application/json';
+	const XHTML = 'application/xhtml+xml';
+	const RSS = 'application/rss+xml';
+	const XML = 'application/xml';
+	const TEXT = 'text/plain';
+	
 	const JAVASCRIPT = 'application/x-javascript';
 	const JPEG = 'image/jpg';
 	const PNG = 'image/png';
@@ -25,13 +28,11 @@ abstract class MIMEType {
 	const PSD = 'image/psd';
 	const TIFF = 'image/tiff';
 	const CSS = 'text/css';
-	const XML = 'application/xml; charset=UTF-8';
 	const WORD = 'application/msword';
 	const EXEL = 'application/vnd.ms-excel';
 	const POWERPOINT = 'application/vnd.ms-powerpoint';
 	const RTF = 'application/rtf';
 	const PDF = 'application/pdf';
-	const TEXT = 'text/plain; charset=UTF-8';
 	const MPEG = 'video/mpeg';
 	const MP3 = 'audio/mpeg3';
 	const WAW = 'audio/wav';

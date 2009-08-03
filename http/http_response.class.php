@@ -47,7 +47,8 @@ class HTTPResponse extends Response {
 	
 	public function __construct($body = '', 
 		                        $response_code = self::OK,
-		                        $mime_type = MIMEType::HTML) {
+		                        $mime_type = MIMEType::HTML,
+		                        $charset = 'UTF-8') {
 		$this->body = '';
 		$this->write(is_object($body) ? $body->__toString() : $body);
 			
@@ -65,7 +66,7 @@ class HTTPResponse extends Response {
 		}
 		
 		$this['Content-Type'] = $mime_type;
-		
+		$this->setCharacterSet($charset);
 	}
 	
 	public function code() {
@@ -79,17 +80,26 @@ class HTTPResponse extends Response {
 		header("HTTP/1.1 {$this->response_code}");
 		foreach ($this->headers as $header_name => $header_value)
 			header("$header_name: $header_value");
+		return $this;
 	}
 	
 	
 	public function write($contents) {
 		$this->body .= $contents;
+		return $this;
+	}
+	
+	public function setCharacterSet($charset) {
+		if (!is_null($charset))
+			$this['Content-Type'] .= "; charset={$charset}";
+		return $this;
 	}
 	
 	public function flush() {
 		$this->sendHeaders();
 		print $this->body;
 		flush();
+		return $this;
 	}
 	
 	/**@+ @ignore */
@@ -108,8 +118,7 @@ class HTTPResponse extends Response {
 		if (is_int($key))
 			throw new KeyException('HTTPResponse::offsetSet() does not allow numeric indices');
 
-		$this->headers[$key] = $value;
-		
+		$this->headers[$key] = $value;	
 	}
 		
 	public function offsetUnset($key) {
