@@ -188,6 +188,13 @@ class ControllerAction extends CallableAction {
 		return NULL;
 	}
 	
+	public function allAnnotations() {
+		return array_merge(
+			$this->controller()->getAllAnnotations(),
+			$this->reflection()->getAllAnnotations()
+		);
+	}
+	
 	public static function invokeControllerAction($label, array $arguments = array()) {
 		
 		$action = new ControllerAction(

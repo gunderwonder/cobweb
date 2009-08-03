@@ -117,14 +117,8 @@ class CallableAction implements Action {
 		return $this->options;
 	}
 	
-	
-	
-	
-	
 	protected function loadAction() { }
 	
-	
-
 	protected function reflection() {
 		if (is_string($this->callable)) {
 			if (str_contains($this->callable, '::')) {
@@ -176,6 +170,10 @@ class CallableAction implements Action {
 	public function annotation($annotation) {
 		if ($this->reflection()->hasAnnotation($annotation))
 			return $this->reflection()->getAnnotation($annotation);
+	}
+	
+	public function allAnnotations() {
+		return $this->reflection()->allAnnotations();
 	}
 	
 	public function __toString() {

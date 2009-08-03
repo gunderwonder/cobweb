@@ -36,4 +36,12 @@ interface Action  {
 	 * @return mixed the value of the annotation
 	 */
 	public function annotation($annotation);
+	
+	
+	/**
+	 * Return an array of all the annotations of this action
+	 * 
+	 * @return array
+	 */
+	public function allAnnotations();
 }

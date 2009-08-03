@@ -43,6 +43,10 @@ class IncludeURLConfigurationAction implements Action {
 		return NULL;
 	}
 	
+	public function allAnnotations() {
+		return array();
+	}
+	
 	public function rules() {
 		if (!is_null($this->rules))
 			return $this->rules;
