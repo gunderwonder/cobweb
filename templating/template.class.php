@@ -25,6 +25,9 @@ class Template implements ArrayAccess {
 	/**  @var integer */
 	const ABSOLUTE_TEMPLATE_PATH = 20;
 	
+	/**  @var integer */
+	const DEFER_TEMPLATE_LOADING = 30;
+	
 	/**
 	 * Creates a template object.
 	 * 
@@ -59,7 +62,7 @@ class Template implements ArrayAccess {
 		if ($loading == self::RELATIVE_TEMPLATE_PATH)
 			$template = self::loadTemplate($filename);
 		else {
-			if (!file_exists($filename))
+			if ($loading != self::DEFER_TEMPLATE_LOADING && !file_exists($filename))
 				throw new FileNotFoundException("Could not find template file '$filename'");
 				
 			$template = $filename;
