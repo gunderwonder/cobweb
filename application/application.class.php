@@ -30,12 +30,16 @@ class Application {
 	}
 	
 	protected function initialize() {
-		$application_path_constant = strtoupper(str_replace('-', '_', $this->name)) . '_DIRECTORY';
+		$application_path_constant = $this->pathConstantName();
 		if (!defined($application_path_constant))
 			define($application_path_constant, $this->path);
 		
 		if (file_exists($this->path . '/settings/bootstrap.inc.php'))
 			require_once $this->path . '/settings/bootstrap.inc.php';
+	}
+	
+	protected function pathConstantName() {
+		return strtoupper(str_replace('-', '_', $this->name)) . '_APPLICATION_DIRECTORY';
 	}
 	
 	public function path() {
