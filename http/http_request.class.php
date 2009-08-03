@@ -75,8 +75,8 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 */
 	public function body() {
 		if (!$this->body)
-			$this->body = isset($this->properties['META']['HTTP_RAW_POST_DATA']) ?
-				$this->properties['META']['HTTP_RAW_POST_DATA'] :
+			$this->body = isset($this->META['HTTP_RAW_POST_DATA']) ?
+				$this->META['HTTP_RAW_POST_DATA'] :
 				@file_get_contents('php://input');
 		return $this->body;
 	}
