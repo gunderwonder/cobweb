@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- {$exception_class}: {$e->getMessage()} -->
+<!-- {$exception_class}: {$e->getMessage()|escape:'html'} -->
 <html lang="en">
 <head>
 	
