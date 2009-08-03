@@ -135,11 +135,13 @@ abstract class Controller implements RequestProcessor {
 			$template_name,
 			$bindings = array(),
 			$code = HTTPResponse::OK,
-			$mime_type = MIMEType::HTML) {
+			$mime_type = MIMEType::HTML,
+			$template_adapter = NULL,
+			$loading = Template::RELATIVE_TEMPLATE_PATH) {
 				
-		$template = new Template();
+		$template = new Template($template_adapter);
 		$template->bind($bindings);
-		$template->render($template_name);
+		$template->render($template_name, $loading);
 		return $this->respond($template, $code, $mime_type);
 	}
 	
