@@ -74,6 +74,17 @@ function strip_magic_quotes($v) {
            stripslashes($v);
 }
 
+function http_parse_qvalues($qvalues) {
+	$values = array();
+	foreach (preg_split('/\s*,\s*/', $qvalues) as $qvalue) {
+		@list($value, $q) = preg_split('/\s*;\s*q\s*=\s*/', $qvalue);
+		$q = (is_null($q) || !is_numeric($q)) ? 1.0 : floatval($q);
+		$values[$q][] = $value;
+	}
+	krsort($values, SORT_NUMERIC);
+	return $values;
+}
+
 if (!function_exists('__')) {
 	if (!function_exists('_')) {
 		function __($message) {
