@@ -205,6 +205,7 @@ class Cobweb implements CobwebDeclaration {
 	
 	public static function processTemplate(Request $request) {
 		return array(
+			'request' => $request, 
 			'REQUEST' => $request, 
 			'URL_PREFIX' => Cobweb::get('URL_PREFIX')
 		);
