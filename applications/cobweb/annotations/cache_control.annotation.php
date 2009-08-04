@@ -29,8 +29,14 @@ class CacheControl extends ActionAnnotation {
 
 		$cache_control_header = array();
 		foreach ($CACHE_CONTROL_DIRECTIVES as $directive_name => $directive)
-			if (isset($this->value[$directive_name]))
-				$cache_control_header[] => "{$directive}={$this->value[$directive_name]}";
+			if (isset($this->value[$directive_name]) || in_array($directive_name, $this->value)) {
+				$cache_control_header[] = $directive . (isset($this->value[$directive_name]) ? "={$this->value[$directive_name]}" : '');
+				if ($directive_name == 'no_cache')
+					$response['Pragma'] = 'no-cache';
+			}
+		
+		if (!in_array('no_cache', $this->value))
+			$response['Pragma'] = '';
 				
 		$response['Cache-Control'] = implode(',', $cache_control_header);
 		return $response;
