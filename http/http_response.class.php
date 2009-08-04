@@ -15,6 +15,7 @@ class HTTPResponse extends Response {
 	
 	protected $headers = NULL;
 	protected $response_code = 200;
+	protected $content_type = NULL;
 	
 	const OK                    = '200 OK';
 	
@@ -65,7 +66,7 @@ class HTTPResponse extends Response {
 			$this[$header_name] = $value;
 		}
 		
-		$this['Content-Type'] = $mime_type;
+		$this['Content-Type'] = $this->content_type = $mime_type;
 		$this->setCharacterSet($charset);
 	}
 	
@@ -95,6 +96,10 @@ class HTTPResponse extends Response {
 		return $this;
 	}
 	
+	public function contentType() {
+		return $this->content_type;
+	}
+	
 	public function flush() {
 		$this->sendHeaders();
 		print $this->body;
@@ -104,10 +109,7 @@ class HTTPResponse extends Response {
 	
 	/**@+ @ignore */
 	public function offsetExists($key) {
-		if (is_int($key))
-			return false;
-		
-		return array_key_exists($key, $this->headers);
+		return isset($this->headers[$key]);
 	}
 	
 	public function offsetGet($key) {
