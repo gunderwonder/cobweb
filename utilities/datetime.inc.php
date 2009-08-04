@@ -22,7 +22,7 @@ class CWDateTime extends DateTime {
 	public static function createfromDateTime(DateTime $dt) {
 		if ($dt instanceof CWDateTime)
 			return $dt;
-		return new CWDateTime($dt->format(self::DATE_SQL));
+		return new CWDateTime($dt->format('U'));
 	}
 	
 	public function set($year = NULL, $month = NULL, $day = NULL, 
@@ -46,10 +46,9 @@ class CWDateTime extends DateTime {
 	public function compare(DateTime $d) {
 		$t_1 = $this->timestamp();
 		$t_2 = intval($d->format('U'));
-		
-		return $t_1 === $t_2 ? 0 : 
-		       $t_1 >   $t_2 ? 1 : 
-		       -1;
+		if ($t_1 == $t_2) return 0;
+		if ($t_1 > $t_2) return 1;
+		return -1;
 	}
 	
 	public function __get($key) {
