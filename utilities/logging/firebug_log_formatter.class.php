@@ -40,7 +40,7 @@ class FirebugLogFormatter extends LogFormatter {
 		$log .= "\t\tconsole.groupEnd()\n\t}\n\t// ]]>\n</script>";
 		
 		// HTML
-		if ($response['Content-Type'] == MIMEType::HTML) {
+		if ($response->contentType() == MIMEType::HTML) {
 			
 				if (($position = utf8_strpos($response->body, '</head>')) !== false)
 					$response->body = str_replace(
