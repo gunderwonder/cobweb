@@ -188,7 +188,12 @@ class CobwebManager {
      * @param string $message the message to output
      */
 	public function info($message) {
-		echo "cobweb: {$message}\n";
+		echo "{$message}\n";
+	}
+	
+	public function prompt($prompt) {
+		echo "{$prompt}: ";
+		return trim(fgets(STDIN));
 	}
 	
 	/**

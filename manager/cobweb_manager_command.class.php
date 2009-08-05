@@ -108,7 +108,11 @@ abstract class CobwebManagerCommand {
 	}
 	
 	public function info($message) {
-		$this->manager->info($message);
+		$this->manager->info("{$this->name()}: {$message}");
+	}
+	
+	public function prompt($prompt) {
+		return $this->manager->prompt("{$this->name()}: {$prompt}");
 	}
 	
 	public function debug($message) {
