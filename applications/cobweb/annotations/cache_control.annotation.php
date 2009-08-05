@@ -13,24 +13,24 @@
  */
 class CacheControl extends ActionAnnotation {
 	
+	protected $CACHE_CONTROL_DIRECTIVES = array(
+		'private' => 'private',
+		'no_cache' => 'no-cache',
+		'no_transform' => 'no-transform',
+		'must_revalidate' => 'must-revalidate',
+		'proxy_revalidate' => 'proxy-revalidate',
+		'max_age' => 'max-age',
+		's_maxage' => 's-maxage'
+	);
 	
 	public function processResponse(Request $request, Response $response) {
 		
 		// TODO: check if the request is cachable
-		$CACHE_CONTROL_DIRECTIVES = array(
-			'private' => 'private',
-			'no_cache' => 'no-cache',
-			'no_transform' => 'no-transform',
-			'must_revalidate' => 'must_revalidate',
-			'proxy_revalidate' => 'proxy_revalidate',
-			'max_age' => 'max-age',
-			's_maxage' => 's-maxage'
-		);
-
 		$cache_control_header = array();
-		foreach ($CACHE_CONTROL_DIRECTIVES as $directive_name => $directive)
+		foreach ($this->CACHE_CONTROL_DIRECTIVES as $directive_name => $directive)
 			if (isset($this->value[$directive_name]) || in_array($directive_name, $this->value)) {
-				$cache_control_header[] = $directive . (isset($this->value[$directive_name]) ? "={$this->value[$directive_name]}" : '');
+				$cache_control_header[] = $directive . 
+					(isset($this->value[$directive_name]) ? "={$this->value[$directive_name]}" : '');
 				if ($directive_name == 'no_cache')
 					$response['Pragma'] = 'no-cache';
 			}
