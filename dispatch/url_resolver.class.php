@@ -385,8 +385,11 @@ class URLResolver implements Resolver {
 		if (!isset($reverse_map[$name]))
 			throw new CobwebException("No URL mapped to action {$name}");
 			
-		return Cobweb::get('URL_PREFIX') . '/' . 
-		       $this->reverseResolve($reverse_map[$name], $arguments);
+		return ltrim(
+			Cobweb::get('URL_PREFIX') . '/' . 
+			$this->reverseResolve($reverse_map[$name], $arguments),
+			'/'
+		);
 	}
 	
 	public function attemptedPatterns() {
