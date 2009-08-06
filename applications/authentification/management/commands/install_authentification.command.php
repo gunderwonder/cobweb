@@ -15,9 +15,19 @@ class InstallAuthentificationCommand extends CobwebManagerCommand {
 	
 	public function execute() {
 		$this->info('Creating authentification tables...');
-		// Doctrine::createTablesFromArray(array('User', 'Usergroup', 'Permission', 'UsergroupPermission', 'Userpermission'));
 		
-		$su = new User();
+		$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
+		Doctrine::createTablesFromArray(array(
+			$userclass, 
+			'Usergroup', 
+			'Permission', 
+			'UsergroupPermission', 
+			'Userpermission')
+		);
+		
+		$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
+		$su = new $userclass;
+		
 		$su->username = $this->prompt('Superuser username');
 		$su->setPassword($this->prompt('Superuser password'));
 		$su->email = $this->prompt('Superuser email adress');

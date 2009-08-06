@@ -52,7 +52,7 @@ class Usergroup extends Doctrine_Record {
 	}
 	
 	public static function table() {
-		return Doctrine::getTable('usergroup');
+		return Doctrine::getTable('Usergroup');
 	}
 	
 }

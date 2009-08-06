@@ -18,7 +18,8 @@ class UserController extends Controller {
 			$username = $this->POST->get('username', '');
 			$password = $this->POST->get('password', '');
 			
-			$user = User::authenticate($username, $password);
+			$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
+			$user = $userclass::authenticate($username, $password);
 			
 			if ($user) {
 				$this->request->session['cobweb-user-id'] = $user->id;
@@ -32,14 +33,15 @@ class UserController extends Controller {
 		}
 		
 		return $this->render(
-			'login.tpl', array('login_error' => $login_error),
+			$temaplate_name, array('login_error' => $login_error),
 			$login_error ? HTTPResponse::UNAUTHORIZED : HTTPResponse::OK
 		);
 	}
 	
-	public function logout($template_name) {
-		$this->request->user->logout();
-		return $this->render($template_name);
+	public function logout($redirect = NULL) {
+		$this->request->session->end();
+		$redirect_url = $redirect ? $redirect : Cobweb::get('LOGIN_URL');
+		return $this->redirect($redirect_url);
 	}
 	
 	public function logoutAndRedirectToLogin($login_url = NULL) {

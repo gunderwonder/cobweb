@@ -92,7 +92,7 @@ class User extends Model {
 		if ($this->is_superuser)
 			return true;
 		
-		$user = Model::query('User', 'u')
+		$user = Model::query(Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User'), 'u')
 			->leftJoin('u.Permissions p')
 			->where('u.id = ?', $this->id)
 			->addWhere('p.credential = ?', $credential)
@@ -136,8 +136,11 @@ class User extends Model {
 		return NULL;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function table() {
-		return Doctrine::getTable('User');
+		return Doctrine::getTable(Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User'));
 	}
 	
 	public function __toString() {

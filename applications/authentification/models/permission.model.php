@@ -32,7 +32,7 @@ class Permission extends Doctrine_Record {
 			)
 		);
 		
-		$this->hasMany('User',
+		$this->hasMany(Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User'),
 			array(
 				'local' => 'permission_id',
 				'foreign' => 'user_id',

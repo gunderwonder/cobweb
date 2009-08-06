@@ -12,30 +12,26 @@
  * @version    $Revision$
  */
 class AuthentificationMiddleware extends Middleware {
-	
-	public function initialize() {
 		
-	}
-	
 	public function processAction(Request $request, Action $action) {
 		if (isset($request->user))
 			return;
 		
 		if (($user_id = $request->session->get('cobweb-user-id', false))) {
 			
-			$user = Model::table('User')->find($user_id);
+			$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
+			$user = Model::table($userclass)->find($user_id);
+				
 			if ($user) {
 				$request->user = $user;
 				$request->user->setAuthenticated(true);
 				if (!$request->user)
-					$request->user = new User();
+					$request->user = new $userclass();
 		
 				Cobweb::log('Authenticated user %o', $request->user);
 			} else
 				unset($request->session['cobweb-user-id']);
-				
 		}
-		
 		
 		if ($request->isAuthenticated() &&
 		    $action->hasAnnotation('RequiresPermission')) {
