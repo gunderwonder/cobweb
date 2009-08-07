@@ -17,6 +17,16 @@ class HTTPResponse extends Response {
 	protected $response_code = 200;
 	protected $content_type = NULL;
 	
+	protected $CHARSET_MIME_TYPES = array(
+		MIMEType::HTML,
+		MIMEType::JSON,
+		MIMEType::XHTML,
+		MIMEType::RSS,
+		MIMEType::XML,
+		MIMEType::TEXT,
+		MIMEType::JAVASCRIPT
+	);
+	
 	const OK                    = '200 OK';
 	
 	const REDIRECT              = '302 Found';
@@ -67,7 +77,9 @@ class HTTPResponse extends Response {
 		}
 		
 		$this['Content-Type'] = $this->content_type = $mime_type;
-		$this->setCharacterSet($charset);
+		
+		if (in_array($mime_type, $this->CHARSET_MIME_TYPES))
+			$this->setCharacterSet($charset);
 	}
 	
 	public function code() {
