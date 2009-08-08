@@ -33,6 +33,10 @@ class CacheControl extends ActionAnnotation {
 					(isset($this->value[$directive_name]) ? "={$this->value[$directive_name]}" : '');
 				if ($directive_name == 'no_cache')
 					$response['Pragma'] = 'no-cache';
+				elseif ($directive_name == 'max_age')
+					$response['Expires'] = CWDateTime::create()
+						->modify("+ {$this->value[$directive_name]} seconds")
+						->format(DateTime::RFC1123);
 			}
 		
 		if (!in_array('no_cache', $this->value))
