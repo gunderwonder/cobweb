@@ -19,12 +19,34 @@ abstract class CacheEngine {
 	/** @var Request */
 	protected $request;
 	
-	public function __construct(Dispatcher $dispatcher, Request $request, $path, array $options) {
+	/** @var array */
+	protected $options;
+	
+	protected $hostname = NULL;
+	protected $path = NULL;
+	protected $port = NULL;
+	protected $username = NULL;
+	protected $password = NULL;
+	protected $fragment = NULL;
+	
+	public function __construct(Dispatcher $dispatcher, Request $request, ImmutableArray $uri) {
 		$this->dispatcher = $dispatcher;
 		$this->request = $request;
-		$this->path = $path;
-		$this->options = $options;
+		
+		$this->hostname = $uri->get('host', NULL);
+		$this->path = $uri->get('path', NULL);
+		$this->port = $uri->get('port', NULL);
+		$this->username = $uri->get('user', NULL);
+		$this->password = $uri->get('pass', NULL);
+		$this->fragment = $uri->get('fragment', NULL);
+		
+		$this->options = array();
+		parse_str($uri->get('query', ''), $this->options);
+		
+		$this->initialize();
 	}
+	
+	protected function initialize() { }
 	
 	public function dispatcher() {
 		return $this->dispatcher;

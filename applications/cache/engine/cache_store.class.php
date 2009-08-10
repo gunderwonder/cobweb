@@ -18,26 +18,21 @@ class CacheStore {
 	
 	/** @var array */
 	protected static $scheme_mappings = array(
-		'db' => 'DatabaseCacheEngine'
+		'db' => 'DatabaseCacheEngine',
+		'memcached' => 'MemcachedCacheEngine'
 	);
 	
 	public static function initialize() {
 		$engine_uri = parse_url(Cobweb::get('CACHE_ENGINE', 'db://cobweb_cache'));
-		$scheme = isset($engine_uri['scheme']) ? $engine_uri['scheme'] : '';
-		$path = isset($engine_uri['path']) ? $engine_uri['path'] : '';
-		$query = isset($engine_uri['query']) ? $engine_uri['query'] : '';
-		$options = array();
-		if ($query)
-			parse_str($query, $options);
-			
+
+		$scheme = $engine_uri['scheme'];
 		if (!isset(self::$scheme_mappings[$scheme]))
 			throw new CobwebConfigurationException("No cache engine defined for the '{$scheme}' scheme");
 			
 		self::$engine = new self::$scheme_mappings[$scheme](
 			Cobweb::instance()->dispatcher(), 
 			Cobweb::instance()->request(),
-			$path,
-			$options
+			new ImmutableArray($engine_uri)
 		);
 	}
 	

@@ -21,7 +21,7 @@ class CobwebCache extends Model {
 	
 	public function hasExpired(CWDateTime $now = NULL) {
 		$now = is_null($now) ? new CWDateTime() : $now;
-		if (in_array(CWDateTime::comparator($now, new CWDateTime($this->expiration)), array(0, 1)))
+		if (CWDateTime::comparator($now, new CWDateTime($this->expiration)) >= 0)
 			return true;
 			
 		return NULL;
