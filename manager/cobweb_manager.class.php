@@ -97,6 +97,9 @@ class CobwebManager {
 		
 		if ($command == 'shell')
 			define('COBWEB_PROJECT_DIRECTORY', getcwd());
+			
+		if (!defined('COBWEB_WWW_ROOT'))
+			define('COBWEB_WWW_ROOT', getcwd());
 		
 		if (file_exists($builtin_path)) {
 			Cobweb::initialize();
