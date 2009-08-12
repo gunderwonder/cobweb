@@ -58,14 +58,15 @@ abstract class MIMEType {
 			$info = finfo_open(FILEINFO_MIME);
     		$mime_type = finfo_file($info, $filename);
 			finfo_close($info);
-			return $mime_type;
+			if ($mime_type) 
+				return $mime_type;
 		}
 		
-		if (function_exists('mime_content_type'))
-			return mime_content_type($filename);
+		if (function_exists('mime_content_type') && $result = mime_content_type($filename))
+			return $result;
 		
 		$suffix = substr($filename, strrpos($filename, '.') + 1, strlen($filename) - 1);
-		
+
         switch(strtolower($suffix)) {
             case "js" :
                 return self::JAVASCRIPT;
