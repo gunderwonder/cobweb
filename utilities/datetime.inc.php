@@ -15,13 +15,28 @@ class CWDateTime extends DateTime {
 	
 	const DATE_SQL = 'Y-m-d H:i:s';
 
+	public function __construct($time = 'now') {
+		
+		if (is_int($time)) {
+			if (method_exists($this, 'setTimestamp')) {
+				
+				$this->setTimestamp($time);
+				return;
+			}
+			$time = "@{$time}";
+		}
+		parent::__construct($time);
+	}
+
 	public static function create($time = 'now') {
+		if ($time instanceof DateTime)
+			return self::createfromDateTime($time);
 		return new CWDateTime($time);
 	}
 	
 	public static function createfromDateTime(DateTime $dt) {
 		if ($dt instanceof CWDateTime)
-			return $dt;
+			return clone $dt;
 		return new CWDateTime($dt->format('U'));
 	}
 	
