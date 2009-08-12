@@ -286,6 +286,7 @@ class Cobweb implements CobwebDeclaration {
 	 * @deprecated
 	 */
 	public static function setting($key) {
+		Cobweb::warn('Cobweb::setting() is deprecated, use Cobweb::get() instead');
 		return self::get($key);
 	}
 }
