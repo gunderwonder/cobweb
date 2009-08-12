@@ -5,7 +5,7 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-class MutableArray implements ArrayAccess, IteratorAggregate {
+class MutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	
 	protected $array;
 	
@@ -51,6 +51,10 @@ class MutableArray implements ArrayAccess, IteratorAggregate {
 	
 	public function getIterator() {
 		return new ArrayIterator($this->array);
+	}
+	
+	public function count() {
+		return count($this->array);
 	}
 	
 }
