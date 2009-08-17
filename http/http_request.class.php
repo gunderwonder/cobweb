@@ -86,8 +86,8 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * 
 	 * @return string server name
 	 */
-	public function domain() {
-		$this->META['SERVER_NAME'];
+	public function host() {
+		return $this->META['SERVER_NAME'];
 	}
 	
 	/**
