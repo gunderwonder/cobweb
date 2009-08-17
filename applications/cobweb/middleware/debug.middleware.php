@@ -12,12 +12,12 @@ require_once COBWEB_DIRECTORY . '/applications/cobweb/middleware/cobweb.middlewa
  * @version    $Rev$
  * @package    Cobweb
  * @subpackage Cobweb Application
+ * @deprecated
  */
 class DebugMiddleware extends Middleware {
 	
-	private $error = false;
-	
 	public function initialize() {
+		Cobweb::warn('DebugMiddleware is deprecated, use CobwebMiddleware instead');
 		$this->middleware = new CobwebMiddleware($this->dispatcher);
 	}
 	
