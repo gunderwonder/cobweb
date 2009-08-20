@@ -42,9 +42,11 @@ class CobwebController extends Controller {
 	 * @return HTTPResponse
 	 */
 	public function gracefulException(Exception $exception) {
-		return $this->render(
-			Cobweb::get('HTTP500_TEMPLATE', '500.tpl'), 
-			array('exception' => $exception)
+		return $this->render(Cobweb::get('HTTP500_TEMPLATE', '500.tpl'), array(
+				'exception' => $exception,
+				'exception_class' => get_class($exception),
+			),
+			HTTPResponse::INTERNAL_SERVER_ERROR
 		);
 	}
 	

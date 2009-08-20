@@ -6,5 +6,6 @@
 </head>
 <body>
 	<h1>500 Internal Server Error</h1>
+	<p>{$exception_class}: {$exception->getMessage()}</p>
 </body>
 </html>
