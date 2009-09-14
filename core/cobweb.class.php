@@ -32,6 +32,8 @@ class Cobweb implements CobwebDeclaration {
 		
 		Cobweb::info('This is Cobweb %s...', self::VERSION);
 		$this->dispatcher = $this->createDispatcher(array());
+		$this->request = $this->createRequest(array('dispatcher' => $this->dispatcher));
+		
 		$this->configuration = $this->createConfiguration(array('dispatcher' => $this->dispatcher));
 		
 		Cobweb::log('Loading settings...');
@@ -39,21 +41,21 @@ class Cobweb implements CobwebDeclaration {
 		$this->configuration->configure(
 			$this->configuration->load(COBWEB_DIRECTORY . '/settings/settings.conf.php'));
 		
+		Cobweb::set('__REQUEST__', $this->request());
+		
 		if (defined('COBWEB_PROJECT_DIRECTORY')) {
 			
 			$this->configuration->configure(
 				$this->configuration->load(COBWEB_PROJECT_DIRECTORY . '/settings/settings.conf.php'));
+			$this->application_manager = $this->createApplicationManager(
+				array('dispatcher' => $this->dispatcher, 'request' => $this->request)
+			);
 			
 			Router::connect($this->configuration->load(
 				COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
 		}
 		
 		Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
-		
-		$this->request = $this->createRequest(array('dispatcher' => $this->dispatcher));
-		$this->application_manager = $this->createApplicationManager(
-			array('dispatcher' => $this->dispatcher, 'request' => $this->request)
-		);
 		
 		$this->middleware_manager = $this->createMiddlewareManager(
 			array(
@@ -67,8 +69,6 @@ class Cobweb implements CobwebDeclaration {
 	public static function initialize(CobwebDeclaration $cobweb = NULL) {
 		if (self::$initialized)
 			return;
-		
-		
 		
 		if (is_null(self::$cobweb))
 			self::$cobweb = is_null($cobweb) ? new Cobweb() : $cobweb;
@@ -111,11 +111,9 @@ class Cobweb implements CobwebDeclaration {
 		
 		date_default_timezone_set(Cobweb::get('TIMEZONE'));
 		
-		Cobweb::set('__REQUEST__', $this->request());
 		Cobweb::set('__MIDDLEWARE_MANAGER__', $this->middlewareManager());
 		Cobweb::set('__DISPATCHER__', $this->dispatcher());
 		Cobweb::set('__RESOLVER__', $this->resolver());
-		
 		
 		$middleware = Cobweb::get('INSTALLED_MIDDLEWARE', array());
 		if (!in_array('cobweb.cobweb', $middleware))
@@ -223,7 +221,7 @@ class Cobweb implements CobwebDeclaration {
 		$error_file, 
 		$error_line_number, 
 		$error_context) {
-			
+		
 		if (error_reporting() == 0)
     		return false;
 
@@ -269,15 +267,18 @@ class Cobweb implements CobwebDeclaration {
 			if (Cobweb::get('DEBUG')) {
 				require_once COBWEB_DIRECTORY . '/applications/cobweb/controllers/debug.controller.php';
 				try {
-					$dispatcher = Cobweb::get('__DISPATCHER__');
-					$request = Cobweb::get('__REQUEST__');
-					$resolver = Cobweb::get('__RESOLVER__');	
+					$cobweb = Cobweb::instance();
+					$debug_controller = new DebugController(
+						$cobweb->dispatcher(), 
+						$cobweb->request(), 
+						$cobweb->resolver(),
+						NULL
+					);
+					$response = $debug_controller->debugger($e);
+					$response->flush();
 				} catch (Exception $_e) {
 					throw $e;
 				}
-				$debug_controller = new DebugController($dispatcher, $request, $resolver);
-				$response = $debug_controller->debugger($e);
-				$dispatcher->finalize($response);	
 			}
 		}
 	}
