@@ -82,11 +82,11 @@ class DebugController extends Controller {
 		$template['backtrace'] = $backtrace;
 		
 		$template['attempted_patterns'] = $template['matching_pattern'] = NULL;
-		$resolver = Cobweb::get('__RESOLVER__');	
+		$resolver = Cobweb::instance()->resolver();
 		if (method_exists($resolver, 'attemptedPatterns'))
-			$template['attempted_patterns'] = $resolver->attemptedPatterns();
+			$template['attempted_patterns'] = $resolver ? $resolver->attemptedPatterns() : array();
 		if (method_exists($resolver, 'matchingPattern'))
-			$template['matching_pattern'] = $resolver->matchingPattern();
+			$template['matching_pattern'] = $resolver ? $resolver->matchingPattern() : array();
 		
 		$template->render(
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/exception.tpl', 
