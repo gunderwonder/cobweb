@@ -33,6 +33,7 @@ class Application {
 		$application_path_constant = $this->pathConstantName();
 		if (!defined($application_path_constant))
 			define($application_path_constant, $this->path);
+		unset($application_path_constant);
 		
 		if (file_exists($this->path . '/settings/bootstrap.inc.php'))
 			require_once $this->path . '/settings/bootstrap.inc.php';
