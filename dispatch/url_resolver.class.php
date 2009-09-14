@@ -78,8 +78,13 @@ class URLResolver implements Resolver {
 					);
 				} else if ($action instanceof IncludeURLConfigurationAction) {
 					return $this->resolveInclude($request, $action, $pattern, $matches, $url);
-				} else if ($action instanceof Action)
+				} else if ($action instanceof Action) {
 					return $action;
+				} else if ($action instanceof ActionFactory) {
+					return $action->createAction($request, $this->dispatcher, $this, $matches, array(
+						'pattern' => $pattern,
+					));
+				}
 			}
 		}
 		

@@ -51,12 +51,14 @@ class CobwebLoader {
 		'RequestProcessor' => '/middleware/request_processor.interface.php',
 		
 		// actions
-		'Action' => '/controller/action.class.php',
 		'Controller' => '/controller/controller.class.php',
 		'CobwebController' => '/applications/cobweb/controllers/cobweb.controller.php',
 		'CallableAction' => '/action/callable_action.class.php',
+		'Concealed' => '/action/callable_action.class.php',
 		'ControllerAction' => '/action/controller_action.class.php',
 		'Action' => '/action/action.interface.php',
+		'ActionFactory' => '/action/action_factory.interface.php',
+		'GenericActionFactory' => '/action/generic_action_factory.class.php',
 		'IncludeURLConfigurationAction' => '/action/include_url_configuration_action.class.php',
 		
 		// caching

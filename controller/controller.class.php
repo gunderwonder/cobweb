@@ -63,15 +63,18 @@ abstract class Controller implements RequestProcessor {
 	/** @var HTTPQueryDictionary */
 	protected $GET;
 	
+	protected $action;
+	
 	/**
 	 * Instantiates a Controller
 	 * 
 	 * @param Dispatcher $dispatcher  the request dispatcher
 	 * @param Request    $request     the request object
 	 */
-	public function __construct(Dispatcher $dispatcher, Request $request, Resolver $resolver) {
+	public function __construct(Dispatcher $dispatcher, Request $request, Resolver $resolver, Action $action = NULL) {
 		$this->request = $request;
 		$this->dispatcher = $dispatcher;
+		$this->action = $action;
 		
 		// proxy request parameters
 		$this->POST = $request->POST;
@@ -79,6 +82,10 @@ abstract class Controller implements RequestProcessor {
 		$this->resolver = $resolver;
 		
 		$this->initialize();
+	}
+	
+	protected function action() {
+		return $this->action;
 	}
 	
 	/**
@@ -107,6 +114,7 @@ abstract class Controller implements RequestProcessor {
 	 * 
 	 * @param string $label     the controller action's label
 	 * @param string $arguments the arguments to apply to the action
+	 * @Concealed
 	 */
 	protected function redirect($label, array $arguments = array()) {
 		if (str_starts_with($label, '@'))
@@ -216,22 +224,24 @@ abstract class Controller implements RequestProcessor {
 	
 	
 	// REQUEST PROCESSOR IMPLEMENTATION
+	/** @Concealed */
 	public function processRequest(Request $request) {
 		return NULL;
 	}
 	
+	/** @Concealed */
 	public function processResponse(Request $request, Response $response) {
 		return $response;
 	}
 	
+	/** @Concealed */
 	public function processAction(Request $request, Action $action) {
 		return NULL;
 	}
 	
+	/** @Concealed */
 	public function processException(Request $request, Exception $exception) {
 		return NULL;
 	}
-	
-	
 	
 }

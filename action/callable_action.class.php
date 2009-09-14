@@ -6,6 +6,16 @@
  */
 
 /**
+ * Using this annotation will cause the callable to not be exposed to the
+ * action.
+ * 
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Dispatch
+ */
+class Concealed extends Annotation { }
+
+/**
  * @author Øystein Riiser Gundersen <oystein@upstruct.com>
  * @package Cobweb
  * @subpackage Dispatch
@@ -51,7 +61,7 @@ class CallableAction implements Action {
 	}
 	
 	public function invoke(array $arguments = NULL) {
-		$arguments = is_null($arguments) ? $this->arguments : $arguments;
+		$arguments = is_null($arguments) ? $this->arguments() : $arguments;
 		$arguments = $this->validateArguments($arguments);
 		
 		$response = call_user_func_array($this->callable, $arguments);

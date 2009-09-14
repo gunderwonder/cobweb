@@ -5,7 +5,6 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-
 /**
  * Represents an {@link Action} that invokes a {@link Controller} action.
  * 
@@ -16,7 +15,7 @@
  */
 class ControllerAction extends CallableAction {
 	
-	private 
+	protected 
 		$controller_name = NULL,
 		$controller      = NULL,
 		$action_name     = NULL,
@@ -104,6 +103,9 @@ class ControllerAction extends CallableAction {
 		if (!$this->action->isPublic())
 			throw new CobwebDispatchException(
 				"{$this->controller_name}::{$this->action_name}' is not a public method");
+		
+		if ($this->hasAnnotation('Concealed'))
+			throw new CobwebDispatchException('Cannot call concealed action');
 	}
 	
 	public function invoke(array $arguments = NULL) {
@@ -115,7 +117,7 @@ class ControllerAction extends CallableAction {
 			$class = $this->controller->getName();
 			$method = $this->action->getName();
 			
-			$this->instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver);
+			$this->instance = $this->controller->newInstance($this->dispatcher, $this->request, $this->resolver, $this);
 			
 			if(($response = $this->controller->getMethod('processRequest')->invoke($this->instance, $this->request)))
 				return $response;
@@ -124,21 +126,28 @@ class ControllerAction extends CallableAction {
 			
 			Cobweb::info('Invoking %o with arguments %o', "{$class}::{$method}", $arguments);
 			$response = $this->action->invokeArgs($this->instance, $arguments);
-			if (!$response instanceof Response)
-				throw new CobwebException(
-					"Action '{$class}::{$method}' must return a response instance, got " .
-					(is_object($response) ? get_class($response) . ' instance' : gettype($response))
-				);
-			
+
+			$response = $this->processResponse($response);
+
 			$response = $this->controller->getMethod('processResponse')->invoke($this->instance, $this->request, $response);
 	
-		} catch (ReflectionException $e) { 
+		} catch (ReflectionException $e) {
+			
 			throw new CobwebDispatchException(
 				"Error invoking '{$this->action->getName()}' in controller " .
 				"{$this->controller->getName()} for URL '{$this->request->path()}'. " . 
 				"The error was: '{$e->getMessage()}'");
 		}
 	
+		return $response;
+	}
+	
+	protected function processResponse($response) {
+		if (!$response instanceof Response)
+			throw new CobwebException(
+				"Controller actions must return a response instance, got " .
+				(is_object($response) ? get_class($response) . ' instance' : gettype($response))
+			);
 		return $response;
 	}
 	
