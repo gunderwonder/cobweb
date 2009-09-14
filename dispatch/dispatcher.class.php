@@ -44,7 +44,7 @@ class Dispatcher {
 		// invoke the action, catching any exception it may throw
 		try {
 			$response = $action->invoke();
-		
+			
 		/* if an exception is thrown in the controller layer, let the middleware
 		 * handle it or rethrow the exception
 		 */
@@ -106,4 +106,3 @@ class Dispatcher {
 	}
 	
 }
-
