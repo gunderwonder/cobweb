@@ -27,10 +27,7 @@ Cobweb includes a number of Open Source projects in this directory (/vendor). Ea
 	
 - PHPUnit (/vendor/phpunit) is licenced under a BSD-style licence:
 	http://www.phpunit.de/wiki/Copyright
-	
-- SwiftMailer (/vendor/swiftmailer) is licenced under the LGPL:
-	http://github.com/swiftmailer/swiftmailer/blob/ea6417f4840e1bd8d8242fe9527c7b8f314da2a4/LICENSE.LGPL
-	
+		
 - PHPUTF8 (/vendor/utf8) is licenced under the LGPL:
 	http://phputf8.cvs.sourceforge.net/viewvc/phputf8/utf8/LICENSE?view=markup
 	
