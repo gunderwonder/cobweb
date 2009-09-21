@@ -18,6 +18,7 @@
 class Session implements ArrayAccess {
 	
 	public function __construct() {
+		ini_set('session.use_only_cookies', 1);
 		$session_parameters = session_get_cookie_params();
 		session_set_cookie_params(
 			$session_parameters['lifetime'],
@@ -47,8 +48,18 @@ class Session implements ArrayAccess {
 	}
 	
 	public function end() {
+		session_set_cookie_params(0);
+		$this->regenerate();
 		return session_destroy();
-
+	}
+	
+	public function regenerate() {
+		session_regenerate_id();
+	}
+	
+	public function expire($expiry) {
+		session_set_cookie_params($expiry);
+		$this->regenerate();
 	}
 	
 	public function get($key, $default = NULL) {
