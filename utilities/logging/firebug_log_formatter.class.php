@@ -53,9 +53,7 @@ class FirebugLogFormatter extends LogFormatter {
 			
 		// AJAXResponse
 		} else if ($response instanceof AJAXResponse) {
-			$json = JSON::decode($response->body);
-			$json['logs'] = $log;
-			$response->body = JSON::encode($json);
+			$response->body['log'] = $log;
 		}
 	}
 	

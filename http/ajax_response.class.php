@@ -75,7 +75,6 @@ class AJAXResponse extends HTTPResponse {
 	 */
 	const FAILURE = 0;
 	
-	
 	/**
 	 * Instantate an {@link AJAXResponse}
 	 * 
@@ -93,16 +92,12 @@ class AJAXResponse extends HTTPResponse {
 		                        array $extra = NULL,
 		                        $code = HTTPResponse::OK) {
 
-		$body = array(
+		$body = array_merge(array(
 			'status' => $status,
 			'command' => $command,
 			'message' => $message
-		);
+		), $extra ? $extra : array());
 		
-		// merge extra values if present and JSON encode the body
-		if (!$extra)
-			$extra = array();
-		$body = JSON::encode(array_merge($body, $extra));
 			
 		parent::__construct($body, $code, MIMEType::JSON);
 	}
@@ -170,6 +165,17 @@ class AJAXResponse extends HTTPResponse {
 			'',
 			array('content' => $content)
 		);
+	}
+	
+	
+	public function write($contents) {
+		$this->body = is_array($this->body) ? $this->body : array();
+		$this->body = array_merge($this->body, $contents);
+	}
+	
+	public function flush() {
+		$this->sendHeaders();
+		echo JSON::encode($this->body);
 	}
 }
 

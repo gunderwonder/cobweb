@@ -60,8 +60,8 @@ class HTTPResponse extends Response {
 		                        $response_code = self::OK,
 		                        $mime_type = MIMEType::HTML,
 		                        $charset = 'UTF-8') {
-		$this->body = '';
-		$this->write(is_object($body) ? $body->__toString() : $body);
+		$this->body = NULL;
+		$this->write($body);
 			
 		if (is_int($response_code))
 			$this->response_code = self::$HTTP_codes[$response_code];
@@ -98,6 +98,7 @@ class HTTPResponse extends Response {
 	
 	
 	public function write($contents) {
+		is_object($contents) ? $contents->__toString() : $contents;
 		$this->body .= $contents;
 		return $this;
 	}
