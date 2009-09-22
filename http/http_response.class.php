@@ -186,7 +186,7 @@ class HTTPResponseNotFound extends HTTPResponse {
 }
 
 class HTTPResponseForbidden extends HTTPResponse {
-	public function __construct($body = "404 Forbidden") {
+	public function __construct($body = "403 Forbidden") {
 		parent::__construct($body, self::FORBIDDEN);
 	}
 }
