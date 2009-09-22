@@ -208,7 +208,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 			$domain = $this->META['SERVER_NAME'];
 
 		setcookie($key, $value, $expiry, $path, $domain, $secure, $http_only);
-		
+
 		$this->dispatcher->fire('request.cookie_set', 
 			array('cookie' => array($key => $value), 'request' => $this));
 	}
@@ -236,6 +236,12 @@ class HTTPRequest extends Request implements ArrayAccess {
 		$value = $this->cookie($key);
 		unset($_COOKIE[$key]);
 		return $value;
+	}
+	
+	public function header($header_name, $default = NULL) {
+		if (isset($this[$header_name]))
+			return $this[$header_name];
+		return $default;
 	}
 	
 	/**@+ @ignore */
@@ -268,7 +274,6 @@ class HTTPRequest extends Request implements ArrayAccess {
 			);
 			$formatted_headers[$formatted_key] = $value;
 		}
-		
 		return $formatted_headers;
 	}
 	
