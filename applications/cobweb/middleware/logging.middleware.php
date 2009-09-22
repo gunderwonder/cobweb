@@ -16,8 +16,9 @@ class LoggingEnabled extends Annotation { }
  */
 class LoggingMiddleware extends Middleware {
 	
-	protected $loggers;
+	protected $response_processed = false;
 	
+	protected $loggers;
 	protected $logging_enabled = NULL;
 	
 	public function initialize() {
@@ -37,6 +38,8 @@ class LoggingMiddleware extends Middleware {
 	}
 	
 	public function processResponse(Request $request, Response $response) {
+		if ($this->response_processed)
+			return $response;
 		
 		if (in_array($response->code(), array(304)))
 			return $response;
@@ -50,6 +53,7 @@ class LoggingMiddleware extends Middleware {
 			$formatter->format($response);
 		}
 		
+		$this->response_processed = true;
 		return $response;
 		
 	}
