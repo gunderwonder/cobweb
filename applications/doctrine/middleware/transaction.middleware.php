@@ -18,7 +18,7 @@ class TransactionMiddleware extends Middleware {
 			$connection->beginTransaction();
 	}
 	
-	public function processException(Request $request, Response $response, Exception $e) {
+	public function processException(Request $request, Exception $e) {
 		foreach (CobwebDoctrineManager::connections() as $connection)
 			$connection->rollback();
 	}
