@@ -63,27 +63,27 @@ class SessionNotificationManager implements IteratorAggregate {
 	}
 	
 	protected function notify($message, $type, $options = array()) {
-		$this->notifications[] = new BeehiveNotification($message, $type);
+		$this->notifications[] = new SessionNotification($message, $type);
 		return $this;
 	}
 	
 	public function info($message, $options = array()) {
-		$this->notify($message, BeehiveNotification::INFO, $options);
+		$this->notify($message, SessionNotification::INFO, $options);
 		return $this;
 	}
 	
 	public function error($message, $options = array()) {
-		$this->notify($message, BeehiveNotification::ERROR, $options);
+		$this->notify($message, SessionNotification::ERROR, $options);
 		return $this;
 	}
 	
 	public function warning($message, $options = array()) {
-		$this->notify($message, BeehiveNotification::WARNING, $options);
+		$this->notify($message, SessionNotification::WARNING, $options);
 		return $this;
 	}
 	
 	public function success($message, $options = array()) {
-		$this->notify($message, BeehiveNotification::SUCCESS, $options);
+		$this->notify($message, SessionNotification::SUCCESS, $options);
 		return $this;
 	}
 	
