@@ -97,7 +97,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @return boolean whether the request was made using HTTPs or not
 	 */
 	public function isSecure() {
-		return !empty($this['META']['HTTPS']);
+		return !empty($this->META['HTTPS']);
 	}
 	
 	/**
