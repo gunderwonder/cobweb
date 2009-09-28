@@ -21,19 +21,25 @@
 
 <body>
 	<div id="header"><h1>Cobweb caught an exception</h1></div>
-	<div id="content">
-		<h3>Caught exception</h3>
-		<h2>{$exception_class}</h2>
-		<h3>it was thrown in</h3>
-		<p>
-			<a href="txmt://open?url=file://{$e->getFile()}&amp;line={$e->getLine()}">
-				<tt>{$file_path}</tt>
-			</a>
-			<span style="font-size: 12px;">on line {$e->getLine()}</span>
-		</p>
+	
+	<div id="exception">
+		    <h3>Caught exception</h3>
+		    <h2>{$exception_class}</h2>
+		    <h3>it was thrown in</h3>
+		    <p>
+			        <a href="txmt://open?url=file://{$e->getFile()}&amp;line={$e->getLine()}">
+			    	<tt>{$file_path}</tt>
+			        </a>
+			    <span style="font-size: 12px;">on line {$e->getLine()}</span>
+		    </p>
+		
 		
 		<h3>Message</h3>
-		<p>{$e->getMessage()}</p>
+		<p class="message">{$e->getMessage()|escape:'html'|nl2br}</p>
+	</div>
+	
+	<div id="content">
+	    
 		
 		<h3>Stacktrace</h3>
 		<table cellspacing="0" cellpadding="0" border-collapse="0" style="margin-bottom: 30px;">

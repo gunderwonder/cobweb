@@ -20,6 +20,7 @@ class DebugController extends Controller {
 	 * @return  HTTPResponse  500/404 response with detailed stacktrace/debug information
 	 */
 	public function debugger(Exception $exception) {
+	    
 		if ($this->request->isAJAX())
 			return $this->textDebugger($exception);
 		
@@ -92,6 +93,8 @@ class DebugController extends Controller {
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/exception.tpl', 
 			Template::ABSOLUTE_TEMPLATE_PATH);
 		
+		if (ob_get_level())
+            @ob_get_clean();
 		
 		$code = $exception instanceof HTTPException ? $exception->getCode() : 500;
 
