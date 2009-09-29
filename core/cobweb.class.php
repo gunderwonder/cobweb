@@ -53,17 +53,19 @@ class Cobweb implements CobwebDeclaration {
 			
 			Router::connect($this->configuration->load(
 				COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
+				
+			Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
+		
+		    $this->middleware_manager = $this->createMiddlewareManager(
+		    	array(
+		    		'dispatcher' => $this->dispatcher,
+		    		'application_manager' => $this->application_manager
+		    	)
+		    );
+		    $this->resolver = $this->createResolver(array('dispatcher' => $this->dispatcher));
 		}
 		
-		Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
 		
-		$this->middleware_manager = $this->createMiddlewareManager(
-			array(
-				'dispatcher' => $this->dispatcher,
-				'application_manager' => $this->application_manager
-			)
-		);
-		$this->resolver = $this->createResolver(array('dispatcher' => $this->dispatcher));
 	}
 	
 	public static function initialize(CobwebDeclaration $cobweb = NULL) {
