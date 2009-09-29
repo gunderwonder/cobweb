@@ -4,6 +4,8 @@
  * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
  * @copyright Upstruct Berlin Oslo
  */
+ 
+
 
 /**
  * @package Cobweb
@@ -17,7 +19,13 @@ class SessionMiddleware extends Middleware {
 	
 	public function initialize() {
 		Cobweb::log('Initializing session middleware...');
-		$this->session = new Session();
+		$session_class = Cobweb::get('SESSION_STORAGE_CLASSNAME', 'Session');
+		$this->session = new $session_class(Cobweb::instance()->request());
+
+		if (!$this->session instanceof SessionStorage)
+            throw new CobwebConfigurationException(
+                "The `SESSION_STORAGE_CLASSNAME` class must implement SessionStorage"
+            );
 	}
 	
 	public function processRequest(Request $request) {

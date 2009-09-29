@@ -15,7 +15,7 @@
  * @package    Cobweb
  * @subpackage Cobweb Application
  */
-class Session implements ArrayAccess {
+class Session implements SessionStorage {
 	
 	public function __construct() {
 		ini_set('session.use_only_cookies', 1);
@@ -51,6 +51,10 @@ class Session implements ArrayAccess {
 		session_set_cookie_params(0);
 		$this->regenerate();
 		return session_destroy();
+	}
+	
+	public function flush() {
+	    session_unset();
 	}
 	
 	public function regenerate() {
