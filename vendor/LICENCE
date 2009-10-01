@@ -14,7 +14,7 @@ Cobweb includes a number of Open Source projects in this directory (/vendor). Ea
 	http://code.google.com/p/addendum/source/browse/trunk/LICENSE
 	
 - FirePHP (/vendor/firephp) is licenced under the New BSD License:
-	http://firephp.googlecode.com/svn/tags/Library-FirePHPCore-0.2.1/lib/FirePHPCore/LICENSE
+	http://firephp.googlecode.com/sPvn/tags/Library-FirePHPCore-0.2.1/lib/FirePHPCore/LICENSE
 	
 - Markdown (/vendor/markdown) is licenced under a BSD-style licence:
 	http://michelf.com/projects/php-markdown/license/
@@ -24,9 +24,6 @@ Cobweb includes a number of Open Source projects in this directory (/vendor). Ea
 	
 - Portable PHP password hashing framework (/vendor/phpass) is in the public domain:
 	http://www.openwall.com/phpass/
-	
-- PHPUnit (/vendor/phpunit) is licenced under a BSD-style licence:
-	http://www.phpunit.de/wiki/Copyright
 		
 - PHPUTF8 (/vendor/utf8) is licenced under the LGPL:
 	http://phputf8.cvs.sourceforge.net/viewvc/phputf8/utf8/LICENSE?view=markup
