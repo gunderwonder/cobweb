@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- Cobweb buildfile -->
+<project name="cobweb" default="dist" basedir="..">
+	<property name="application.build.directory" value="./build" />
+	<property name="svn.repository.baseurl" value="http://cobweb.googlecode.com/svn/" />
+	<property name="svn.repository.basedir" value="trunk/" />
+	
+    <target name="prepare">
+        <mkdir dir="${application.build.directory}" />
+    </target>
+
+    <target name="build" depends="prepare">
+		
+    </target>
+
+    <target name="dist" depends="build">
+		<svnlastrevision
+   			workingcopy="${project.basedir}"
+   			propertyname="svn.revision.head" />
+
+		<property 
+			name="svn.export.directory" 
+			value="${application.build.directory}/rev-${svn.revision.head}" />
+			
+		<svnexport 
+			repositoryurl="${svn.repository.basedir}/${svn.repository.basedir}"
+   			todir="${svn.export.directory}" />
+	
+        <tar destfile="${project.basedir}/${phing.project.name}.tar.bz2" compression="bzip2">
+ 			<fileset dir="${svn.export.directory}">
+	 			<exclude name="${application.build.directory}" />
+ 			</fileset>
+		</tar>
+    </target>
+</project>
