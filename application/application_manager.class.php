@@ -29,6 +29,8 @@ class ApplicationManager {
 		
 		foreach ($installed_applications as $application_name)
 			$this->load($application_name);
+			
+		Cobweb::info('Loaded applications %o', Cobweb::get('INSTALLED_APPLICATIONS'));
 	}
 	
 	public function load($application_name) {
@@ -49,7 +51,7 @@ class ApplicationManager {
 						            $application_name,
 						            $path);
 					
-				Cobweb::info('Loaded application %o', $application_name);
+				
 				return $this->loaded_applications[$application_name];
 			}
 		}
