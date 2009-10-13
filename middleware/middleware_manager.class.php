@@ -56,6 +56,8 @@ class MiddlewareManager {
 	 * @return Response|NULL
 	 */
 	public function handleRequest(Request $request) {
+		Cobweb::log('Invoking request middleware...');
+		
 		foreach ($this->middleware as $middleware)
 			if (($response = $middleware->processRequest($request)))
 				return $this->assertResponse($response, $middleware);
@@ -77,6 +79,8 @@ class MiddlewareManager {
 	 * @throws CobwebMiddlewareException
 	 */
 	public function handleResponse(Request $request, Response $response = NULL) {
+		Cobweb::log('Invoking response middleware...');
+		
 		foreach ($this->middleware_reversed as $middleware)
 			$response = $this->assertResponse($middleware->processResponse($request, $response), $middleware);
 				
@@ -97,6 +101,8 @@ class MiddlewareManager {
 	 * @throws CobwebMiddlewareException
 	 */
 	public function handleException(Request $request, Exception $exception) {
+		Cobweb::log('Invoking exception middleware...');
+		
 		foreach ($this->middleware_reversed as $middleware)
 			if (($response = $middleware->processException($request, $exception)))
 				return $this->assertResponse($response, $middleware);
@@ -117,6 +123,8 @@ class MiddlewareManager {
 	 * @throws CobwebMiddlewareException
 	 */
 	public function handleAction(Request $request, Action $action) {
+		Cobweb::log('Invoking action middleware...');
+		
 		foreach ($this->middleware as $middleware)
 			if (($response = $middleware->processAction($request, $action)))
 				return $this->assertResponse($response, $middleware);
