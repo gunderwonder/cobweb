@@ -54,16 +54,16 @@ abstract class MIMEType {
 	 * @see   http://no.php.net/manual/en/function.mime-content-type.php#84361
 	 */
 	public static function guess($filename) {
-		if (function_exists('finfo_open')) {
-			$info = finfo_open(FILEINFO_MIME);
-    		$mime_type = finfo_file($info, $filename);
-			finfo_close($info);
-			if ($mime_type) 
-				return $mime_type;
-		}
+		// if (function_exists('finfo_open')) {
+		// 	$info = finfo_open(FILEINFO_MIME);
+		//     		$mime_type = finfo_file($info, $filename);
+		// 	finfo_close($info);
+		// 	if ($mime_type) 
+		// 		return $mime_type;
+		// }
 		
-		if (function_exists('mime_content_type') && $result = mime_content_type($filename))
-			return $result;
+		// if (function_exists('mime_content_type') && $result = mime_content_type($filename))
+		// 	return $result;
 		
 		$suffix = substr($filename, strrpos($filename, '.') + 1, strlen($filename) - 1);
 
