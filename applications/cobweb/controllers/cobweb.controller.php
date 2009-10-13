@@ -33,8 +33,8 @@ class CobwebController extends Controller {
 			
 		return $this->render(Cobweb::get('HTTP404_TEMPLATE', '404.tpl'), 
 			array('uri' => $this->request->URI()), 
-			HTTPResponse::NOT_FOUND);
-			
+			HTTPResponse::NOT_FOUND
+		);	
 	}
 	
 	/**
@@ -51,7 +51,13 @@ class CobwebController extends Controller {
 	}
 	
 	public function start() {
-		return $this->render('/debug/cobweb_installed.tpl');
+		return $this->render(
+			'/debug/cobweb_installed.tpl', 
+			array(), 
+			HTTPResponse::OK, 
+			MIMEType::HTML, 
+			TemplateAdapter::PHP
+		);
 	}
 	
 	public function serveStaticData($path) {

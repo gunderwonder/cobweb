@@ -1,4 +1,4 @@
-{literal}
+/* {literal} */
 body {
 	background-color: white;
 }
@@ -116,6 +116,10 @@ p {
 	border-bottom: 1px solid LightGray;
 }
 
+#cobweb-installation {
+	background-color: #F9F9F9;
+}
+
 .message {
 /*	color: maroon;*/
 }
@@ -208,4 +212,21 @@ h4 {
 .controller-stackpoint td b {
 	color: maroon;
 }
-{/literal}
+
+.warning-list {
+	list-style-type: none;
+	font-size: 13px;
+	background-color: #f3f3f3;
+	border: 1px solid gray;	
+	padding: 20px;
+}
+
+.warning-list span {
+	color: green;
+	margin-right: 10px;
+}
+
+.warning-list span.error {
+	color: maroon;
+}
+/* {/literal} */
