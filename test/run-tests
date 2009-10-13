@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-../vendor/phpunit/phpunit.php $@ CobwebTestSuiteLoader bootstrap_tests.inc.php 
+phpunit $@ CobwebTestSuiteLoader bootstrap_tests.inc.php 

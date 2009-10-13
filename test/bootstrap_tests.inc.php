@@ -2,37 +2,15 @@
 if (!defined('COBWEB_DIRECTORY'))
 	define('COBWEB_DIRECTORY', realpath(dirname(__FILE__) . '/../'));
 
-
-set_include_path(get_include_path() . ':' . COBWEB_DIRECTORY . '/vendor/phpunit/');
-
 require_once 'PHPUnit/Framework.php';
-
-
-class CobwebTestSuite extends PHPUnit_Framework_TestSuite {
-	
- 
-    protected function setUp() {
-	
-    }
- 
-    protected function tearDown() {
-    }
-}
-
+require_once COBWEB_DIRECTORY . '/core/cobweb_bootstrap.inc.php';
 
 if (!defined('PHPUnit_MAIN_METHOD'))
    define('PHPUnit_MAIN_METHOD', 'CobwebTest::main');
 
-
-require_once dirname(__FILE__) . '/core/cobweb_configuration.test.php';
-
 class CobwebTestSuiteLoader {
 	
-	public static function main() {
-		// PHPUnit_TextUI_TestRunner::run(self::suite(), array(
-		// 	'printer' => new PHPUnit_Util_Log_TAP()
-		// ));
-	}
+	public static function main() { }
 	
 	public static function suite() {
 		$suite = new PHPUnit_Framework_TestSuite('Cobweb Test Suite');
@@ -66,8 +44,9 @@ class CobwebTestSuiteLoader {
 	
 	protected function loadTestCases() {
 		foreach (glob($this->directory . '/*.test.php') as $test_file) {
-			require_once $test_file;
-			$this->suite->addTestSuite($this->classify(basename($test_file)));
+			$class_name = $this->classify(basename($test_file));
+			CobwebLoader::register($class_name, $test_file);
+			$this->suite->addTestSuite($class_name);
 		}
 	}
 	
@@ -77,11 +56,5 @@ class CobwebTestSuiteLoader {
 			create_function('$x', 'return ucfirst($x[1]);'),
 			ucfirst($basename)
 		) . 'Test';
-	}
-	
-	
+	}	
 }
-
-if (PHPUnit_MAIN_METHOD == 'CobwebTest::main');
-	CobwebTestSuiteLoader::main();
-
