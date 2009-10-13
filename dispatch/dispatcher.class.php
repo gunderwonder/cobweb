@@ -80,7 +80,7 @@ class Dispatcher {
 	public function observe($event_name, $callable) {
 		if (!isset($this->event_listeners[$event_name]))
 			$this->event_listeners[$event_name] = array();
-			
+		
 		$this->event_listeners[$event_name][] = $callable;
 	}
 	
@@ -94,6 +94,7 @@ class Dispatcher {
 	 * @param  array   $memo        a memo to pass to the event listener callback
 	 */
 	public function fire($event_name, array $memo = NULL) {
+	    Cobweb::info("Fired event %o with data %o!", $event_name, $memo);
 		if (!isset($this->event_listeners[$event_name]))
 			return;
 		
