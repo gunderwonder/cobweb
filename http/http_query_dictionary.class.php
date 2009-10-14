@@ -8,10 +8,7 @@
 class HTTPQueryDictionary extends ImmutableArray {
 	
 	public function get($key, $nullvalue = NULL) {
-		if (!empty($this[$key]))
-			return $this[$key];
-			
-		return $nullvalue; 
+		return parent::get($key, $nullvalue);
 	}
 	
 	public function query() {
