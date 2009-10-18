@@ -16,7 +16,7 @@ class IncludeURLConfigurationAction implements Action {
 	
 	public function __construct($label, array $options = NULL) {
 		$this->label = $label;
-		if (count(list($this->application_name, $this->file) = explode('.', $this->label)) != 2)
+		if (count(@list($this->application_name, $this->file) = explode('.', $this->label)) != 2)
 			throw new CobwebConfigurationException('Invalid URL configuration label');
 		
 		if (!in_array($this->application_name, Cobweb::get('INSTALLED_APPLICATIONS')))
