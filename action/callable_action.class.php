@@ -28,6 +28,8 @@ class CallableAction implements Action {
 	protected $pattern;
 	protected $resolver;
 	
+	
+	
 	public function __construct(HTTPRequest $request,
 		                        Dispatcher $dispatcher,
 		                        Resolver $resolver,
@@ -38,8 +40,8 @@ class CallableAction implements Action {
 		$this->request = $request;
 		$this->pattern = $pattern;
 		$this->resolver = $resolver;
-
 		
+
 		$this->initialize($specification, $arguments);
 		$this->loadAction();
 	}
@@ -127,22 +129,25 @@ class CallableAction implements Action {
 		return $this->options;
 	}
 	
-	protected function loadAction() { }
+	protected function loadAction() {  }
 	
 	protected function reflection() {
+		
 		if (is_string($this->callable)) {
 			if (str_contains($this->callable, '::')) {
 				list($class, $method) = explode('::', $this->callable);
 				$class = new ReflectionAnnotatedClass($class);
 				return $class->getMethod($method);
 			}
-			
+
 			return new ReflectionFunction($this->callable);
-		} else {
+		} else if (is_array($this->callable)) {
 			list($object_or_class, $method) = $this->callable;
 			if (is_string($object_or_class))
 				$object_or_class = new ReflectionAnnotatedClass($object_or_class);			
 			return $object_or_class->getMethod($method);
+		} else {
+			return new ReflectionFunction($this->callable);
 		}
 	}
 	
@@ -171,7 +176,9 @@ class CallableAction implements Action {
 	 * @see @Action::hasAnnotation
 	 */
 	public function hasAnnotation($annotation) {
-		return $this->reflection()->hasAnnotation($annotation);
+		if ($this->reflection() instanceof ReflectionAnnotatedClass)
+			return $this->reflection()->hasAnnotation($annotation);
+		return false;
 	}
 	
 	/**
@@ -183,7 +190,9 @@ class CallableAction implements Action {
 	}
 	
 	public function allAnnotations() {
-		return $this->reflection()->allAnnotations();
+		if ($this->reflection() instanceof ReflectionAnnotatedClass)
+			return $this->reflection()->allAnnotations();
+		return array();
 	}
 	
 	public function __toString() {

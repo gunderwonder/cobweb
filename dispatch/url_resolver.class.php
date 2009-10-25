@@ -71,7 +71,7 @@ class URLResolver implements Resolver {
 				Cobweb::info("Request URI %o resolved to action %o using pattern %o",  
 					$request->URI(), $action, $pattern);
 				
-				if (is_string($action) || is_array($action)) {
+				if (is_callable($action)) {
 					$action = is_array($action) ? $action : array($action);
 					return CallableAction::create(
 						$request, $this->dispatcher, $this, $pattern, $matches, $action
