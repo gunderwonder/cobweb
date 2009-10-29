@@ -22,47 +22,31 @@ class CobwebErrorException extends ErrorException {
 	private $error_message;
 	
 	/** @var array */
-	private static $current_stacktrace = NULL;
+	private $trace = NULL;
 	
 	public function __construct(
-				$error_number,
 				$error_message,
+				$error_code,
+				$error_number,
 				$error_file,
 				$error_line_number,
-				$error_context,
 				$trace = NULL) {
 					
 		
-		self::$current_stacktrace = is_null($trace) ? array_slice(debug_backtrace(), 2) : $trace;
-		$this->rethrow($error_message);
+		$this->trace = is_null($trace) ? array_slice(debug_backtrace(), 2) : $trace;
 		
 		$this->error_message = $error_message;
 		parent::__construct(
 			$error_message, 
+			0,
 			$error_number, 
-			0, 
+			 
 			$error_file, 
 			$error_line_number);
 	}
 	
-	public static function currentStacktrace() {
-		$stacktrace = self::$current_stacktrace;
-		self::$current_stacktrace = NULL;
-		return $stacktrace;
-	}
-	
-	public function rethrow($message) {
-		if (preg_match('/^Undefined variable: \w+$/', $message))
-			throw new UnexpectedValueException($message);
-			
-		if (preg_match('/^Undefined offset: /', $message))
-			throw new OutOfBoundsException($message);
-			
-		// TODO: add more Exception types here...
-	}
-	
-	public function rethrowedExceptions() {
-		return array('UnexpectedValueException', 'OutOfBoundsException');
+	public function origin() {
+		return $this->trace;
 	}
 
 }

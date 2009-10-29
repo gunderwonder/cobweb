@@ -229,11 +229,11 @@ class Cobweb implements CobwebDeclaration {
 
   		if (error_reporting() & $error_number) {
 			throw new CobwebErrorException(
-				$error_number,
 				$error_message,
+				0,
+				$error_number,
 				$error_file,
 				$error_line_number,
-				$error_context,
 				array_slice(debug_backtrace(), 1)
 			);
 		}
