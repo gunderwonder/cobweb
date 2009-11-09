@@ -56,6 +56,7 @@ class HTTPRequest extends Request implements ArrayAccess {
 		}
 		
 		$this->path_info = parse_url($this->META->get('REQUEST_URI', 'file://' . getcwd()));
+		$this->path_info['path'] = rawurldecode($this->path_info['path']);
 	}
 
 	/**
