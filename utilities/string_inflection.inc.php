@@ -50,6 +50,12 @@ function str_titlecase($string) {
 function stringify($object) {
 	static $seen = array();
 	
+	if (is_null($object))
+		return 'NULL';
+	
+	if (is_bool($object))
+		return $object ? 'true' : 'false';
+	
 	if (is_object($object)) {
 		$class = get_class($object);
 		
@@ -70,6 +76,8 @@ function stringify($object) {
 	
 	
 	} else if (is_array($object)) {
+		if (empty($object))
+			return '[]';
 		$array = '[';
 		for ($i = 0; $i < count($object); $i++) {
 			if (!is_int(key($object)))
