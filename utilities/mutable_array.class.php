@@ -5,6 +5,10 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @package Cobweb
+ * @subpackage Utilities
+ */
 class MutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	
 	protected $array;
