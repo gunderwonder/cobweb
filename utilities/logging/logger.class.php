@@ -5,6 +5,10 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @package Cobweb
+ * @subpackage Logging
+ */
 class Logger implements IteratorAggregate {
 	
 	/** @var array */
@@ -13,14 +17,30 @@ class Logger implements IteratorAggregate {
 	/** @var string */
 	protected $name;
 	
+	/** @var string */
+	protected $log_level;
+	
+	const DEBUG = 1;
+	const INFO = 2;
+	const WARNING = 4;
+	const ERROR = 8;
+	
 	/**
 	 * Creates a logger with the specified (optional) name.
 	 * 
 	 * @param string $name the name of this logger
 	 */
-	public function __construct($name = '') {
+	public function __construct($name = '', $log_level = self::DEBUG) {
 		$this->name = $name;
 		$this->logs = array();
+		$this->log_level = $log_level;
+		
+		$this->LOG_LEVELS = array(
+			'DEBUG' => self::DEBUG,
+			'INFO' => self::INFO,
+			'WARNING' => self::WARNING,
+			'ERROR' => self::ERROR,
+		);
 	}
 	
 	/**
@@ -29,7 +49,8 @@ class Logger implements IteratorAggregate {
 	 * 
 	 */
 	private function append($function, $things) {
-		$this->logs[] = array($function, $things);
+		// if ($this->LOG_LEVELS[$function] & $this->log_level)
+			$this->logs[] = array($function, $things);
 	}
 	
 	public function isEmpty() {

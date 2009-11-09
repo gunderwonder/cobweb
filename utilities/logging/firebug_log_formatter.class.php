@@ -5,6 +5,10 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @package Cobweb
+ * @subpackage Logging
+ */
 class FirebugLogFormatter extends LogFormatter {
 	
 	
