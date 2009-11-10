@@ -45,14 +45,19 @@ class Cobweb implements CobwebDeclaration {
 		
 		if (defined('COBWEB_PROJECT_DIRECTORY')) {
 			
-			$this->configuration->configure(
-				$this->configuration->load(COBWEB_PROJECT_DIRECTORY . '/settings/settings.conf.php'));
+			try {
+				$urlconf_file = COBWEB_PROJECT_DIRECTORY . '/settings/settings.conf.php';
+				$this->configuration->configure($this->configuration->load($urlconf_file));
+			} catch (FileNotFoundException $e) {  }
+			
 			$this->application_manager = $this->createApplicationManager(
 				array('dispatcher' => $this->dispatcher, 'request' => $this->request)
 			);
 			
-			Router::connect($this->configuration->load(
-				COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
+			try {
+				Router::connect($this->configuration->load(
+					COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
+			} catch (FileNotFoundException $e) {  }
 				
 			Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
 		
@@ -64,8 +69,6 @@ class Cobweb implements CobwebDeclaration {
 		    );
 		    $this->resolver = $this->createResolver(array('dispatcher' => $this->dispatcher));
 		}
-		
-		
 	}
 	
 	public static function initialize(CobwebDeclaration $cobweb = NULL) {
@@ -75,6 +78,7 @@ class Cobweb implements CobwebDeclaration {
 		if (is_null(self::$cobweb))
 			self::$cobweb = is_null($cobweb) ? new Cobweb() : $cobweb;
 		self::$initialized = true;
+		return self::$cobweb;
 	}
 	
 	public static function run() {
@@ -95,7 +99,9 @@ class Cobweb implements CobwebDeclaration {
 		self::$cobweb->configuration()->configure($settings);
 	}
 	
-	
+	/**
+	 * @deprecated
+	 */
 	public static function loadApplication($application_name) {
 		$application = self::$cobweb->applicationManager()->load($application_name);
 		return $application;
