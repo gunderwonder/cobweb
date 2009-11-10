@@ -5,24 +5,17 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-
 $settings = array(
 	'DEBUG' => true,
 	'ERROR_REPORTING' => E_ALL | E_STRICT,
 	'INSTALLED_MIDDLEWARE' => array(),
 	'INSTALLED_APPLICATIONS' => array('cobweb'),
-	
 	'URL_PREFIX' => '',
-	
 	'TIMEZONE' => 'Europe/Oslo',
-	
-	'TEMPLATE_PROCESSORS' => array(
-		'Cobweb::processTemplate'
-	),
-	
+	'TEMPLATE_PROCESSORS' => array('Cobweb::processTemplate'),
 	'APPEND_SLASH_ON_404' => true,
+	'URL_CONFIGURATION' => array('^$' => 'cobweb.cobweb.start')
 );
-
 
 if (defined('COBWEB_PROJECT_DIRECTORY'))
 	$settings = array_merge($settings,
