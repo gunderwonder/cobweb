@@ -13,11 +13,17 @@
  */
 class HTTPResponse extends Response {
 	
-	protected $headers = NULL;
+	/** @var array */
+	protected $headers = NULL; 
+	
+	/** @var int */
 	protected $response_code = 200;
+	
+	/** @var string */
 	protected $content_type = NULL;
 	
-	protected $CHARSET_MIME_TYPES = array(
+	/** @var array */
+	private $CHARSET_MIME_TYPES = array(
 		MIMEType::HTML,
 		MIMEType::JSON,
 		MIMEType::XHTML,
@@ -42,7 +48,7 @@ class HTTPResponse extends Response {
 	
 	const INTERNAL_SERVER_ERROR = '500 Internal Server Error';
 
-	
+	/** @var array */
 	private static $HTTP_codes = array(
 		200 => self::OK,
 		400 => self::BAD_REQUEST,
@@ -69,7 +75,6 @@ class HTTPResponse extends Response {
 			$this->response_code = $response_code;
 		$this->mime_type = $mime_type;
 		
-		
 		$this->headers = new MutableArray();
 		foreach(headers_list() as $h) {
 			list($header_name, $value) = preg_split('/:\s/', $h);
@@ -77,7 +82,6 @@ class HTTPResponse extends Response {
 		}
 		
 		$this['Content-Type'] = $this->content_type = $mime_type;
-		
 		if (in_array($mime_type, $this->CHARSET_MIME_TYPES))
 			$this->setCharacterSet($charset);
 	}
@@ -136,16 +140,17 @@ class HTTPResponse extends Response {
 		$this->headers[$key] = $value;	
 	}
 		
-	public function offsetUnset($key) {
-		if (is_int($key))
-			throw new KeyException('HTTPResponse::offsetUnset() does not allow numeric indices');
-		
+	public function offsetUnset($key) {		
 		$this->headers[$key] = '';
 	}
 	/**@- */
 	
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseRedirect extends HTTPResponse {
 	public function __construct($location) {
 		parent::__construct("", HTTPResponse::REDIRECT);
@@ -153,6 +158,10 @@ class HTTPResponseRedirect extends HTTPResponse {
 	}
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponsePermanentRedirect extends HTTPResponse {
 	public function __construct($location) {
 		parent::__construct("", HTTPResponse::PERMANENT_REDIRECT);
@@ -160,6 +169,10 @@ class HTTPResponsePermanentRedirect extends HTTPResponse {
 	}
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseGone extends HTTPResponse {
 	
 	public function __construct($location) {
@@ -167,30 +180,51 @@ class HTTPResponseGone extends HTTPResponse {
 	}
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseUnauthorized extends HTTPResponse {
 	public function __construct($body = "") {
 		parent::__construct($body, self::UNAUTHORIZED);
 	}
 }
 
-class HttpResponseBadRequest extends HTTPResponse {
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
+class HTTPResponseBadRequest extends HTTPResponse {
 	public function __construct($body = "400 Bad Request") {
 		parent::__construct($body, self::BAD_REQUEST);
 	}
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseNotFound extends HTTPResponse {
 	public function __construct($body = "404 Not Found") {
 		parent::__construct($body, self::NOT_FOUND);
 	}
 }
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseForbidden extends HTTPResponse {
 	public function __construct($body = "403 Forbidden") {
 		parent::__construct($body, self::FORBIDDEN);
 	}
 }
 
+/**
+ * 
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseNotModified extends HTTPResponse {
 	public function __construct($expiration_seconds = 3600, $must_revalidate = true) {
 		parent::__construct('', self::NOT_MODIFIED);
@@ -201,13 +235,25 @@ class HTTPResponseNotModified extends HTTPResponse {
 		
 		if ($must_revalidate)
 			$this['Cache-Control'] = 'must-revalidate';
-		
 	}
 }
 
+/**
+ * A response with a `405 Method Not Allowed` HTTP status. The constructor takes
+ * a list of permitted HTTP methods use for the URI; the following example 
+ * will result in a response with the `Allow` header set to `GET, POST`
+ * 
+ * 	$method_not_allowed = new HTTPResponseMethodNotAllowed(array('GET', 'POST'));
+ * 
+ * @param array $allowed_methods
+ * @param mixed $body
+ * @see AllowedHeaders
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPResponseMethodNotAllowed extends HTTPResponse {
-	public function __construct(array $allowed_methods) {
-		parent::__construct('405 Method Not Allowed', self::METHOD_NOT_ALLOWED);
+	public function __construct(array $allowed_methods, $body = NULL) {
+		parent::__construct(is_null($body) ? '405 Method Not Allowed' : $body, self::METHOD_NOT_ALLOWED);
 		$this['Allow'] = implode(', ', $allowed_methods);
 	}
 }

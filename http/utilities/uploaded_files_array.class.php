@@ -72,7 +72,6 @@ class UploadedFile extends SplFileInfo {
 		if (file_exists($new_path))
 			throw new IOException("File {$new_path} exists!");
 		
-		// throws `CobwebErrorException` this fails
 		move_uploaded_file($this->file['tmp_name'], $new_path);
 		
 		return new SplFileInfo($new_path);

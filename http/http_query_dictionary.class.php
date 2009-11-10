@@ -5,6 +5,10 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @package Cobweb
+ * @subpackage HTTP
+ */
 class HTTPQueryDictionary extends ImmutableArray {
 	
 	public function get($key, $nullvalue = NULL) {

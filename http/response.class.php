@@ -13,23 +13,25 @@
  */
 abstract class Response implements ArrayAccess {
 	
+	/** @var mixed */
 	public $body;
 	
 	/**
-	 * Write the specified content to this response
+	 * Append the specified content to the body of this response.
 	 * @param  string   $contents content to write
 	 * @return Response           this response
 	 */
 	abstract public function write($contents);
 	
 	/**
-	 * Finalizes this response
-	 * @return Response
+	 * Finalizes and outputs this response.
+	 * @return Response this response object
 	 */
 	abstract public function flush();
 	
 	/**
 	 * Returns the HTTP status code of this response
+	 * 
 	 * @return integer HTTP status code
 	 */
 	abstract public function code();
