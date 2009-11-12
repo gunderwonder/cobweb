@@ -28,5 +28,7 @@ Cobweb includes a number of Open Source projects in this directory (/vendor). Ea
 - PHPUTF8 (/vendor/utf8) is licenced under the LGPL:
 	http://phputf8.cvs.sourceforge.net/viewvc/phputf8/utf8/LICENSE?view=markup
 	
+- RFC3696 Email Parser is licence under the CC Attribution-ShareAlike 2.5 licence:
+	http://creativecommons.org/licenses/by-sa/2.5/
 	
 
