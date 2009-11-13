@@ -1,8 +1,17 @@
 <?php
+/**
+ * @version $Id$
+ * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
+ * @copyright Upstruct Berlin Oslo
+ */
 
 /**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Tests
+ * @version $Revision$
  * @see http://code.djangoproject.com/browser/django/trunk/tests/regressiontests/text/tests.py?rev=5609
- **/
+ */
 class IRIToURITest extends CobwebTestCase {
 	
 	public function test() {
