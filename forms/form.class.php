@@ -5,154 +5,131 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-require_once dirname(__FILE__) . '/../vendor/utf8/utf8.php';
-
-/**
- * TODO: add global error messages/translations
- * 
- * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
- * @package    Cobweb
- * @subpackage Forms
- * @version    $Revision$
- */
 abstract class Form implements IteratorAggregate {
 	
-	private $fields = array();
-	private $errors;
-	private $data;
+	protected $form_fields = array();
+	protected $errors = array();
+	protected $form_data = array();
+	protected $clean_data = array();
 	
-	private $clean_data = array();
-
+	protected $id_format;
 	
-	public function __construct($data = NULL) {
-		$this->clean_data = array();
+	public function __construct($form_data = NULL, array $properties = array()) {
+		$properties = new ImmutableArray($properties);
+		$this->id_format = $properties->get('id_format', 'id_%s');
 		
+		$this->form_data = !is_null($form_data) ? new ImmutableArray($form_data) : NULL;
 		$this->configure();
-		$this->bind($data);
-		
-		$this->inspect();
+		$this->clean_data = $this->isBound() ? $this->clean() : NULL;
 	}
 	
-	public function bind($data = NULL) {
-		$this->data = $data;
-		if ($this->isBound())
-			$this->validate($data);
+	/**
+	 * @return array
+	 */
+	protected function clean() {
+		$clean_data = array();
+		foreach ($this as $name => $field) {
+			$data = $field->widget()->extract($this->form_data, $name);
+			try {
+				$clean_data[$name] = $field->clean($data);
+			} catch (FormValidationException $e) {
+				$this->errors[$name] = $e->messages();
+			}
+		}
+		return $clean_data;
 	}
 	
-	abstract protected function configure() ;
-	
-	private function inspect() {
-	
-	}
-	
+	/**
+	 * @return bool
+	 */
 	public function isBound() {
-		return !is_null($this->data);
+		return !is_null($this->form_data);
 	}
 	
-	public function isValid() {
-		return is_null($this->errors());
-	}
+	/**
+	 * 
+	 */
+	abstract protected function configure();
 	
+	/**
+	 * @return array
+	 */
 	public function errors() {
-		if (!$this->isBound())
-			return false;
-		
 		return $this->errors;
 	}
 	
-	public function addError($field_id, $error_message) {
-		if (!isset($this->errors[$field_id]))
-			$this->errors[$field_id] = array();
-			
-		$this->errors[$field_id][] = $error_message;
-			
+	/**
+	 * @param string $name
+	 * @return array
+	 */
+	public function error($name) {
+		return isset($this->errors[$name]) ? $this->errors[$name] : array();
 	}
 	
-	public function validate() {
-		
-		$this->clean_data = array();
-		
-		foreach ($this->fields as $key => $field) {
-				
-			try {
-				$this->clean_data[$key] = $field->clean(
-					$field->widget()->value($this->data, FormField::HTMLize($key), NULL));
-			
-			} catch (FormValidationException $e) {
-				$this->errors[FormField::HTMLize($key)] = $e->errors();
-			}
+	public function identify($name) {
+		return sprintf($this->id_format, $name);
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isValid() {
+		return $this->isBound() && empty($this->errors);
+	}
+	
+	/**
+	 * @param string $key
+	 * @param FormField $field
+	 */
+	public function __set($key, $field) {
+		if ($field instanceof FormField) {
+			$field->bindToForm($this, $key);
+			$this->form_fields[$key] = $field;
+		} else
+			throw new InvalidArgumentException('Can only assingn form field objects to form');
+	}
 
-		}
-	}
-	
-	protected function __set($key, $value) {
-		if ($value instanceof FormField) {
-			$this->fields[$key] = $value;
-			$value->setForm($this);
-			$value->setName($key);
-			return;
-		}
-		// $this->$key = $value;
-			
-	}
-	
+	/**
+	 * @param string $key
+	 * @return FormField
+	 */
 	public function __get($key) {
-		$getter = 'get' . ucfirst($key);
-
-		if (method_exists($this, $getter))
-			return $this->$getter();
-		
-		$htmlized_key = FormField::HTMLize($key);
-		
-		if (isset($this->clean_data[$key]))
-			return $this->clean_data[$key];
-		if (isset($this->clean_data[$htmlized_key]))
-			return $this->clean_data[$key];
-		
-		if (isset($this->data[$key]))
-			return $this->data[$key];
-		if (isset($this->data[$htmlized_key]))
-			return $this->data[$htmlized_key];
-		
-		if (!isset($this->fields[$key]))
-			throw new FormException("Field '{$key}' is not defined");
-			
-		throw new FormException("Unknown field '{$key}'");
+		if (!isset($this->form_fields[$key]))	
+			throw new InvalidArgumentException("Unknown field '{$key}'");
+		return $this->form_fields[$key];
 	}
 	
-	public function assign($object) {
-		if (!$this->isValid())
-			throw new FormException('Cannot assign form values to object. The form is invalid');
-		
-		if (!is_object($object))
-			throw new UnexpectedValueException('Can only assign form values to objects.');
-			
-		foreach ($this->fields as $clean_data => $field)
-			$object->$key = $this->clean_data[$key];
-	}
-	
-	public function data() {
-		return $this->data;
-	}
-	
-	public function field($key) {
-		return $this->fields[$key];
-	}
-	
+	/**
+	 * @return array
+	 */
 	public function cleanData() {
 		return $this->clean_data;
 	}
 	
+	public function data() {
+		return $this->form_data;
+	}
+	
+	/**
+	 * @param string $key
+	 * @return Iterator
+	 */
 	public function getIterator() {
-		return new ArrayIterator($this->fields);
+		return new ArrayIterator($this->form_fields);
 	}
 	
 	public static function create(array $specification, $data = NULL) {
-		return new ConcreteForm($specification, $data);
+		return new AnonymousForm($specification, $data);
 	}
-	
-	
-	
-	
 }
 
+final class AnonymousForm extends Form {
+	
+	public function __construct(array $specification, $data = NULL, array $properties = array()) {
+		foreach ($specification as $key => $field)
+			$this->__set($key, $field);		
+		parent::__construct($data, $properties);
+	}
+	
+	public function configure() { }
+}

@@ -104,22 +104,24 @@ class CobwebLoader {
 		// forms
 		'Form' => '/forms/form.class.php',
 		'FormField' => '/forms/form_field.class.php',
+		
+		'TextField' => '/forms/fields/text_fields.inc.php',
+		'EmailField' => '/forms/fields/text_fields.inc.php',
+		'RegexField' => '/forms/fields/text_fields.inc.php',
+		'DateField' => '/forms/fields/datetime_fields.inc.php',
+		'NumericField' => '/forms/fields/numeric_fields.inc.php',
+		
 		'FormWidget' => '/forms/form_widget.class.php',
-		'FormException' => '/forms/form_exceptions.inc.php',
-		'FormValidationException' => '/forms/form_exceptions.inc.php',
-		'IntegerField' => '/forms/fields/integer_field.class.php',
-		'TextField' => '/forms/fields/text_field.class.php',
-		'TextInput' => '/forms/widgets/text_input.class.php',
-		// 'PasswordInput' => '/forms/widgets/password_input.class.php',
-		'EmailField' => '/forms/fields/email_field.class.php',
-		'PositiveIntegerField' => '/forms/fields/positive_integer_field.class.php',
-		'ConcreteForm' => '/forms/concrete_form.class.php',
+		'InputWidget' => '/forms/widgets/input_widgets.inc.php',
+		'TextInput' => '/forms/widgets/input_widgets.inc.php',
 		
 		// misc
 		'Permalinkable' => '/core/permalinkable.interface.php',
 		'CWDateTime' => '/utilities/datetime.inc.php',
 		'JSON' => '/utilities/json.class.php',
 		'MIMEType' => '/http/mime_type.class.php',
+		
+		'CobwebTestCase' => '/test/cobweb_test_case.class.php'
 	);
 	
 	private static $external_classes = array();
@@ -133,12 +135,12 @@ class CobwebLoader {
 		
 		if (isset(self::$cobweb_classes[$class])) {
 			require_once COBWEB_DIRECTORY . self::$cobweb_classes[$class];
-			return class_exists($class);
+			return class_exists($class, false);
 		}
 		
 		if (isset(self::$external_classes[$class])) {
 			require_once self::$external_classes[$class];
-			return class_exists($class);
+			return class_exists($class, false);
 		}
 		
 		return false;

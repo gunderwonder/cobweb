@@ -13,28 +13,16 @@
  */
 abstract class FormWidget {
 	
-	private $specification = array(
-		'initial' => ''
-	);
+	protected $attributes = array();
 	
-	abstract public function render($data = NULL);
-	
-	public function value(array $data, $key, $default) {
-		if (!isset($data[$key]))
-			return $default;
-			
-		
-		return $data[$key];
+	public function __construct($attributes = array()) {
+		$this->attributes = $attributes;
 	}
 	
-	public function initialData() {
-		return $this->specification['initial'];
+	public function extract($data, $field_name) {
+		return $data->get($field_name, NULL);
 	}
 	
-	public function setField(FormField $field) {
-		$this->field = $field;
-		$this->specification = array_merge($this->specification, 
-			                               $this->field->specification);
-	}
+	abstract function render(FormField $field, $data, $attributes = array());
 	
 }

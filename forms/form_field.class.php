@@ -1,119 +1,116 @@
 <?php
-/**
- * @version $Id$
- * @licence http://www.opensource.org/licenses/bsd-license.php The BSD License
- * @copyright Upstruct Berlin Oslo
- */
 
-/**
- * @author     Øystein Riiser Gundersen
- * @package    Cobweb
- * @subpackage Forms
- * @version    $Revision$
- */
+class FormValidationException extends UnexpectedValueException {
+	protected $messages = array();
+	
+	public function __construct($messages) {
+		$this->messages = is_string($messages) ? array($messages) : $messages;
+		
+		parent::__construct(implode(', ', $this->messages));
+	}
+	
+	public function messages() {
+		return $this->messages;
+	}
+}
+
 abstract class FormField {
 	
-	private $defaults = array(
-		'required' => true,
-		'initial' => ''
-	);
-	
-	private $error_messages = array(
-		'required' => "'%s' is required"
-	);
-	
-	private $label;
-	
-	public function __construct(array $specification = array(),
-		                        FormWidget $widget = NULL) {
-			
-		$this->specification = new ImmutableArray(array_merge($this->defaults, $specification));
-		$this->widget = is_null($widget) ? $this->defaultWidget() : $widget;
+	protected $properties = array();
+	protected $form = NULL;
+	protected $name = NULL;
+
+	public function __construct(array $properties = array()) {
 		
-		// merge default error messages with the concrete class' messages
-		$this->error_messages = array_merge($this->error_messages, 
-			$this->errorMessages());
-			
-		// merge error message with specification if provided
-		if (isset($this->specification['error_messages'])) {
-			$this->error_messages = array_merge(
-				$this->error_messages, 
-				$this->specification['error_messages']);
-			// unset($this->specification['error_messages']);
-		}
-	}
-	
-	public function clean($value) {
-		if (empty($value) && $this->isRequired())
-			$this->error('required');
+		$properties = array_merge($this->defaultProperties(), $properties);
+		$properties = new ImmutableArray($properties);
+		$this->required = $properties->get('required', true);
+		$this->widget = $properties->get('widget', new TextInput());
+		$this->label = $properties->get('label', '');
 		
-		return (string)$value;
+		$this->error_messages = array_merge(
+			array(
+				'required' => __('This field is required.'),
+        		'invalid' => __('Enter a valid value.'),
+			),
+			$properties->get('error_messages', array())
+		);
+		
+		$this->properties = $properties;
+		$this->initialize();
 	}
 	
-	public static function propertize($field_name) {
-		return str_replace('-', '_', $field_name);
-	}
+	protected function initialize() { }
 	
-	
-	public static function HTMLize($field_name) {
-		return str_replace('_', '-', $field_name);
-	}
-	
-	public static function labelize($field_name) {
-		return ucfirst(str_replace('_', ' ', $field_name));
+	public function isRequired() {
+		return $this->required;
 	}
 	
 	public function label() {
-		if ($label = $this->specification->get('label', NULL))
-			return $label;
-		return self::labelize($this->name);
-	}
-	
-	public function defaultWidget() {
-		return new TextInput();
+		return $this->label;
 	}
 	
 	public function widget() {
 		return $this->widget;
 	}
 	
-	public function isRequired() {
-		return $this->specification['required'];
+	/**
+	 * @throws FormValidationException
+	 */
+	public function clean($value) {
+		if ($this->required && in_array($value, array(NULL, '')))
+			throw new FormValidationException($this->error_messages['required']);
+		return $value;
 	}
 	
-	public function setForm(Form $form) {
-		$this->form = $form;
-	}
-	
-	public function setName($name) {
-		$this->name = $name;
-	}
-	
-	public function error($error_message_key, array $arguments = NULL) {
-		if (is_null($arguments))
-			$arguments = array($this->label());
-			
-		throw new FormValidationException(
-			array(call_user_func_array(
-				  	'sprintf', 
-			      	array_merge(array($this->error_messages[$error_message_key]), 
-			      	            $arguments)
-				)
-			)
-		);
-	}
-	
-	public function errorMessage($key) {
-		return $this->error_messages[$key];
-	}
-	
-	protected function errorMessages() {
+	protected function defaultProperties() {
 		return array();
 	}
 	
-	public function __toString() {
-		return $this->widget()->render();
+	public function name() {
+		if (!$this->isBoundToForm())
+			throw new CobwebException('This field is not bound to any form and is not named');
+		return $this->name;
 	}
-
+	
+	public function bindToForm(Form $form, $name) {
+		$this->form = $form;
+		$this->name = $name;
+		if (!$this->label)
+			$this->label = $this->createLabel($name);
+	}
+	
+	protected function isBoundToForm() {
+		return !is_null($this->form);
+	}
+	
+	public function id() {
+		if (!$this->isBoundToForm())
+			return '';
+			
+		// form handles ids
+		return $this->form->identify($this->name);
+	}
+	
+	public function render() {
+		if (!$this->isBoundToForm())
+			throw new CobwebException('This field is not bound to any form and cannot be rendered');
+		
+		$data = $this->form->isBound() ? $this->form->data()->get($this->name, '') : '';
+		return $this->widget()->render($this, $data);
+	}
+	
+	protected function createLabel($name) {
+		return str_replace('_', ' ', utf8_ucfirst($name));
+	}
+	
+	protected function message() {
+		$arguments = func_get_args();
+		$message_type = array_shift($arguments);
+		$message = $this->error_messages[$message_type];
+		if (!empty($arguments))
+			$message = vsprintf($message, $arguments);
+		return $message;
+	}
 
 }
