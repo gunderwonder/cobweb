@@ -2,7 +2,7 @@
 if (!defined('COBWEB_DIRECTORY'))
 	define('COBWEB_DIRECTORY', realpath(dirname(__FILE__) . '/../'));
 if (!defined('COBWEB_PROJECT_DIRECTORY'))
-	define('COBWEB_PROJECT_DIRECTORY', COBWEB_DIRECTORY . '/test/fixtures/fixture-project');
+	define('COBWEB_PROJECT_DIRECTORY', COBWEB_DIRECTORY . '/test/support/testy');
 
 require_once 'PHPUnit/Framework.php';
 require_once COBWEB_DIRECTORY . '/core/cobweb_bootstrap.inc.php';
@@ -40,7 +40,7 @@ class CobwebTestSuiteLoader {
 			if ($file->isDir() 
 			&& !$file->isDot() 
 			&& strpos($file->getFilename(), '.') !== 0 
-			&& $file->getFilename() != 'fixtures')
+			&& $file->getFilename() != 'support')
 				new CobwebTestSuiteLoader($this->parent_suite, $file->getPathname());
 	}
 	
