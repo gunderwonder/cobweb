@@ -1,6 +1,8 @@
 <?php
 if (!defined('COBWEB_DIRECTORY'))
 	define('COBWEB_DIRECTORY', realpath(dirname(__FILE__) . '/../'));
+if (!defined('COBWEB_PROJECT_DIRECTORY'))
+	define('COBWEB_PROJECT_DIRECTORY', COBWEB_DIRECTORY . '/test/fixtures/fixture-project');
 
 require_once 'PHPUnit/Framework.php';
 require_once COBWEB_DIRECTORY . '/core/cobweb_bootstrap.inc.php';
