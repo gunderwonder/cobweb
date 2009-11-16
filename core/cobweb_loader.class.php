@@ -110,6 +110,8 @@ class CobwebLoader {
 		'RegexField' => '/forms/fields/text_fields.inc.php',
 		'DateField' => '/forms/fields/datetime_fields.inc.php',
 		'NumericField' => '/forms/fields/numeric_fields.inc.php',
+		'IntegerField' => '/forms/fields/numeric_fields.inc.php',
+		'FloatField' => '/forms/fields/numeric_fields.inc.php',
 		
 		'FormWidget' => '/forms/form_widget.class.php',
 		'InputWidget' => '/forms/widgets/input_widgets.inc.php',
