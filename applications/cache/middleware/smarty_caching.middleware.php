@@ -21,7 +21,6 @@ class SmartyCachesTemplate extends Annotation { }
  */
 class SmartyCachingMiddleware extends Middleware {
 	
-	
 	public function processAction(Request $request, Action $action) {
 		$template_name = NULL;
 		if ($action->hasAnnotation('SmartyCachesTemplate'))
