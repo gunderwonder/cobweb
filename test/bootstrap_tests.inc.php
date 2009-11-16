@@ -10,6 +10,9 @@ require_once COBWEB_DIRECTORY . '/core/cobweb_bootstrap.inc.php';
 if (!defined('PHPUnit_MAIN_METHOD'))
    define('PHPUnit_MAIN_METHOD', 'CobwebTest::main');
 
+Cobweb::initialize()->setup();
+Doctrine::loadData(COBWEB_PROJECT_DIRECTORY . '/data/fixtures');
+
 class CobwebTestSuiteLoader {
 	
 	public static function main() { }
@@ -17,7 +20,6 @@ class CobwebTestSuiteLoader {
 	public static function suite() {
 		$suite = new PHPUnit_Framework_TestSuite('Cobweb Test Suite');
 		$loader = new CobwebTestSuiteLoader($suite, NULL);
-
 		return $suite;
 	}
 	
@@ -59,4 +61,5 @@ class CobwebTestSuiteLoader {
 			ucfirst($basename)
 		) . 'Test';
 	}	
+	
 }

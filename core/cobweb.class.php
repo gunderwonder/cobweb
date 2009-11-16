@@ -115,7 +115,7 @@ class Cobweb implements CobwebDeclaration {
 		return self::$cobweb;
 	}
 	
-	protected function setup() {
+	public function setup() {
 		
 		date_default_timezone_set(Cobweb::get('TIMEZONE'));
 		
