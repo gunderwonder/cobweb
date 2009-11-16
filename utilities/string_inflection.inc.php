@@ -19,14 +19,12 @@ function str_slugify($string) {
     
     $slug = strip_tags($string);
 
-	$strip = array(
-		',', '-', '.', '!', '?', ':', ';', '=', 
-		'(', ')', '/', '\\', '&', '$', '\'', '"'
-	);
-	$slug = str_replace($strip, '', $slug);    
+	$slug = preg_replace('/[,!\?:;=\(\)\/\\&\$\"]/u', '', trim($slug));
+	$slug = preg_replace('/([\._\s\']+)/u', '-', $slug);
+	$slug = preg_replace('/-+/u', '-', $slug);
 	
     $slug = htmlentities(trim($slug), ENT_NOQUOTES, 'UTF-8');
-    $slug = strtolower(preg_replace('/[_\s\.\'"]+/u', '-', trim($slug)));
+    $slug = strtolower($slug);
   	$slug = preg_replace(
     	'/&(\w+)(uml|acute|grave|circ|tilde|slash|ring|lig);/',
     	'$1',
@@ -47,7 +45,7 @@ function str_titlecase($string) {
 }
 
 
-function stringify($object) {
+function stringify($object, $level = 1) {
 	static $seen = array();
 	
 	if (is_null($object))
@@ -69,24 +67,25 @@ function stringify($object) {
 
 		else if (method_exists($object, '__toString'))
 			$vars = "{$object->__toString()}";
-			
+		
+		$indent = !empty($vars) ? "\n" . str_repeat("\t", $level) : '';
 		$vars = stringify($vars);
 		$seen = array();
-		return "< $class ⇒ $vars >";
-	
+		$level = 1;
+		return "< {$class} ⇒ {$indent}{$vars} >";
 	
 	} else if (is_array($object)) {
 		if (empty($object))
 			return '[]';
-		$array = '[';
+		$array = "[\n" . str_repeat("\t", $level);
 		for ($i = 0; $i < count($object); $i++) {
 			if (!is_int(key($object)))
-				$array .= ' ' . key($object) . ' → ' . stringify(current($object));
+				$array .= ' ' . key($object) . ' → ' . stringify(current($object), $level + 1);
 			else
-				$array .= ' ' . stringify(current($object))	;
+				$array .= ' ' . stringify(current($object), $level + 1)	;
 				
 			if ($i != count($object) - 1)
-				$array .= ',';
+				$array .= ",\n" . str_repeat("\t", $level);
 			
 			next($object);
 		}
