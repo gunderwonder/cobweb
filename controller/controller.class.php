@@ -30,18 +30,21 @@
  * controller action's URL with {@link Controller::redirect()}.
  * 
  * Controller actions are named with labels in the URL configuration and other
- * places using the pattern '<application_name>.<controller_name>.<action_name>'.
+ * places using the pattern
+ *  
+ * 	<application_name>.<controller_name>.<action_name>.
  * 
  * Here is an example of a controller action that renders the string 'Hello, world'
  * to the user agent. If this action belonged to an application 'hello' it would
- * have been labeled 'hello.hello_world.greet'.
- * <code>
- * class HelloWorldController extends Controller {
- *     public function greet() {
- *          return new HTTPResponse('Hello, world!');
- *     }
- * }
- * </code>
+ * have been labeled `hello.hello_world.greet`.
+ * 
+ * 	class HelloWorldController extends Controller {
+ * 	    public function greet() {
+ * 	         return new HTTPResponse('Hello, world!');
+ * 	    }
+ * 	}
+ * 
+ * {@link ReflectionClass::getConstants()}
  * 
  * @package    Cobweb
  * @subpackage Dispatch
@@ -54,16 +57,29 @@
  */
 abstract class Controller implements RequestProcessor {
 	
-	/** @var Request */
+	/**
+	 * The request object of this controller instance
+	 * @var Request
+	 **/
 	protected $request;
 		
-	/** @var HTTPQueryDictionary */
+	/**
+	 * The POST parameters of the request
+	 * @var HTTPQueryDictionary 
+	 **/
 	protected $POST;
 		
-	/** @var HTTPQueryDictionary */
+	/**
+	 * The GET parameters of the request
+	 * @var HTTPQueryDictionary
+	 **/
 	protected $GET;
 	
-	protected $action;
+	/**
+	 * The {@link Action} instance which represents the invocation of this controller
+	 * @var Action
+	 **/
+	private $action;
 	
 	/**
 	 * Instantiates a Controller
@@ -71,7 +87,12 @@ abstract class Controller implements RequestProcessor {
 	 * @param Dispatcher $dispatcher  the request dispatcher
 	 * @param Request    $request     the request object
 	 */
-	public function __construct(Dispatcher $dispatcher, Request $request, Resolver $resolver, Action $action = NULL) {
+	public function __construct(
+			Dispatcher $dispatcher, 
+			Request $request, 
+			Resolver $resolver, 
+			Action $action = NULL) {
+				
 		$this->request = $request;
 		$this->dispatcher = $dispatcher;
 		$this->action = $action;
@@ -92,9 +113,7 @@ abstract class Controller implements RequestProcessor {
 	 * {@link Controller} subclasses may override this method for object
 	 * initialization code. It is called after the controller is instantiated.
 	 */
-	protected function initialize() {
-		
-	}
+	protected function initialize() { }
 	
 	/**
 	 * Invoke a Controller's method specified by its label
@@ -118,10 +137,9 @@ abstract class Controller implements RequestProcessor {
 	 */
 	protected function redirect($label, array $arguments = array()) {
 		if (str_starts_with($label, '@'))
-			$url = Cobweb::get('__RESOLVER__')->reverse(utf8_substr($label, 1), $arguments);
+			$url = Cobweb::instance()->resolver()->reverse(substr($label, 1), $arguments);
 		else
 			$url = $label;
-			
 		return new HTTPResponseRedirect($url);
 	}
 	
@@ -159,7 +177,7 @@ abstract class Controller implements RequestProcessor {
 	
 	/**
 	 * Proxy for the request object's {@link Request::method()} method. Returns
-	 * one of 'GET', 'POST', 'DELETE' or 'UPDATE'
+	 * one of `HEAD`, `GET`, `POST`, `DELETE` or `UPDATE`
 	 * 
 	 * @see    Request::method()
 	 * @return string the HTTP method of the request
@@ -170,7 +188,7 @@ abstract class Controller implements RequestProcessor {
 	
 	/**
 	 * Proxy for the request object's {@link Request::isPOST()} method. Returns
-	 * true if the method of the request is a 'POST', false otherwise.
+	 * true if the method of the request is a `POST`, false otherwise.
 	 * 
 	 * @see    Request::isPOST()
 	 * @return bool whether or not the request was made using the 'POST' method
@@ -181,7 +199,7 @@ abstract class Controller implements RequestProcessor {
 	
 	/**
 	 * Proxy for the request object's {@link Request::isGET()} method. Returns
-	 * true if the method of the request is a 'GET', false otherwise.
+	 * true if the method of the request is a `GET`, false otherwise.
 	 * 
 	 * @see    Request::isGET()
 	 * @return bool whether or not the request was made using the 'GET' method
@@ -192,7 +210,7 @@ abstract class Controller implements RequestProcessor {
 	
 	/**
 	 * Proxy for the request object's {@link Request::isDELETE()} method. Returns
-	 * true if the method of the request is a 'DELETE', false otherwise.
+	 * true if the method of the request is a `DELETE`, false otherwise.
 	 * 
 	 * @see    Request::isDELETE()
 	 * @return bool whether or not the request was made using the 'DELETE' method
@@ -203,7 +221,7 @@ abstract class Controller implements RequestProcessor {
 	
 	/**
 	 * Proxy for the request object's {@link Request::isPUT()} method. Returns
-	 * true if the method of the request is a 'PUT', false otherwise.
+	 * true if the method of the request is a `PUT`, false otherwise.
 	 * 
 	 * @see    Request::isPUT()
 	 * @return bool whether or not the request was made using the 'PUT' method
@@ -222,9 +240,11 @@ abstract class Controller implements RequestProcessor {
 		return $value;
 	}
 	
-	
 	// REQUEST PROCESSOR IMPLEMENTATION
-	/** @Concealed */
+	/** 
+	 * @return HTTPResponse
+	 * @Concealed
+	 **/
 	public function processRequest(Request $request) {
 		return NULL;
 	}
