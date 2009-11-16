@@ -19,7 +19,6 @@ class CWDateTime extends DateTime {
 		
 		if (is_int($time)) {
 			if (method_exists($this, 'setTimestamp')) {
-				
 				$this->setTimestamp($time);
 				return;
 			}
@@ -31,6 +30,14 @@ class CWDateTime extends DateTime {
 	public static function create($time = 'now') {
 		if ($time instanceof DateTime)
 			return self::createfromDateTime($time);
+		$arguments = func_get_args();
+		if (count($arguments) > 2) {
+			$time = new CWDateTime();
+			for ($i = 3; $i < 6; $i++)
+				if (!isset($arguments[$i])) $arguments[] = 0;
+			call_user_func_array(array($time, 'set'), $arguments);
+			return $time;
+		}
 		return new CWDateTime($time);
 	}
 	
