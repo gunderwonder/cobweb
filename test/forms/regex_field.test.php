@@ -103,4 +103,69 @@ class RegexFieldTest extends CobwebTestCase {
 		}
 		
 	}
+	
+	/**
+	 * @dataProvider slugs
+	 */
+	public function testSlugField($value, $should_be_valid) {
+		$field = new SlugField();
+		
+		if ($should_be_valid)
+			$this->assertEquals($field->clean($value), $value);
+		else {
+			try {
+				$field->clean($value);
+				$this->fail('Invalid slug should throw validation exception');
+			} catch (FormValidationException $e) {
+				$this->assertEquals($e->messages(), array(
+					__(
+						"Enter a valid 'slug' consisting of letters, " .
+						"numbers, uderscores or hyphens."
+					)
+				));
+			}
+		}
+	}
+	
+	public function slugs() {
+		return array(
+			array('^&!', false),
+			array('a-nice-valid-slug', true),
+			array('øystein-riiser-gunderseon', false) // XXX: locale
+		);
+	}
+	
+	/**
+	 * @dataProvider slugifiedSlugs
+	 */
+	public function testSlugFieldWithSlugifier($value, $normalized, $should_be_valid) {
+		$field = new SlugField(array('slugify_value' => true));
+		
+		if ($should_be_valid)
+			$this->assertEquals($field->clean($value), $normalized);
+		else {
+			try {
+				$field->clean($value);
+				$this->fail('Invalid slug should throw validation exception');
+			} catch (FormValidationException $e) {
+				$this->assertEquals($e->messages(), array(
+					__(
+						"Enter a valid 'slug' consisting of letters, " .
+						"numbers, uderscores or hyphens."
+					)
+				));
+			}
+		}
+	}
+	
+	public function slugifiedSlugs() {
+		return array(
+			array('^&!', NULL, false),
+			array('a-nice-valid-slug', 'a-nice-valid-slug', true),
+			array('øystein-riiser-gundersen', 'oystein-riiser-gundersen', true),
+			array('øystein--riiser--gundersen', 'oystein-riiser-gundersen', true),
+			array('Øystein Riiser Gundersen', 'oystein-riiser-gundersen', true),
+			array('Øystein  Riiser  Gundersen', 'oystein-riiser-gundersen', true),
+		);
+	}
 }

@@ -55,6 +55,12 @@ class TextField extends FormField {
 	}
 }
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Forms
+ * @version $Revision$
+ */
 class RegexField extends TextField {
 	
 	protected $regex = NULL;
@@ -73,6 +79,55 @@ class RegexField extends TextField {
 	}
 }
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Forms
+ * @version $Revision$
+ */
+class SlugField extends RegexField {
+	
+	const SLUG_RE = '/^[-\w]+$/';
+	
+	protected $slugify_value = false;
+	
+	public function __construct(array $properties = array()) {
+		parent::__construct(self::SLUG_RE, $properties);
+	}
+	
+	public function initialize() {
+		$this->slugify_value = $this->properties->get('slugify_value', false);
+	}
+	
+	public function clean($value) {
+		try {
+			$value = parent::clean($value);
+		} catch (FormValidationException $e) {
+			if ($this->slugify_value)
+				return parent::clean(str_slugify($value));
+			throw $e;
+		}
+		return $value;
+	}
+	
+	protected function defaultProperties() {
+		return array(
+			'error_messages' => array(
+				'invalid' => __(
+					"Enter a valid 'slug' consisting of letters, " .
+					"numbers, uderscores or hyphens."
+				)
+			)
+		);
+	}
+}
+
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Forms
+ * @version $Revision$
+ */
 class CustomField extends FormField {
 	protected $cleaner = NULL;
 	
@@ -87,6 +142,12 @@ class CustomField extends FormField {
 	}
 }
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Forms
+ * @version $Revision$
+ */
 class CustomTextField extends TextField {
 	protected $cleaner = NULL;
 	
@@ -102,6 +163,12 @@ class CustomTextField extends TextField {
 	}
 }
 
+/**
+ * @author Øystein Riiser Gundersen <oystein@upstruct.com>
+ * @package Cobweb
+ * @subpackage Forms
+ * @version $Revision$
+ */
 class EmailField extends TextField {
 	
 	private static $included_validator = false;
