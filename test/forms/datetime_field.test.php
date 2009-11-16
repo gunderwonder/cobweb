@@ -1,5 +1,4 @@
 <?php
-
 class DateTimeFieldTest extends CobwebTestCase {
 	
 	/**
@@ -61,6 +60,13 @@ class DateTimeFieldTest extends CobwebTestCase {
 		
 		try {
 			$field->clean('2006-10-25 14:30:45');
+			$this->fail('Invalid datetime should throw validation exception');
+		} catch (FormValidationException $e) {
+			$this->assertEquals($e->messages(), array(__('Enter a valid date/time.')));
+		}
+		
+		try {
+			$field->clean('2006 10 25 2:30 PMø');
 			$this->fail('Invalid datetime should throw validation exception');
 		} catch (FormValidationException $e) {
 			$this->assertEquals($e->messages(), array(__('Enter a valid date/time.')));
