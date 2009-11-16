@@ -33,7 +33,7 @@ class UserController extends Controller {
 		}
 		
 		return $this->render(
-			$temaplate_name, array('login_error' => $login_error),
+			$template_name, array('login_error' => $login_error),
 			$login_error ? HTTPResponse::UNAUTHORIZED : HTTPResponse::OK
 		);
 	}
@@ -41,6 +41,7 @@ class UserController extends Controller {
 	public function logout($redirect = NULL) {
 		$this->request->session->end();
 		$redirect_url = $redirect ? $redirect : Cobweb::get('LOGIN_URL');
+		
 		return $this->redirect($redirect_url);
 	}
 	
