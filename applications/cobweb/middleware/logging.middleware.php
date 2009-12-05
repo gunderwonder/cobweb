@@ -5,14 +5,23 @@
  * @copyright Upstruct Berlin Oslo
  */
 
+/**
+ * @package Cobweb
+ * @subpackage Logging
+ */
 class LoggingDisabled extends Annotation { }
+
+/**
+ * @package Cobweb
+ * @subpackage Logging
+ */
 class LoggingEnabled extends Annotation { }
 
 /**
  * @author     Øystein Riiser Gundersen <oystein@upstruct.com>
  * @version    $Rev$
  * @package    Cobweb
- * @subpackage Cobweb Application
+ * @subpackage Logging
  */
 class LoggingMiddleware extends Middleware {
 	
