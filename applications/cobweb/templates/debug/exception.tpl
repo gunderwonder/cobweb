@@ -21,7 +21,6 @@
 
 <body>
 	<div id="header"><h1>Cobweb caught an exception</h1></div>
-	
 	<div id="exception">
 		    <h3>Caught exception</h3>
 		    <h2>{$exception_class}</h2>
