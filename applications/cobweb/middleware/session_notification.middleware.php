@@ -134,9 +134,15 @@ class SessionNotificationMiddleware extends Middleware {
 		}
 		
 		if (Cobweb::get('AUTOCLEAR_SESSION_NOTIFICATIONS', true) &&
-			!($response instanceof HTTPResponseRedirect))
+			!$this->isRedirectResponse($request))
 			$request->notifications->clear();
 		return $response;
+	}
+	
+	private function isRedirectResponse($response) {
+		return  $response instanceof HTTPResponseRedirect ||
+		       ($response instanceof AJAXResponse && 
+			    $response->body['command'] == 'redirect');
 	}
 	
 }
