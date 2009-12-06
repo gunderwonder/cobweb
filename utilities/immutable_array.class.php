@@ -16,7 +16,7 @@ class ImmutableArray implements ArrayAccess, IteratorAggregate, Countable {
 	protected $array;
 	
 	public function __construct($array) {
-		$this->array = $array;
+		$this->array = $array instanceof ImmutableArray ? $array->toArray() : $array;
 	}
 	
 	public function get($key, $nullvalue) {
