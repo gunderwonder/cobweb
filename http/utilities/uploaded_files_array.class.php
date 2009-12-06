@@ -21,13 +21,13 @@ class UploadedFilesArray extends ImmutableArray {
 	 * Lazy load {@link UploadedFile} objects
 	 */
 	public function offsetGet($key) {
-		if (!isset($this[$key]))
+		if (!isset($this->array[$key]))
 			throw new OutOfBoundsException("No uploaded file with key '$key'");
 		
-		if ($this[$key] instanceof UploadedFile)
-			return $this[$key];
+		if ($this->array[$key] instanceof UploadedFile)
+			return $this->array[$key];
 		$this->array[$key] = new UploadedFile($this->array[$key]);
-		return $this[$key];
+		return $this->array[$key];
 		
 	}
 	
