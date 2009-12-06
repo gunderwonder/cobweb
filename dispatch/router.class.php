@@ -47,4 +47,8 @@ class Router {
 		return self::$router;
 	}
 	
+	public static function reverse($label, array $arguments = array()) {
+		return Cobweb::instance()->resolver()->reverse($label, $arguments);
+	}
+	
 }
