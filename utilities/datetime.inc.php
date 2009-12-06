@@ -18,10 +18,10 @@ class CWDateTime extends DateTime {
 	public function __construct($time = 'now') {
 		
 		if (is_int($time)) {
-			if (method_exists($this, 'setTimestamp')) {
-				$this->setTimestamp($time);
-				return;
-			}
+			// if (method_exists($this, 'setTimestamp')) {
+			// 	$this->setTimestamp($time);
+			// 	return;
+			// }
 			$time = "@{$time}";
 		}
 		parent::__construct($time);
