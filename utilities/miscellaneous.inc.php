@@ -75,7 +75,7 @@ function iri_to_uri($iri) {
 		'/', '#', '%', '[', ']', '=', ':', ';', '$',
 		 '&', '(', ')', '+', ',', '!', '?', '*'
 	);
-	$SAFE_CHARACTERS_RE = '{([/#%\\[\\]\\=\\:;\\$&\\(\\)\\+,\\!\\?\\*])}';
+	$SAFE_CHARACTERS_RE = '/([\/#%\\[\\]\\=\\:;\\$&\\(\\)\\+,\\!\\?\\*])/';
 	$parts = preg_split($SAFE_CHARACTERS_RE, $iri, -1, PREG_SPLIT_DELIM_CAPTURE);
 	$uri = '';
 	foreach ($parts as $part)
@@ -97,11 +97,11 @@ function http_parse_qvalues($qvalues) {
 		$q = (is_null($q) || !is_numeric($q)) ? 1.0 : floatval($q);
 		$values[(string)$q][] = $value;
 	}
-
 	krsort($values, SORT_NUMERIC);
 	return $values;
 }
 
+// translation
 if (!function_exists('__')) {
 	if (!function_exists('_')) {
 		function __($message) {
@@ -113,6 +113,18 @@ if (!function_exists('__')) {
 		}
 	}
 }
+if (!function_exists('__n')) {
+	if (!function_exists('ngettext')) {
+		function __n($message, $message_plural, $count) {
+			return $message;
+		}
+	} else {
+		function __n($message, $message_plural, $count) {
+			return ngettext($message, $message_plural, $count);
+		}
+	}
+}
+
 
 /**
  * Encodes reserved HTML characters (<, >, &, ", ') in the specified `$value`
