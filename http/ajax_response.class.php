@@ -150,6 +150,8 @@ class AJAXResponse extends HTTPResponse {
 	 * @return AJAXResponse      the response object
 	 */
 	public static function redirect($url, $message = '') {
+		if (is_array($url))
+			$url = call_user_func_array(array('Router', 'reverse'), $url);
 		return new AJAXResponse(
 			AJAXResponse::SUCCESS, 
 			AJAXResponse::REDIRECT,
@@ -158,11 +160,13 @@ class AJAXResponse extends HTTPResponse {
 		);
 	}
 	
-	public static function send($content) {
+	public static function send($content, $message = '') {
+		if ($content instanceof Template)
+			$content = (string)$content;
 		return new AJAXResponse(
 			AJAXResponse::SUCCESS,
 			AJAXResponse::UPDATE,
-			'',
+			$message,
 			array('content' => $content)
 		);
 	}
