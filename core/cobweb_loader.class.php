@@ -136,13 +136,13 @@ class CobwebLoader {
 	public static function load($class) {
 		
 		if (isset(self::$cobweb_classes[$class])) {
-			require_once COBWEB_DIRECTORY . self::$cobweb_classes[$class];
-			return class_exists($class, false);
+			require COBWEB_DIRECTORY . self::$cobweb_classes[$class];
+			return true;
 		}
 		
 		if (isset(self::$external_classes[$class])) {
-			require_once self::$external_classes[$class];
-			return class_exists($class, false);
+			require self::$external_classes[$class];
+			return true;
 		}
 		
 		return false;
