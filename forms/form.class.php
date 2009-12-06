@@ -19,6 +19,7 @@ abstract class Form implements IteratorAggregate {
 		$this->id_format = $properties->get('id_format', 'id_%s');
 		
 		$this->form_data = !is_null($form_data) ? new ImmutableArray($form_data) : NULL;
+		
 		$this->configure();
 		$this->clean_data = $this->isBound() ? $this->clean() : NULL;
 	}
@@ -29,6 +30,7 @@ abstract class Form implements IteratorAggregate {
 	protected function clean() {
 		$clean_data = array();
 		foreach ($this as $name => $field) {
+			
 			$data = $field->widget()->extract($this->form_data, $name);
 			try {
 				$clean_data[$name] = $field->clean($data);

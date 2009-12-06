@@ -91,10 +91,9 @@ class DateField extends DatetimeField {
 	
 	protected $INPUT_FORMATS = array(
     	'%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y',
-    	'%b %d %Y', '%b %d, %Y',
-    	'%d %b %Y', '%d %b, %Y',
-    	'%B %d %Y', '%B %d, %Y',
-    	'%d %B %Y', '%d %B, %Y',
+ 		'%m.%d.%y', '%m.%d.%Y', '%b %d %Y', '%b %d, %Y',
+    	'%d %b %Y', '%d %b, %Y', '%B %d %Y', 
+		'%B %d, %Y', '%d %B %Y', '%d %B, %Y',
 	);
 	
 	protected $input_formats = array();

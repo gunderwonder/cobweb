@@ -92,12 +92,26 @@ abstract class FormField {
 		return $this->form->identify($this->name);
 	}
 	
+	public function renderLabel() {
+		if (!$this->isBoundToForm())
+			throw new CobwebException('This field is not bound to any form and cannot be rendered');
+		return $this->widget()->renderLabel($this);
+	}
+	
 	public function render() {
 		if (!$this->isBoundToForm())
 			throw new CobwebException('This field is not bound to any form and cannot be rendered');
 		
 		$data = $this->form->isBound() ? $this->form->data()->get($this->name, '') : '';
 		return $this->widget()->render($this, $data);
+	}
+	
+	public function __toString() {
+		try {
+			return $this->render();
+		} catch (Exception $e) {
+			return '';
+		}
 	}
 	
 	protected function createLabel($name) {
