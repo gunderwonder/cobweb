@@ -7,6 +7,10 @@
 
 require_once dirname(__FILE__) . '/smarty_template.class.php';
 
+/**
+ * @package Cobweb
+ * @subpackage Templating
+ */
 class SmartyTemplateAdapter extends TemplateAdapter {
 	
 	private $smarty;
