@@ -28,7 +28,7 @@ class AuthentificationMiddleware extends Middleware {
 				if (!$request->user)
 					$request->user = new $userclass();
 		
-				Cobweb::log('Authenticated user %o', $request->user);
+				Cobweb::log('Authenticated user %o', $request->user->username);
 			} else
 				unset($request->session['cobweb-user-id']);
 		}
@@ -48,8 +48,13 @@ class AuthentificationMiddleware extends Middleware {
 			$request->path() != Cobweb::get('LOGIN_URL') &&
 			$action->hasAnnotation('RequiresAuthentification')) {
 			
-			return new HTTPResponseRedirect(Cobweb::get('LOGIN_URL'));
+			$redirect_url = Cobweb::get('LOGIN_URL');
+			if ($request->path() != Cobweb::get('LOGIN_REDIRECT_URL'))
+				$redirect_url .= '?' . http_build_query(array('next' => $request->URI()), '', '&');
+			
+			return new HTTPResponseRedirect($redirect_url);
 		}
+		
 	}
 	
 	
