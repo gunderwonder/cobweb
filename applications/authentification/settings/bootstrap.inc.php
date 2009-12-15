@@ -8,5 +8,7 @@
 class RequiresAuthentification extends Annotation { }
 class RequiresPermission extends Annotation { }
 
-CobwebLoader::register('Authentificator', dirname(__FILE__) . '/../authentificator.interface.php');
-CobwebLoader::register('CobwebAuthentificator', dirname(__FILE__) . '/../backends/cobweb_authentificator.class.php');
+CobwebLoader::autoload(AUTHENTIFICATION_APPLICATION_DIRECTORY, array(
+	'Authentificator', '/libarary/authentificator.interface.php',
+ 	'ModelAuthentificator', '/library/model_authentificator.class.php'
+));
