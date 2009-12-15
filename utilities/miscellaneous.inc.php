@@ -101,6 +101,14 @@ function http_parse_qvalues($qvalues) {
 	return $values;
 }
 
+function identity_function($x) {
+	return $x;
+}
+
+function empty_function() {
+	return NULL;
+}
+
 // translation
 if (!function_exists('__')) {
 	if (!function_exists('_')) {
