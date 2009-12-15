@@ -42,8 +42,8 @@ class CobwebLoader {
 		'UploadedFile' => '/http/utilities/uploaded_files_array.class.php',
 		
 		// collections
-		'ImmutableArray' => '/utilities/immutable_array.class.php',
-		'MutableArray' => '/utilities/mutable_array.class.php',
+		'ImmutableArray' => '/utilities/array.inc.php',
+		'MutableArray' => '/utilities/array.inc.php',
 		
 		// middleware
 		'MiddlewareManager' => '/middleware/middleware_manager.class.php',
