@@ -14,7 +14,8 @@ CobwebLoader::autoload(DOCTRINE_APPLICATION_DIRECTORY, array(
 	'CobwebDoctrineManager' => '/library/cobweb_doctrine_manager.class.php'
 ));
 
-CobwebDoctrineManager::connect(Cobweb::get('DATABASE_SOURCE_NAME'));
+if ($dsn = Cobweb::get('DATABASE_SOURCE_NAME', false))
+	CobwebDoctrineManager::connect($dsn);
 
 if (Cobweb::get('DOCTRINE_MODEL_LOADING', true)) {
 	Cobweb::log('Loading models...');
