@@ -8,3 +8,6 @@
 class RequiresAuthentification extends Annotation { }
 class RequiresPermission extends Annotation { }
 
+CobwebLoader::autoload(AUTHENTIFICATION_APPLICATION_DIRECTORY, array(
+	'RequiresHTTPAuthentification' => '/annotations/authentification_annotations.inc.php'
+));
