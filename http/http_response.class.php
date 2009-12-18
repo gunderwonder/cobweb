@@ -185,8 +185,9 @@ class HTTPResponseGone extends HTTPResponse {
  * @subpackage HTTP
  */
 class HTTPResponseUnauthorized extends HTTPResponse {
-	public function __construct($body = "") {
+	public function __construct($body = '', $realm_name = '') {
 		parent::__construct($body, self::UNAUTHORIZED);
+		$this['WWW-Authenticate'] = "Basic realm=\"{$realm_name}\"";
 	}
 }
 
