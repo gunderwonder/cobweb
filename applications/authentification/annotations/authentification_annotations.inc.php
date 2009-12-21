@@ -14,7 +14,7 @@ class RequiresHTTPAuthentification extends ActionAnnotation {
 		$password = $request->META['PHP_AUTH_PW'];
 		
 		$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
-		$user = $userclass::authenticate($username, $password);
+		$user = call_user_func(array($userclass, 'authenticate'), $username, $password);
 		
 		if (!$user)
 			return new HTTPResponseUnauthorized($this->login_failure_body, $this->realm);
