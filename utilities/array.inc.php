@@ -3,20 +3,20 @@
 
 class CWArray extends ArrayObject {
 	
-	public function __construct($traverable = array(), $iterator_class = 'ArrayIterator') {
+	public function __construct($traversable = array(), $iterator_class = 'ArrayIterator') {
 		
-		parent::__construct(self::coerce($traverable), 0, $iterator_class);
+		parent::__construct(self::coerce($traversable), 0, $iterator_class);
 	}
 	
 	public static function coerce($traversable) {
 		if (is_array($traversable))
 			return $traversable;
-		else if ($traverable instanceof ArrayObject)
-			return $traverable->getArrayCopy();
-		else if ($traverable instanceof Iterator)
+		else if ($traversable instanceof ArrayObject)
+			return $traversable->getArrayCopy();
+		else if ($traversable instanceof Iterator)
 			return iterator_to_array($traverable);
-		else if ($traverable instanceof IteratorAggregate)
-			return iterator_to_array($traverable->getIterator());
+		else if ($traversable instanceof IteratorAggregate)
+			return iterator_to_array($traversable->getIterator());
 		return (array)$traverable;
 	}
 	

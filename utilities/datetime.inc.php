@@ -16,14 +16,8 @@ class CWDateTime extends DateTime {
 	const DATE_SQL = 'Y-m-d H:i:s';
 
 	public function __construct($time = 'now') {
-		
-		if (is_int($time)) {
-			// if (method_exists($this, 'setTimestamp')) {
-			// 	$this->setTimestamp($time);
-			// 	return;
-			// }
+		if (is_int($time))
 			$time = "@{$time}";
-		}
 		parent::__construct($time);
 	}
 
@@ -44,7 +38,7 @@ class CWDateTime extends DateTime {
 	public static function createfromDateTime(DateTime $dt) {
 		if ($dt instanceof CWDateTime)
 			return clone $dt;
-		return new CWDateTime($dt->format('U'));
+		return new CWDateTime(intval($dt->format('U')));
 	}
 	
 	public function set($year = NULL, $month = NULL, $day = NULL, 
@@ -103,7 +97,6 @@ class CWDateTime extends DateTime {
 	}
 	
 	public function timestamp() {
-		// PHP >= 5.3
 		if (method_exists($this, 'getTimestamp'))
 			return $this->getTimestamp();
 			

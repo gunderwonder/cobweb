@@ -88,7 +88,7 @@ function iri_to_uri($iri) {
  * array of header values types ordered and indexed by their quality value
  *  
  * @param string $qvalues
- * @return retu
+ * @return return array
  */
 function http_parse_qvalues($qvalues) {
 	$values = array();
@@ -101,10 +101,32 @@ function http_parse_qvalues($qvalues) {
 	return $values;
 }
 
+function lookup_attribute($item, $attribute_name) {
+	if (isset($item->$attribute_name))
+		return $item->$attribute_name;
+	else if (isset($item[$attribute_name]))
+		return $item[$attribute_name];
+	else if (method_exists($item, $attribute_name))
+		return $item->$attribute_name();
+	return NULL;
+}
+
+/**
+ * The identity function (a function which takes one argument and returns it)
+ * 
+ * @param mixed $x
+ * @return mixed
+ */
 function identity_function($x) {
 	return $x;
 }
 
+/**
+ * The emtpy function (a function which takes no arguments and returns NULL)
+ * 
+ * @param mixed $x
+ * @return NULL
+ */
 function empty_function() {
 	return NULL;
 }
