@@ -11,7 +11,7 @@
  * @subpackage HTTP Utilities
  * @version    $Revision$
  */
-class UploadedFilesArray extends ImmutableArray {
+class UploadedFilesArray extends CWArray {
 	
 	public function __construct($files) {
 		parent::__construct($files);	
@@ -21,14 +21,13 @@ class UploadedFilesArray extends ImmutableArray {
 	 * Lazy load {@link UploadedFile} objects
 	 */
 	public function offsetGet($key) {
-		if (!isset($this->array[$key]))
+		if (!parent::offsetExists($key))
 			throw new OutOfBoundsException("No uploaded file with key '$key'");
 		
-		if ($this->array[$key] instanceof UploadedFile)
-			return $this->array[$key];
-		$this->array[$key] = new UploadedFile($this->array[$key]);
-		return $this->array[$key];
-		
+		if (parent::offsetGet($key) instanceof UploadedFile)
+			parent::offsetGet($key);
+		parent::offsetSet($key, new UploadedFile(parent::offsetGet($key)));
+		return parent::offsetGet($key);
 	}
 	
 }
