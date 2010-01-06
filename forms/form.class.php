@@ -5,7 +5,7 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-abstract class Form implements IteratorAggregate {
+abstract class Form implements IteratorAggregate, ArrayAccess {
 	
 	protected $form_fields = array();
 	protected $errors = array();
@@ -22,6 +22,8 @@ abstract class Form implements IteratorAggregate {
 		
 		$this->configure();
 		$this->clean_data = $this->isBound() ? $this->clean() : NULL;
+		if ($this->isValid())
+			$this->formClean();
 	}
 	
 	/**
@@ -30,7 +32,6 @@ abstract class Form implements IteratorAggregate {
 	protected function clean() {
 		$clean_data = array();
 		foreach ($this as $name => $field) {
-			
 			$data = $field->widget()->extract($this->form_data, $name);
 			try {
 				$clean_data[$name] = $field->clean($data);
@@ -39,6 +40,21 @@ abstract class Form implements IteratorAggregate {
 			}
 		}
 		return $clean_data;
+	}
+	
+	protected function formClean() {	
+		foreach ($this as $name => $field) {
+			$cleaner_method_name = 'clean' . str_replace('_', '', $name);
+			try {
+				if (method_exists($this, $cleaner_method_name))
+					$this->clean_data[$name] = call_user_func(
+						array($this, $cleaner_method_name), 
+						$this->clean_data[$name]
+					);
+			} catch (FormValidationException $e) {
+				$this->errors[$name] = $e->messages();
+			}
+		}
 	}
 	
 	/**
@@ -106,6 +122,23 @@ abstract class Form implements IteratorAggregate {
 	 */
 	public function cleanData() {
 		return $this->clean_data;
+	}
+	
+	// ArrayAccess implementation
+	public function offsetExists($offset) {
+		return isset($this->clean_data[$offset]);
+	}
+	
+	public function offsetGet($offset) {
+		return $this->clean_data[$offset];
+	}
+	
+	public function offsetSet($offset, $value) {
+		throw new Exception('Cannot change clean form data');
+	}
+	
+	public function offsetUnset($offset) {
+		throw new Exception('Cannot unset clean form data');
 	}
 	
 	public function data() {
