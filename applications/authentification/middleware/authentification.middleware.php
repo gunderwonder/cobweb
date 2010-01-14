@@ -12,6 +12,7 @@
  * @version    $Revision$
  */
 class AuthentificationMiddleware extends Middleware {
+	
 		
 	public function processAction(Request $request, Action $action) {
 		if (isset($request->user))
@@ -22,7 +23,7 @@ class AuthentificationMiddleware extends Middleware {
 			$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
 			$user = Model::table($userclass)->find($user_id);
 				
-			if ($user) {
+			if ($user && (!isset($user->is_active) || $user->is_active)) {
 				$request->user = $user;
 				$request->user->setAuthenticated(true);
 				if (!$request->user)
@@ -48,7 +49,8 @@ class AuthentificationMiddleware extends Middleware {
 			$request->path() != Cobweb::get('LOGIN_URL') &&
 			$action->hasAnnotation('RequiresAuthentification')) {
 			
-			$redirect_url = Cobweb::get('LOGIN_URL');
+			$annotation =  $action->annotation('RequiresAuthentification');
+			$redirect_url = $annotation->loginURL(Cobweb::get('LOGIN_URL'));
 			if ($request->path() != Cobweb::get('LOGIN_REDIRECT_URL'))
 				$redirect_url .= '?' . http_build_query(array('next' => $request->URI()), '', '&');
 			
