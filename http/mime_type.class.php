@@ -21,7 +21,7 @@ abstract class MIMEType {
 	const TEXT = 'text/plain';
 	
 	const JAVASCRIPT = 'application/x-javascript';
-	const JPEG = 'image/jpg';
+	const JPEG = 'image/jpeg';
 	const PNG = 'image/png';
 	const GIF = 'image/gif';
 	const BMP = 'image/bmp';
