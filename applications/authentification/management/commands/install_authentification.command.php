@@ -22,7 +22,7 @@ class InstallAuthentificationCommand extends CobwebManagerCommand {
 			'Usergroup', 
 			'Permission', 
 			'UsergroupPermission', 
-			'Userpermission')
+			'UserPermission')
 		);
 		
 		$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
