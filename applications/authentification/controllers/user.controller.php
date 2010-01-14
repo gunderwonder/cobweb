@@ -19,7 +19,7 @@ class UserController extends Controller {
 			$password = $this->POST->get('password', '');
 			
 			$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
-			$user = $userclass::authenticate($username, $password);
+			$user = call_user_func(array($userclass, 'authenticate'), $username, $password);
 			
 			if ($user) {
 				$this->request->session['cobweb-user-id'] = $user->id;
