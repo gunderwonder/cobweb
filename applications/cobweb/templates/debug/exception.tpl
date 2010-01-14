@@ -101,7 +101,7 @@
 						<pre style="background-color: #EAEAEA;">{foreach from=$trace.source_range item=line}{$line}
 {/foreach}</pre>
 					</div>
-					<pre><code class="stack-line-{$trace.stack_line-$trace.source_range[0]} php">{$trace.source}</code><pre>
+					<pre><code class="stack-line-{$trace.stack_line-$trace.source_range[0]} php">{$trace.source|escape}</code><pre>
 				</td>
 			</tr>
 			{/if}
