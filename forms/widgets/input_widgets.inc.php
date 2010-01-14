@@ -35,7 +35,7 @@ class PasswordInput extends InputWidget {
 
 	public function inputType() {
 		return 'password';
-	}	
+	}
 }
 
 class HiddenInput extends InputWidget {

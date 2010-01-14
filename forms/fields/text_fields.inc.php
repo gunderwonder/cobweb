@@ -73,8 +73,11 @@ class RegexField extends TextField {
 	public function clean($value) {
 		$value = parent::clean($value);
 		if ($value == '') return $value;
-		if (preg_match($this->regex, $value))	
-			return $value;
+		
+		if (!is_array($this->regex)) $this->regex = array($this->regex);
+		foreach ($this->regex as $pattern)
+			if (preg_match($pattern, $value))
+				return $value;
 		throw new FormValidationException(sprintf($this->error_messages['invalid']));
 	}
 }

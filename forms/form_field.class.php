@@ -92,18 +92,19 @@ abstract class FormField {
 		return $this->form->identify($this->name);
 	}
 	
-	public function renderLabel() {
+	public function renderLabel($attributes = array()) {
 		if (!$this->isBoundToForm())
 			throw new CobwebException('This field is not bound to any form and cannot be rendered');
-		return $this->widget()->renderLabel($this);
+		return $this->widget()->renderLabel($this, $attributes);
 	}
 	
-	public function render() {
+	public function render($attributes = array()) {
+		
 		if (!$this->isBoundToForm())
 			throw new CobwebException('This field is not bound to any form and cannot be rendered');
 		
 		$data = $this->form->isBound() ? $this->form->data()->get($this->name, '') : '';
-		return $this->widget()->render($this, $data);
+		return $this->widget()->render($this, $data, $attributes);
 	}
 	
 	public function __toString() {
@@ -125,6 +126,14 @@ abstract class FormField {
 		if (!empty($arguments))
 			$message = vsprintf($message, $arguments);
 		return $message;
+	}
+	
+	public function isValid() {
+		return !is_null($this->form) ? $this->form->error($this->name()) : true;
+	}
+	
+	public function errors() {
+		return !is_null($this->form) ? $this->form->error($this->name()) : array();
 	}
 
 }

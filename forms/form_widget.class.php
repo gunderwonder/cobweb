@@ -19,14 +19,13 @@ abstract class FormWidget {
 		$this->attributes = $attributes;
 	}
 	
-	public function extract($data, $field_name) {
-		return $data->get($field_name, NULL);
+	public function extract(FormField $field, $data) {
+		return $data->get($field->name(), NULL);
 	}
 	
 	abstract function render(FormField $field, $data, $attributes = array());
 	
-	public function renderLabel(FormField $field) {
-		$attributes = array();
+	public function renderLabel(FormField $field, $attributes = array()) {
 		if ($id = $field->id())
 			$attributes['for'] = $id;
 		$html_attributes = html_flatten_attributes($attributes);

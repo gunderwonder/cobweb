@@ -22,8 +22,7 @@ abstract class Form implements IteratorAggregate, ArrayAccess {
 		
 		$this->configure();
 		$this->clean_data = $this->isBound() ? $this->clean() : NULL;
-		if ($this->isValid())
-			$this->formClean();
+		if ($this->isBound()) $this->formClean();
 	}
 	
 	/**
@@ -32,7 +31,7 @@ abstract class Form implements IteratorAggregate, ArrayAccess {
 	protected function clean() {
 		$clean_data = array();
 		foreach ($this as $name => $field) {
-			$data = $field->widget()->extract($this->form_data, $name);
+			$data = $field->widget()->extract($field, $this->form_data);
 			try {
 				$clean_data[$name] = $field->clean($data);
 			} catch (FormValidationException $e) {
@@ -44,6 +43,8 @@ abstract class Form implements IteratorAggregate, ArrayAccess {
 	
 	protected function formClean() {	
 		foreach ($this as $name => $field) {
+			if (!isset($this->clean_data[$name]))
+				continue;
 			$cleaner_method_name = 'clean' . str_replace('_', '', $name);
 			try {
 				if (method_exists($this, $cleaner_method_name))
