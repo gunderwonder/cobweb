@@ -21,11 +21,11 @@ class UploadedFilesArray extends CWArray {
 	 * Lazy load {@link UploadedFile} objects
 	 */
 	public function offsetGet($key) {
-		if (!parent::offsetExists($key))
+		if (!$this->offsetExists($key))
 			throw new OutOfBoundsException("No uploaded file with key '$key'");
 		
 		if (parent::offsetGet($key) instanceof UploadedFile)
-			parent::offsetGet($key);
+			return parent::offsetGet($key);
 		parent::offsetSet($key, new UploadedFile(parent::offsetGet($key)));
 		return parent::offsetGet($key);
 	}
@@ -74,5 +74,13 @@ class UploadedFile extends SplFileInfo {
 		move_uploaded_file($this->file['tmp_name'], $new_path);
 		
 		return new SplFileInfo($new_path);
+	}
+	
+	public function name() {
+		return isset($this->file['name']) ? $this->file['name'] : NULL;
+	}
+	
+	public function __toString() {
+		return $this->name();
 	}
 }
