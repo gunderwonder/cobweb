@@ -58,8 +58,6 @@ class Cobweb implements CobwebDeclaration {
 				Router::connect($this->configuration->load(
 					COBWEB_PROJECT_DIRECTORY . '/settings/urls.conf.php'));
 			} catch (FileNotFoundException $e) {  }
-				
-			Cobweb::info('Proceeding with settings %o', $this->configuration->settings());
 		
 		    $this->middleware_manager = $this->createMiddlewareManager(
 		    	array(
