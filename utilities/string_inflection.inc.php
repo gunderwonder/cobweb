@@ -19,9 +19,10 @@ function str_slugify($string) {
     
     $slug = strip_tags($string);
 
-	$slug = preg_replace('/[,!\?:;=\(\)\/\\&\$\"]/u', '', trim($slug));
-	$slug = preg_replace('/([\._\s\']+)/u', '-', $slug);
+	$slug = preg_replace('/[,!\?:;=\(\)\/\\&\$\"\\\']/u', '', trim($slug));
+	$slug = preg_replace('/([–\._\s\']+)/u', '-', $slug);
 	$slug = preg_replace('/-+/u', '-', $slug);
+	$slug = trim($slug, '-');
 	
     $slug = htmlentities(trim($slug), ENT_NOQUOTES, 'UTF-8');
     $slug = strtolower($slug);
