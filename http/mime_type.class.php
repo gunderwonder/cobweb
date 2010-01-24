@@ -53,14 +53,17 @@ abstract class MIMEType {
 	 * 
 	 * @see   http://no.php.net/manual/en/function.mime-content-type.php#84361
 	 */
-	public static function guess($filename) {
-		// if (function_exists('finfo_open')) {
-		// 	$info = finfo_open(FILEINFO_MIME);
-		//     		$mime_type = finfo_file($info, $filename);
-		// 	finfo_close($info);
-		// 	if ($mime_type) 
-		// 		return $mime_type;
-		// }
+	public static function guess($filename, $is_file = false) {
+		if ($is_file && function_exists('finfo_open')) {
+			$info = finfo_open(FILEINFO_MIME);
+		    		$mime_type = finfo_file($info, $filename);
+			finfo_close($info);
+			if ($mime_type) {
+				if (($semicolon_offset = strpos($mime_type, ';')) !== false)
+					$mime_type = substr($mime_type, 0, $semicolon_offset);
+				return $mime_type;
+			}
+		}
 		
 		// if (function_exists('mime_content_type') && $result = mime_content_type($filename))
 		// 	return $result;
