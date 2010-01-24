@@ -45,8 +45,15 @@ class UploadedFile extends SplFileInfo {
 		parent::__construct($this->file['tmp_name']);
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function MIMEtype() {
 		return $this->file['type'];
+	}
+	
+	public function type() {
+		return MIMEType::guess($this->file['tmp_name'], true);
 	}
 	
 	public function exists() {
