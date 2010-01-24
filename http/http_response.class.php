@@ -113,6 +113,13 @@ class HTTPResponse extends Response {
 		return $this;
 	}
 	
+	public function setContentType($content_type, $charset = NULL) {
+		$this['Content-Type'] = $content_type;
+		if (!is_null($charset))
+			$this->setCharacterSet($charset);
+		return $this;
+	}
+	
 	public function contentType() {
 		return $this->content_type;
 	}
