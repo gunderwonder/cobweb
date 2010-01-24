@@ -118,7 +118,7 @@ class SlugField extends RegexField {
 			'error_messages' => array(
 				'invalid' => __(
 					"Enter a valid 'slug' consisting of letters, " .
-					"numbers, uderscores or hyphens."
+					"numbers, underscores or hyphens."
 				)
 			)
 		);
