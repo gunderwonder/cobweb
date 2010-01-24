@@ -132,9 +132,8 @@ class SessionNotificationMiddleware extends Middleware {
 			foreach ($request->notifications as $notification)
 				$response->body['notifications'][] = $notification->toArray();
 		}
-		
 		if (Cobweb::get('AUTOCLEAR_SESSION_NOTIFICATIONS', true) &&
-			!$this->isRedirectResponse($request))
+			!$this->isRedirectResponse($response))
 			$request->notifications->clear();
 		return $response;
 	}
