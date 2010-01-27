@@ -7,6 +7,7 @@
 
 class RequiresAuthentification extends Annotation {
 	protected $login_url = NULL;
+	protected $permissions = array();
 	
 	public function loginURL($default = NULL) {
 		return $this->login_url ? $this->login_url : $default;
@@ -15,5 +16,6 @@ class RequiresAuthentification extends Annotation {
 class RequiresPermission extends Annotation { }
 
 CobwebLoader::autoload(AUTHENTIFICATION_APPLICATION_DIRECTORY, array(
-	'RequiresHTTPAuthentification' => '/annotations/authentification_annotations.inc.php'
+	'RequiresHTTPAuthentification' => '/annotations/authentification_annotations.inc.php',
+	'UsergroupPermission' => '/models/user_group_permission.model.php'
 ));

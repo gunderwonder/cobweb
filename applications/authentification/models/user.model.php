@@ -26,25 +26,24 @@ class User extends Model {
     public function setTableDefinition() {
 		$this->hasColumn('firstname', 'string', 255, array('notnull' => true));
 		$this->hasColumn('lastname', 'string', 255, array('notnull' => true));
-		$this->hasColumn('username', 'string', 255,
-			array(
+		$this->hasColumn('username', 'string', 255, array(
 				'notblank' => true,
 				'notnull' => true,
 				'unique' => true
-			)
-		);
+		));
 		
         $this->hasColumn('password', 'string', 255, array('notnull' => true));
-		$this->hasColumn('email', 'string', 255,
-			array(
+		$this->hasColumn('email', 'string', 255, array(
 				'notnull' => true,
 				'notblank' => true
-			)
-		);
+		))
+		;
 		$this->hasColumn('is_staff', 'boolean', array('default' => false));
 		$this->hasColumn('is_superuser', 'boolean', array('default' => false));
-		
 		$this->hasColumn('usergroup_id', 'integer');
+		
+		if (Cobweb::get('AUTHENTIFICATION_USER_HAS_IS_ACTIVE_FLAG', false))
+			$this->hasColumn('is_active', 'boolean', array('default' => false));
 
     }
 
@@ -85,39 +84,35 @@ class User extends Model {
 		$this->authenticated = $is_authenticated;
 	}
 	
-	public function hasPermission($credential) {
+	public function hasPermission($permission) {
 		if (!$this->isAuthenticated())
 			return false;
 		
 		if ($this->is_superuser)
 			return true;
 		
-		$user = Model::query(Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User'), 'u')
-			->leftJoin('u.Permissions p')
-			->where('u.id = ?', $this->id)
-			->addWhere('p.credential = ?', $credential)
-			->fetchOne();
+		if ($permission == 'is_staff' && $this->is_staff)
+			return true;
 		
-		if ($user)
+		if (in_array($permission, $this->Permissions->toKeyValueArray('id', 'credential')))
 			return true;
 				
-		return $this->Usergroup->hasPermission($credential);
+		return $this->Usergroup->hasPermission($permission);
 	}
 	
-	public function hasPermissions(array $credentials) {
-		foreach ($credentials as $c)
-			if (!$this->hasPermission($c))
+	public function hasPermissions(array $permissions) {
+		foreach ($permissions as $permission)
+			if (!$this->hasPermission($permission))
 				return false;
 				
 		return true;
 	}
 	
 	public function permissions	() {
-		$permissions = array();
-		foreach ($this->Permissions as $permission)
-			$permissions[] = $permission->credential;
-
-		return array_merge($permissions, $this->Usergroup->permissions());
+		return array_merge(
+			$this->Permissions->toKeyValueArray('id', 'credential'), 
+			$this->Usergroup->permissions()
+		);
 	}
 	
 	

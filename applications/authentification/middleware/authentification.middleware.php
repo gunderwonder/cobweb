@@ -13,7 +13,6 @@
  */
 class AuthentificationMiddleware extends Middleware {
 	
-		
 	public function processAction(Request $request, Action $action) {
 		if (isset($request->user))
 			return;
@@ -33,6 +32,9 @@ class AuthentificationMiddleware extends Middleware {
 			} else
 				unset($request->session['cobweb-user-id']);
 		}
+		
+		if ($request->isAuthenticated() && isset($user->is_active) && !$user->is_active)
+			return Controller::invoke('authentification.user.logout');
 		
 		if ($request->isAuthenticated() &&
 		    $action->hasAnnotation('RequiresPermission')) {
