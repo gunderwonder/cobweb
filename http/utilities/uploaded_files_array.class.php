@@ -64,6 +64,12 @@ class UploadedFile extends SplFileInfo {
 		return $this->file['error'] != UPLOAD_ERR_OK;
 	}
 	
+	public function error() {
+		if (!$this->hasErrors())
+			return false;
+		return $this->file['error'];
+	}
+	
 	public function move($to) {
 		if (!$this->exists())
 			throw new IOException("Uploaded file {$this->file['name']} does not exist!");
