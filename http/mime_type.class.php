@@ -71,7 +71,7 @@ abstract class MIMEType {
 		if ($is_file && function_exists('mime_content_type'))
 			return self::stripContentEncodingPart(mime_content_type($filename));
 		
-		$suffix = pathinfo($filename, PATHINFO_FILENAME);
+		$suffix = pathinfo($filename, PATHINFO_EXTENSION);
 
         switch(strtolower($suffix)) {
             case "js" :
