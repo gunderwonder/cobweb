@@ -43,7 +43,13 @@ abstract class MIMEType {
 	const ZIP = 'application/zip';
 	const TAR = 'application/x-tar';
 	const FLASH = 'application/x-shockwave-flash';
+	const OCTET_STREAM = 'application/octet-stream';
 	
+	private static function stripContentEncodingPart($mime_type) {
+		if (($semicolon_offset = strpos($mime_type, ';')) !== false)
+			 return substr($mime_type, 0, $semicolon_offset);
+		return $mime_type;
+	}
 	
 	/**
 	 * Guesses the MIME type based on its filename.
@@ -58,17 +64,14 @@ abstract class MIMEType {
 			$info = finfo_open(FILEINFO_MIME);
 		    		$mime_type = finfo_file($info, $filename);
 			finfo_close($info);
-			if ($mime_type) {
-				if (($semicolon_offset = strpos($mime_type, ';')) !== false)
-					$mime_type = substr($mime_type, 0, $semicolon_offset);
-				return $mime_type;
-			}
+			if ($mime_type)
+				return self::stripContentEncodingPart($mime_type);
 		}
 		
-		// if (function_exists('mime_content_type') && $result = mime_content_type($filename))
-		// 	return $result;
+		if ($is_file && function_exists('mime_content_type'))
+			return self::stripContentEncodingPart(mime_content_type($filename));
 		
-		$suffix = substr($filename, strrpos($filename, '.') + 1, strlen($filename) - 1);
+		$suffix = pathinfo($filename, PATHINFO_FILENAME);
 
         switch(strtolower($suffix)) {
             case "js" :
@@ -163,7 +166,7 @@ abstract class MIMEType {
                 return self::FLASH;
 
             default:
-				return self::TEXT;
+				return self::OCTET_STREAM;
         }
     }
 }
