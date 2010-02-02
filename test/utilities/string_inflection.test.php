@@ -18,7 +18,7 @@ class StringInflectionTest extends CobwebTestCase {
 	public function testSlugifyForeignCharacters() {
 		$this->assertEquals(str_slugify('øystein rocks'), 'oystein-rocks');
 		$this->assertEquals(str_slugify('ålesund is a City'), 'alesund-is-a-city');
-		$this->assertEquals(str_slugify('Øystein\'s Macbook Pro'), 'oystein-s-macbook-pro');
+		$this->assertEquals(str_slugify('Øystein\'s Macbook Pro'), 'oysteins-macbook-pro');
 		$this->assertEquals(str_slugify('iñtërnâtiônàlizætiøn'), 'internationalizaetion');
 	}
 }
