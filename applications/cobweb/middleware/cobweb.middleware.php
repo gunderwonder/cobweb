@@ -94,6 +94,7 @@ EOS;
 		$to = '';
 		foreach ($administrators as $name => $address)
 			$to .= $name ? "{$name} <{$address}>, " : "{$address}, ";
+		trim($to, ',');
 		
 		
 		if ($to)
