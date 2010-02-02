@@ -91,11 +91,7 @@ Exception backtrace:
 EOS;
 		$exception_class = get_class($exception);		
 		$subject = "{$request->host()}: $exception_class caught";
-		$to = '';
-		foreach ($administrators as $name => $address)
-			$to .= $name ? "{$name} <{$address}>, " : "{$address}, ";
-		trim($to, ',');
-		
+		$to = join($administrators, ', ');
 		
 		if ($to)
 			try {
