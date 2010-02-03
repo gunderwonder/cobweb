@@ -43,8 +43,11 @@ class Dispatcher {
 		
 		// invoke the action, catching any exception it may throw
 		try {
+			$start = microtime(true);
 			$response = $action->invoke();
-			
+			Cobweb::info('Action invocaction ran for %o ms', 
+		            round((microtime(true) - $start) * 1000, 4));
+		
 		/* if an exception is thrown in the controller layer, let the middleware
 		 * handle it or rethrow the exception
 		 */
@@ -60,7 +63,7 @@ class Dispatcher {
 			throw $exception;
 		}
 		
-		Cobweb::info('Cobweb ran for %o milliseconds', 
+		Cobweb::info('Request dispatch ran for %o milliseconds', 
 		            round((microtime(true) - Cobweb::get('__COBWEB_START_TIME__')) * 1000, 4));
 		
 		// finally, return the response processed by the middleware

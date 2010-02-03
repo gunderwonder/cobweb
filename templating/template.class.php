@@ -15,6 +15,8 @@ class Template implements ArrayAccess {
 	/** @var string */
 	private $buffer;
 	
+	protected static $template_directories = NULL;
+	
 	/**  @var integer */
 	const RELATIVE_TEMPLATE_PATH = 10;
 	
@@ -110,11 +112,7 @@ class Template implements ArrayAccess {
 	 */
 	public static function loadTemplate($filename) {
 		
-		$template_directories = Cobweb::get('TEMPLATE_DIRECTORIES');
-		foreach (Cobweb::get('INSTALLED_APPLICATIONS') as $application)
-			$template_directories[] = Cobweb::loadApplication($application)->path() . '/templates';
-		
-		foreach ($template_directories as $directory) {
+		foreach (self::templateDirectories() as $directory) {
 			$template = $directory . '/' . $filename;	
 			if (file_exists($template))
 				return $template;
@@ -122,6 +120,20 @@ class Template implements ArrayAccess {
 		
 		throw new FileNotFoundException(
 			"Could not find template file '$filename'. Check your 'TEMPLATE_DIRECTORIES' setting");
+	}
+	
+	public static function templateDirectories() {
+		// memoize application template directories
+		if (!self::$template_directories) {
+			self::$template_directories = Cobweb::get('TEMPLATE_DIRECTORIES', array());
+			$applications = Cobweb::instance()->applicationManager()->applications();
+			foreach ($applications as $application) {
+				$template_directory = $application->path() . '/templates';
+				if (file_exists($template_directory))
+					self::$template_directories[] = $template_directory;
+			}
+		}
+		return self::$template_directories;
 	}
 	
 	/**

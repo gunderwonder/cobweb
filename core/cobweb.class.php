@@ -66,6 +66,7 @@ class Cobweb implements CobwebDeclaration {
 		    	)
 		    );
 		    $this->resolver = $this->createResolver(array('dispatcher' => $this->dispatcher));
+			$this->application_manager->loadApplications();
 		}
 	}
 	
@@ -101,8 +102,8 @@ class Cobweb implements CobwebDeclaration {
 	 * @deprecated
 	 */
 	public static function loadApplication($application_name) {
-		$application = self::$cobweb->applicationManager()->load($application_name);
-		return $application;
+		$applications = self::$cobweb->applicationManager()->applications();
+		return $applications[$application_name];
 		
 	}
 	

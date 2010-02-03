@@ -39,7 +39,10 @@ class DatetimeField extends FormField {
 	}
 	
 	protected function parseDate($value, $format) {
+		
 		if (($date_info = strptime($value, $format)) === false || $date_info['unparsed'])
+			return false;
+		if ($date_info['tm_year'] > 9999)
 			return false;
 		return $this->createDate($date_info);
 	}

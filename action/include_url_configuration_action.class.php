@@ -23,6 +23,9 @@ class IncludeURLConfigurationAction implements Action {
 			throw new CobwebConfigurationException(
 				"'{$this->application_name}' is not in your 'INSTALLED_APPLICATIONS'.");
 		
+		$applications = Cobweb::instance()->applicationManager()->applications();
+		$this->application = $applications[$this->application_name];
+		
 		$this->options = is_null($options) ? array() : $options;
 		$this->rules = NULL;
 	}
@@ -32,7 +35,7 @@ class IncludeURLConfigurationAction implements Action {
 	}
 	
 	protected function path() {
-		return "/{$this->application_name}/settings/{$this->file}.conf.php";
+		return "{$this->application->path()}/settings/{$this->file}.conf.php";
 	}
 	
 	public function hasAnnotation($annotation) {
@@ -51,14 +54,12 @@ class IncludeURLConfigurationAction implements Action {
 		if (!is_null($this->rules))
 			return $this->rules;
 		
-		foreach (Cobweb::get('APPLICATIONS_PATH') as $path) {
-			
-			$urls_path = $path . $this->path();
-			if (file_exists($urls_path)) {
-				$this->rules = require_once $urls_path;
-				return $this->rules;
-			}
+		$urls_path = $this->path();
+		if (file_exists($urls_path)) {
+			$this->rules = require $urls_path;
+			return $this->rules;
 		}
+		
 		throw new CobwebConfigurationException(
 			"No URL configuration file found for {$this->label}");
 	}

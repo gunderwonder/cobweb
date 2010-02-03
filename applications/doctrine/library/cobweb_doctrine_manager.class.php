@@ -18,31 +18,27 @@ class CobwebDoctrineManager {
 	private static $cached_model;
 	
 	public static function loadModels($lazy_load = false) {
-				
-		$applications = Cobweb::get('INSTALLED_APPLICATIONS');
+		$applications = Cobweb::instance()->applicationManager()->applications();
 		foreach ($applications as $application) {
+			$models_path = "{$application->path()}/models";
 			
-			foreach (Cobweb::get('APPLICATIONS_PATH') as $p) {
-				$models_path = "{$p}/{$application}/models";
-			
-				if (file_exists($models_path))
-					foreach (new DirectoryIterator($models_path) as $file)
-						if (!$file->isDir() && 
-						    	!$file->isDot() &&
-						    	!str_starts_with($file->getFilename(), '.')) {
-							
-							if (!$lazy_load) {
-								require_once $file->getPathname();
-							} else {
-								
-								CobwebLoader::register(
-									self::classify($file->getFilename()), 
-									$file->getPathname()
-								);
-							}
-							
-						}	
-			}	
+			if (file_exists($models_path)) {
+				foreach (new DirectoryIterator($models_path) as $file) {
+					if (!$file->isDir() && 
+					    	!$file->isDot() &&
+					    	!str_starts_with($file->getFilename(), '.')) {
+						
+						if (!$lazy_load) {
+							require_once $file->getPathname();
+						} else {
+							CobwebLoader::register(
+								self::classify($file->getFilename()), 
+								$file->getPathname()
+							);
+						}
+					}
+				}
+			}
 		}
 	}
 	

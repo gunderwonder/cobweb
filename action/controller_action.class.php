@@ -157,14 +157,13 @@ class ControllerAction extends CallableAction {
 	
 
 	private function loadControllerFile($controller_label) {
-	
-		foreach (Cobweb::get('APPLICATIONS_PATH') as $path) {
-			$file = "{$path}/{$this->application_name}/controllers" .
-			        "/{$controller_label}.controller.php";
-			if (file_exists($file)) {
-				require_once($file);
-				return;
-			}
+		$applications = Cobweb::instance()->applicationManager()->loadedApplications();
+		$application_path = $applications[$this->application_name]->path();
+
+		$file = "{$application_path}/controllers/{$controller_label}.controller.php";
+		if (file_exists($file)) {
+			require_once($file);
+			return;
 		}
 		
 		throw new FileNotFoundException(

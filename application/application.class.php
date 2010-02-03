@@ -25,18 +25,17 @@ class Application {
 		$this->request = $request;
 		$this->name = $application_name;
 		$this->path = $path;
-		
-		$this->initialize();
 	}
 	
-	protected function initialize() {
+	public function load() {
 		$application_path_constant = $this->pathConstantName();
 		if (!defined($application_path_constant))
 			define($application_path_constant, $this->path);
 		unset($application_path_constant);
 		
 		if (file_exists($this->path . '/settings/bootstrap.inc.php'))
-			require_once $this->path . '/settings/bootstrap.inc.php';
+			require $this->path . '/settings/bootstrap.inc.php';
+		return $this;
 	}
 	
 	protected function pathConstantName() {

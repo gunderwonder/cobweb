@@ -27,15 +27,15 @@ class User extends Model {
 		$this->hasColumn('firstname', 'string', 255, array('notnull' => true));
 		$this->hasColumn('lastname', 'string', 255, array('notnull' => true));
 		$this->hasColumn('username', 'string', 255, array(
-				'notblank' => true,
-				'notnull' => true,
-				'unique' => true
+			'notblank' => true,
+			'notnull' => true,
+			'unique' => true
 		));
 		
         $this->hasColumn('password', 'string', 255, array('notnull' => true));
 		$this->hasColumn('email', 'string', 255, array(
-				'notnull' => true,
-				'notblank' => true
+			'notnull' => true,
+			'notblank' => true
 		))
 		;
 		$this->hasColumn('is_staff', 'boolean', array('default' => false));

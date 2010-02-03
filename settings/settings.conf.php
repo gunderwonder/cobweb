@@ -22,7 +22,6 @@ $settings = array(
 if (defined('COBWEB_PROJECT_DIRECTORY'))
 	$settings = array_merge($settings, array(
 		'APPLICATIONS_PATH' => array(
-			COBWEB_DIRECTORY . '/applications',
 			COBWEB_PROJECT_DIRECTORY . '/applications'
 		),
 		'COMPILED_TEMPLATES_DIRECTORY' => COBWEB_PROJECT_DIRECTORY . '/templates/compiled',
