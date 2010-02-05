@@ -23,10 +23,10 @@
 			value="${application.build.directory}/rev-${svn.revision.head}" />
 			
 		<svnexport 
-			repositoryurl="${svn.repository.basedir}/${svn.repository.basedir}"
+			repositoryurl="${svn.repository.baseurl}/${svn.repository.basedir}"
    			todir="${svn.export.directory}" />
 	
-        <tar destfile="${project.basedir}/${phing.project.name}.tar.bz2" compression="bzip2">
+        <tar destfile="${application.build.directory}/${phing.project.name}.tar.bz2" compression="bzip2">
  			<fileset dir="${svn.export.directory}">
 	 			<exclude name="${application.build.directory}" />
  			</fileset>
