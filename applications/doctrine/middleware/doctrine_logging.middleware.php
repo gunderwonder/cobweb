@@ -39,28 +39,26 @@ class DoctrineLoggingMiddleware extends Middleware {
 		$time = 0;
 		if (Cobweb::get('DEBUG')) {
 			foreach ($this->profiler as $event) {
-					
 				$time += $event->getElapsedSecs();
-				if ($event->getName() == 'query' || $event->getName() == 'execute') {
-					
+				$logger->log(array('Executed event %o in %o ms',
+						$event->getName(), round($event->getElapsedSecs() * 1000, 4)));
+				if ($event->getName() == 'execute' || $event->getName() == 'query') {
 					$query_count++;
-					$logger->log(array('Executed query in %o seconds:', $event->getElapsedSecs()));
-					$logger->info(array('%o', 
-						$this->formatSQL($event->getQuery())));
-				} else
-					$logger->log(array('Executed event %o in %o seconds',
-						$event->getName(), $event->getElapsedSecs()));
-					
+					$logger->info(array(
+						"%o\nwith parameters %o", 
+						$this->formatSQL($event->getQuery()), 
+						$event->getParams()
+					));
+				}
 			}
 		}
 
-		$logger->info(array('Doctrine spent %o seconds executing %o queries', $time, $query_count));
-		
+		$logger->info(array('Doctrine spent %o ms executing %o queries', round($time * 1000, 4), $query_count));
 		return $response;
 	}
 	
 	public function formatSQL($sql) {
-		$sql = preg_replace('/(\s)?(SELECT|FROM|WHERE|AND|OR|LEFT JOIN|ORDER BY|LIMIT|VALUES|INSERT INTO)(\s)/', "\n$2\n\t", $sql);
+		$sql = preg_replace('/(\s)?(SELECT|FROM|WHERE|AND|OR|LEFT JOIN|ORDER BY|LIMIT|VALUES|INSERT INTO|SET)(\s)/', "\n$2\n\t", $sql);
 		$sql = preg_replace('/,\s/', ",\n\t", $sql);
 		return trim($sql);
 	}
