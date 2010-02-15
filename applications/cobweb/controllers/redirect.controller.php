@@ -11,7 +11,7 @@
  * @package    Cobweb
  * @subpackage Cobweb Application
  */
-class RedirectController {
+class RedirectController extends Controller {
 	
 	public function to($url, $permanent = true) {
 		if (!$url) return new HTTPResponseGone();
