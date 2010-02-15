@@ -13,8 +13,8 @@
  */
 class RedirectController extends Controller {
 	
-	public function to($url, $permanent = true) {
-		return $this->redirect($url, $permanent);
+	public function to($url, $permanent = true, $bindings = array()) {
+		return $this->redirect($url, $bindings, $permanent);
 	}
 	
 	public function toAction($label, array $arguments = array()) {
