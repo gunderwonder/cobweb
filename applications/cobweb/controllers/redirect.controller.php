@@ -14,11 +14,7 @@
 class RedirectController extends Controller {
 	
 	public function to($url, $permanent = true) {
-		if (!$url) return new HTTPResponseGone();
-		
-		return $permanent ?
-			new HTTPResponsePermanentRedirect($url) :
-			new HTTPResonseRedirect($url);
+		return $this->redirect($url, $permanent);
 	}
 	
 	public function toAction($label, array $arguments = array()) {
