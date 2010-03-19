@@ -112,10 +112,15 @@ class CobwebLoader {
 		'NumericField' => '/forms/fields/numeric_fields.inc.php',
 		'IntegerField' => '/forms/fields/numeric_fields.inc.php',
 		'FloatField' => '/forms/fields/numeric_fields.inc.php',
+		'BooleanField' => '/forms/fields/choice_fields.inc.php',
 		
 		'FormWidget' => '/forms/form_widget.class.php',
 		'InputWidget' => '/forms/widgets/input_widgets.inc.php',
 		'TextInput' => '/forms/widgets/input_widgets.inc.php',
+		'CheckboxInput' => '/forms/widgets/input_widgets.inc.php',
+		'HiddenInput' => '/forms/widgets/input_widgets.inc.php',
+		'PasswordInput' => '/forms/widgets/input_widgets.inc.php',
+		'TextareaInput' => '/forms/widgets/input_widgets.inc.php',
 		
 		// misc
 		'Permalinkable' => '/core/permalinkable.interface.php',

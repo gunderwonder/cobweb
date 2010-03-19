@@ -59,3 +59,21 @@ class TextareaInput extends FormWidget {
 		return "<textarea{$element_attributes}>{$escaped_value}</textarea>";
 	}
 }
+
+class CheckboxInput extends InputWidget {
+	
+	protected $checked = false;
+	
+	public function render(FormField $field, $value, $attributes = array()) {
+		$attributes = array_merge($attributes, $this->checked ? array('checked' => 'checked') : array());
+		return parent::render($field, $value, $attributes);
+	}
+	
+	public function extract(FormField $field, $data) {
+		return ($this->checked = isset($data[$field->name()]));
+	}
+
+	public function inputType() {
+		return 'checkbox';
+	}
+}
