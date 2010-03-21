@@ -56,8 +56,8 @@ class LoggingMiddleware extends Middleware {
 		if (!$this->logging_enabled)
 			return $response;
 		
+		$formatter_class = Cobweb::get('LOG_FORMATTER', 'FirebugLogFormatter');
 		foreach ($this->loggers as $logger) {
-			$formatter_class = Cobweb::get('LOG_FORMATTER', 'FirebugLogFormatter');
 			$formatter = new $formatter_class($logger);
 			$formatter->format($response);
 		}
