@@ -5,7 +5,7 @@
  * @copyright Upstruct Berlin Oslo
  */
 
-require_once COBWEB_DIRECTORY . '/vendor/doctrine/Doctrine.php';
+require COBWEB_DIRECTORY . '/vendor/doctrine/Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 
 CobwebLoader::autoload(DOCTRINE_APPLICATION_DIRECTORY, array(
