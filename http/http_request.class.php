@@ -222,9 +222,12 @@ class HTTPRequest extends Request implements ArrayAccess {
 	 * @param mixed value to return if the cookie is unset
 	 */
 	public function cookie($key, $default = NULL) {
-		if (!isset($_COOKIE[$key]))
-			return $default;
-		return $_COOKIE[$key];
+		if (isset($_COOKIE[$key]))
+			return $_COOKIE[$key];
+		$translated_key = str_replace('.', '_', $key);
+		if (isset($_COOKIE[$translated_key]))
+			return $_COOKIE[$translated_key];
+		return $default;
 	}
 	
 	/**
