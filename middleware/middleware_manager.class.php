@@ -167,7 +167,7 @@ class MiddlewareManager {
 			$middleware_class = self::classify($middleware_name);
 			
 			if (!class_exists($middleware_class))
-				require_once self::pathify($middleware_name);
+				require self::pathify($middleware_name);
 				
 			if (!class_exists($middleware_class))
 				throw new CobwebMiddlewareException(
