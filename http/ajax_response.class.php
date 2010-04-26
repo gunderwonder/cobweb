@@ -182,5 +182,3 @@ class AJAXResponse extends HTTPResponse {
 		echo JSON::encode($this->body);
 	}
 }
-
-?>
