@@ -206,9 +206,13 @@ class ImmutableCWArray extends CWArray {
 	public function merge($a) { $this->notice(); }
 }
 
-
-
+/**
+ * @deprecated
+ */
 class MutableArray extends CWArray { }
 
+/**
+ * @deprecated
+ */
 class ImmutableArray extends ImmutableCWArray { }
 
