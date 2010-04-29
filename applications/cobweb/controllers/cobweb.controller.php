@@ -33,8 +33,10 @@ class CobwebController extends Controller {
 			
 		return $this->render(Cobweb::get('HTTP404_TEMPLATE', '404.tpl'), 
 			array('uri' => $this->request->URI()), 
-			HTTPResponse::NOT_FOUND
-		);	
+			HTTPResponse::NOT_FOUND,
+			MIMEType::HTML, 
+			TemplateAdapter::PHP
+		);
 	}
 	
 	/**

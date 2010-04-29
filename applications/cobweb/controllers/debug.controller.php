@@ -24,7 +24,7 @@ class DebugController extends Controller {
 		if ($this->request->isAJAX())
 			return $this->textDebugger($exception);
 		
-		$template = new Template();
+		$template = new Template(TemplateAdapter::SMARTY);
 		
 		$template['exception_class'] = get_class($exception);
 		$template['e'] = $exception;
@@ -169,7 +169,7 @@ class DebugController extends Controller {
 	private function textDebugger(Exception $e) {
 		$code = $e instanceof HTTPException ? $e->getCode() : 500;
 		
-		$template = new Template();
+		$template = new Template(TemplateAdapter::SMARTY);
 		$template->bind(array('exception' => $e, 'type' => get_class($e)));
 		$template->render(
 			COBWEB_DIRECTORY . '/applications/cobweb/templates/debug/text_exception.tpl', 
