@@ -19,8 +19,13 @@ class AuthentificationMiddleware extends Middleware {
 		
 		if (($user_id = $request->session->get('cobweb-user-id', false))) {
 			
-			$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
-			$user = Model::table($userclass)->find($user_id);
+			$user = NULL;
+			try {
+				$userclass = Cobweb::get('AUTHENTIFICATION_USER_CLASSNAME', 'User');
+				$user = Model::table($userclass)->find($user_id);
+			} catch (Doctrine_Connection_Exception $e) {
+				// ...
+			}
 				
 			if ($user && (!isset($user->is_active) || $user->is_active)) {
 				$request->user = $user;
