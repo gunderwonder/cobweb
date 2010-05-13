@@ -118,6 +118,10 @@ abstract class Form implements IteratorAggregate, ArrayAccess {
 		return $this->form_fields[$key];
 	}
 	
+	public function __unset($key) {
+		unset($this->form_fields[$key]);
+	}
+	
 	/**
 	 * @return array
 	 */
