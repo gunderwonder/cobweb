@@ -77,13 +77,17 @@ class IntegerField extends NumericField {
 class FloatField extends IntegerField {
 	
 	public function clean($value) {
-		return floatval(parent::clean($value));
+		$value = parent::clean($value);
+		$value = filter_var($value, FILTER_VALIDATE_FLOAT);
+		if ($value === false)
+			throw new FormValidationException($this->message('invalid'));
+		return $value;
 	}
 	
 	protected function defaultProperties() {
 		return array_merge(parent::defaultProperties(),
 			array('error_messages' => array(
-				'invalid' => __('Enter a whole number.')
+				'invalid' => __('Enter a valid floating point number.')
 			),
 		));
 	}
