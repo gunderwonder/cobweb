@@ -48,8 +48,9 @@ class HiddenInput extends InputWidget {
 class TextareaInput extends FormWidget {
 	
 	public function render(FormField $field, $value, $attributes = array()) {
-		$attributes = array_merge($this->attributes, 
+		$attributes = array_merge(
 			array('cols' => 40, 'rows' => 10, 'name' => $field->name()),
+			$this->attributes, 
 			$attributes
 		);
 		if ($id = $field->id())
