@@ -187,7 +187,7 @@ function html_escape($value, $character_set = 'UTF-8') {
 function html_flatten_attributes($attributes, $character_set = 'UTF-8', $trimmed = false) {
 	$html_attributes = '';
 	foreach ($attributes as $key => $value) {
-		if (is_int($key)) continue;
+		if (is_int($key)) $key = $value;
 		if (is_array($value)) $value = implode(' ', $value);
 		$escaped_value = html_escape($value, $character_set);
 		$html_attributes .= sprintf(' %s="%s"', $key, $escaped_value);
