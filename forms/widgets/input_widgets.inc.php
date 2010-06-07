@@ -78,3 +78,40 @@ class CheckboxInput extends InputWidget {
 		return 'checkbox';
 	}
 }
+
+class SelectInput extends FormWidget {
+	
+	function render(FormField $field, $selected, $attributes = array()) {
+		$attributes = array_merge(
+			$this->attributes, 
+			$attributes, 
+			array('name' => $field->name())
+		);
+		
+		$choices = $field->choices();
+		if (($index = array_search($selected, $choices)) !== false)
+			$selected = $index;
+
+		$element_attributes = html_flatten_attributes($attributes);
+		
+		$html = "<select{$element_attributes}>";
+		
+		foreach ($field->choices() as $value => $label)
+			$html .= sprintf('<option value="%s"%s>%s</option>',
+				html_escape($value),
+				!is_null($selected) && $selected == $value ? 'selected="selected"' : '',
+				html_escape($label)
+			);
+		return $html . '</select>';
+	}
+	
+	public function extract($field, $data) {
+		$value = $data->get($field->name());
+		$choices = $field->choices();
+
+		if (($index = array_search($value, $choices)) !== false)
+			return $index;
+			
+		return $value;
+	}
+}
