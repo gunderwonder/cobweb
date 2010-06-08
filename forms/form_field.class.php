@@ -129,7 +129,7 @@ abstract class FormField {
 	}
 	
 	public function isValid() {
-		return !is_null($this->form) ? $this->form->error($this->name()) : true;
+		return !is_null($this->form) ? !(bool)$this->form->error($this->name()) : true;
 	}
 	
 	public function errors() {
