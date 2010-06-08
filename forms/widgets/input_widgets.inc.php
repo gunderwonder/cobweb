@@ -92,14 +92,16 @@ class SelectInput extends FormWidget {
 		if (($index = array_search($selected, $choices)) !== false)
 			$selected = $index;
 
+		if ($id = $field->id())
+			$attributes['id'] = $id;
 		$element_attributes = html_flatten_attributes($attributes);
 		
 		$html = "<select{$element_attributes}>";
-		
+
 		foreach ($field->choices() as $value => $label)
 			$html .= sprintf('<option value="%s"%s>%s</option>',
 				html_escape($value),
-				!is_null($selected) && $selected == $value ? 'selected="selected"' : '',
+				!is_null($selected) && $selected == $value ? 'selected="selected" ' : '',
 				html_escape($label)
 			);
 		return $html . '</select>';
