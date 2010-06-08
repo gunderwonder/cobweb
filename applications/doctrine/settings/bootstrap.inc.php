@@ -11,7 +11,8 @@ spl_autoload_register(array('Doctrine', 'autoload'));
 CobwebLoader::autoload(DOCTRINE_APPLICATION_DIRECTORY, array(
 	'Model' => '/library/model.class.php',
 	'ModelForm' => '/forms/model_form.class.php',
-	'CobwebDoctrineManager' => '/library/cobweb_doctrine_manager.class.php'
+	'CobwebDoctrineManager' => '/library/cobweb_doctrine_manager.class.php',
+	'ModelChoiceField' => '/forms/form_fields.inc.php'
 ));
 
 if ($dsn = Cobweb::get('DATABASE_SOURCE_NAME', false))
