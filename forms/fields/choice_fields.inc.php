@@ -19,7 +19,7 @@ class ChoiceField extends FormField {
 	}
 	
 	public function clean($value) {
-		if (!in_array($value, array_keys($this->choices)))
+		if ($this->isRequired() && !in_array($value, array_keys($this->choices)))
 			throw new FormValidationException($this->error_messages['invalid_choice']);
 			
 		return $value;
