@@ -14,6 +14,7 @@
 class UserController extends Controller {
 	
 	public function login($template_name = 'login.tpl') {
+		$login_error = false;
 		if ($this->isPOST()) {
 			$username = $this->POST->get('username', '');
 			$password = $this->POST->get('password', '');
