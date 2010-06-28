@@ -100,6 +100,10 @@ class SessionNotificationManager implements IteratorAggregate {
 	public function getIterator() {
 		return new ArrayIterator(array_reverse($this->notifications));
 	}
+	
+	public function isEmpty() {
+		return count($this->notifications) == 0;
+	}
 }
 
 /**
