@@ -35,6 +35,8 @@ class PHPTemplate extends TemplateAdapter {
 			$$binding = $value;
 		$this_alias = Cobweb::get('PHP_TEMPLATE_THIS_ALIAS', '_');
 		$$this_alias = $this;
+		unset($this_alias);
+		$request = Cobweb::request();
 		
 		ob_start();
 		try {
